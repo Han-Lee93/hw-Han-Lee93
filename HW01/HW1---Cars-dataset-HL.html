@@ -373,7 +373,9 @@ summary {
 <h2>HW1 Assignment</h2>
 <p>Dataset used: cars</p>
 <p>Details regarding dataset cars</p>
-<pre class="r"><code>colnames(cars) &lt;- c(&quot;Speed&quot;,&quot;Dist&quot;)
+<pre class="r"><code># Renames cars/forcefully creates columns
+colnames(cars) &lt;- c(&quot;Speed&quot;,&quot;Dist&quot;)
+# Shows dataset
 cars</code></pre>
 <pre><code>##    Speed Dist
 ## 1      4    2
@@ -426,11 +428,8 @@ cars</code></pre>
 ## 48    24   93
 ## 49    24  120
 ## 50    25   85</code></pre>
-<pre class="r"><code>str(cars)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    50 obs. of  2 variables:
-##  $ Speed: num  4 4 7 7 8 9 10 10 10 11 ...
-##  $ Dist : num  2 10 4 22 16 10 18 26 34 17 ...</code></pre>
-<pre class="r"><code>summary(cars)</code></pre>
+<pre class="r"><code># Summary data of cars dataset
+summary(cars)</code></pre>
 <pre><code>##      Speed           Dist       
 ##  Min.   : 4.0   Min.   :  2.00  
 ##  1st Qu.:12.0   1st Qu.: 26.00  
@@ -440,7 +439,9 @@ cars</code></pre>
 ##  Max.   :25.0   Max.   :120.00</code></pre>
 <pre class="r"><code># Creating mean for speed in car data.
 speedmean=mean(cars$Speed)
+# Creating mean for dist in car data.
 distmean=mean(cars$Dist)
+# Combines the two means
 overallmean=rbind(speedmean,distmean)</code></pre>
 </div>
 <div id="plots" class="section level2">

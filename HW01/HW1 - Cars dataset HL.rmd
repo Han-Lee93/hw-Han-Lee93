@@ -22,20 +22,26 @@ Dataset used: cars
 
 Details regarding dataset cars
 ```{r Cars}
+# Renames cars/forcefully creates columns
 colnames(cars) <- c("Speed","Dist")
+# Shows dataset
 cars
-str(cars)
+# Summary data of cars dataset
 summary(cars)
 # Creating mean for speed in car data.
 speedmean=mean(cars$Speed)
+# Creating mean for dist in car data.
 distmean=mean(cars$Dist)
+# Combines the two means
 overallmean=rbind(speedmean,distmean)
 ```
 
 ## Plots
 ```{r Plots, echo=FALSE}
+# Scatter plot of the car dataset
 ggplot(data = cars, aes(x=Speed,Dist)) +
   geom_point(aes(Speed))
+# Plot means of car dataset
 plot(overallmean)
 ```
 
