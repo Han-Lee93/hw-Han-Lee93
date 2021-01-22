@@ -1,9 +1,7 @@
-# Han Lee's Introduction
-## Purpose of Repository
-
+# Han Lee's Data Programming Repository
 This repository contains files and folders related to the Data Programming class (Spring 21). This includes HW assignments, experimental code, and storage for items such as images.
 
-## About Me
+## Introduction - About Me
 
 I am currently a 4th year graduate student at the University of South Florida. I am from Ohio and I got my B.S. at the Ohio State University.
 
