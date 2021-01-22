@@ -1,13 +1,19 @@
 ---
-title: "HW1"
+title: "HW1 - Cars dataset HL"
 author: "Han"
 date: "1/21/2021"
 output: 
   html_document:
-  keep_md: true
+    keep_md: true
+  theme: paper
+  toc: true
+  toc_float: true
+  code_folding: "hide"
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(rmarkdown)
 ```
 
 ## HW1 Assignment
@@ -15,19 +21,19 @@ knitr::opts_chunk$set(echo = TRUE)
 Dataset used: cars
 
 Details regarding dataset cars
-```{r cars}
-library(ggplot2)
+```{r Cars}
 colnames(cars) <- c("Speed","Dist")
 cars
 str(cars)
 summary(cars)
+# Creating mean for speed in car data.
 speedmean=mean(cars$Speed)
 distmean=mean(cars$Dist)
 overallmean=rbind(speedmean,distmean)
 ```
 
-## Including Plots
-```{r pressure, echo=FALSE}
+## Plots
+```{r Plots, echo=FALSE}
 ggplot(data = cars, aes(x=Speed,Dist)) +
   geom_point(aes(Speed))
 plot(overallmean)
