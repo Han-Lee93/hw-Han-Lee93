@@ -2,9 +2,10 @@
 title: "HW1"
 author: "Han"
 date: "1/21/2021"
-output: html_document
+output: 
+  html_document:
+  keep_md: true
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -26,8 +27,6 @@ overallmean=rbind(speedmean,distmean)
 ```
 
 ## Including Plots
-
-
 ```{r pressure, echo=FALSE}
 ggplot(data = cars, aes(x=Speed,Dist)) +
   geom_point(aes(Speed))
