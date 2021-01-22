@@ -1,5 +1,5 @@
 # Han Lee's Introduction
-# Purpose of Repository
+## Purpose of Repository
 
 This repository contains files and folders related to the Data Programming class (Spring 21). This includes HW assignments, experimental code, and storage for items such as images.
 
