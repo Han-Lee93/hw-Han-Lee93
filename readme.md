@@ -33,3 +33,5 @@ My area of research is in cognitive psychology. More specifically, I am interest
 - [:ok_hand:] Programming
 - [:thumbsup:] Using R
 - [:ok_hand:] Data organization/management using R
+- [:thumbsdown:] Comfortability with cloud-based platforms
+
