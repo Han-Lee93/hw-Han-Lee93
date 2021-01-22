@@ -14,6 +14,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(rmarkdown)
+library(ggpubr)
 ```
 
 ## HW1 Assignment
@@ -22,27 +23,26 @@ Dataset used: cars
 
 Details regarding dataset cars
 ```{r Cars}
-# Renames cars/forcefully creates columns
-colnames(cars) <- c("Speed","Dist")
 # Shows dataset
 cars
 # Summary data of cars dataset
 summary(cars)
-# Creating mean for speed in car data.
-speedmean=mean(cars$Speed)
-# Creating mean for dist in car data.
-distmean=mean(cars$Dist)
-# Combines the two means
-overallmean=rbind(speedmean,distmean)
+# Correlation of distance and speed
+cor(cars$speed, cars$dist)
 ```
 
 ## Plots
 ```{r Plots, echo=FALSE}
 # Scatter plot of the car dataset
-ggplot(data = cars, aes(x=Speed,Dist)) +
-  geom_point(aes(Speed))
-# Plot means of car dataset
-plot(overallmean)
+sp <- ggscatter(cars, x = "speed", y = "dist",
+   add = "reg.line",  # Add regressin line
+   add.params = list(color = "blue", fill = "lightgray"), # Customize reg. line
+   conf.int = TRUE, # Add confidence interval
+   title = "Correlation between speed and distance" # Add title
+   )
+# Add correlation coefficient to plot
+sp + stat_cor(method = "pearson", label.x = 3, label.y = 30)
+#> `geom_smooth()` using formula 'y ~ x'# Plot means of car dataset
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

@@ -19,14 +19,12 @@ Dataset used: cars
 Details regarding dataset cars
 
 ```r
-# Renames cars/forcefully creates columns
-colnames(cars) <- c("Speed","Dist")
 # Shows dataset
 cars
 ```
 
 ```
-##    Speed Dist
+##    speed dist
 ## 1      4    2
 ## 2      4   10
 ## 3      7    4
@@ -85,7 +83,7 @@ summary(cars)
 ```
 
 ```
-##      Speed           Dist       
+##      speed           dist       
 ##  Min.   : 4.0   Min.   :  2.00  
 ##  1st Qu.:12.0   1st Qu.: 26.00  
 ##  Median :15.0   Median : 36.00  
@@ -95,15 +93,15 @@ summary(cars)
 ```
 
 ```r
-# Creating mean for speed in car data.
-speedmean=mean(cars$Speed)
-# Creating mean for dist in car data.
-distmean=mean(cars$Dist)
-# Combines the two means
-overallmean=rbind(speedmean,distmean)
+# Correlation of distance and speed
+cor(cars$speed, cars$dist)
+```
+
+```
+## [1] 0.8068949
 ```
 
 ## Plots
-![](HW1---Cars-dataset-HL_files/figure-html/Plots-1.png)<!-- -->![](HW1---Cars-dataset-HL_files/figure-html/Plots-2.png)<!-- -->
+![](HW1---Cars-dataset-HL_files/figure-html/Plots-1.png)<!-- -->
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
