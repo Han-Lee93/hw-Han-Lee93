@@ -19,7 +19,9 @@ Dataset used: cars
 Details regarding dataset cars
 
 ```r
+# Renames cars/forcefully creates columns
 colnames(cars) <- c("Speed","Dist")
+# Shows dataset
 cars
 ```
 
@@ -78,16 +80,7 @@ cars
 ```
 
 ```r
-str(cars)
-```
-
-```
-## 'data.frame':	50 obs. of  2 variables:
-##  $ Speed: num  4 4 7 7 8 9 10 10 10 11 ...
-##  $ Dist : num  2 10 4 22 16 10 18 26 34 17 ...
-```
-
-```r
+# Summary data of cars dataset
 summary(cars)
 ```
 
@@ -104,7 +97,9 @@ summary(cars)
 ```r
 # Creating mean for speed in car data.
 speedmean=mean(cars$Speed)
+# Creating mean for dist in car data.
 distmean=mean(cars$Dist)
+# Combines the two means
 overallmean=rbind(speedmean,distmean)
 ```
 
