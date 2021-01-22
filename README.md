@@ -23,9 +23,9 @@ My area of research is in cognitive psychology. More specifically, I am interest
 
 ## Goals for this class
 
-- [:thumbsdown:]Using Github                                              |    **Status**  | **Symbol**    |
-                                                                          |----------------|---------------|
-                                                                          | Comfortable    | :thumbsup:    |
-                                                                          | Adequate       | :ok_hand:     |
-                                                                          | Needs work     | :thumbsdown:  |
+|    **Status**  | **Symbol**    |                                   - [:thumbsdown:]Using Github
+|----------------|---------------|
+| Comfortable    | :thumbsup:    |
+| Adequate       | :ok_hand:     |
+| Needs work     | :thumbsdown:  |
 
