@@ -1,5 +1,5 @@
 # Han Lee's Data Programming Repository
-This repository contains files and folders related to the *Data Programming class (Spring 21)*. This includes HW assignments, experimental code, and storage for items such as images.
+This repository contains files and folders related to the [*Data Programming class (Spring 21)*](https://progdata.netlify.app/#about). This includes HW assignments, experimental code, and storage for items such as images.
 
 ## Introduction - About Me
 
