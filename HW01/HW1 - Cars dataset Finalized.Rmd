@@ -2,13 +2,9 @@
 title: "HW1 - Cars dataset Finalized"
 author: "Han"
 date: "1/21/2021"
-output: 
-  html_document:
-    keep_md: true
-  theme: paper
-  toc: true
-  toc_float: true
-  code_folding: "hide"
+output:
+    github_document: default
+    html_document: default
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
