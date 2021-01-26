@@ -89,6 +89,3 @@ cor(cars$speed, cars$dist)
 ## Plots
 
 ![](HW1---Cars-dataset-Finalized_files/figure-gfm/Plots-1.png)<!-- -->
-
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
