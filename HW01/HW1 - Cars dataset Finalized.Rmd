@@ -1,14 +1,10 @@
 ---
-title: "HW1 - Cars dataset HL"
+title: "HW1 - Cars dataset Finalized"
 author: "Han"
 date: "1/21/2021"
-output: 
-  html_document:
-    keep_md: true
-  theme: paper
-  toc: true
-  toc_float: true
-  code_folding: "hide"
+output:
+    html_document: default
+    github_document: default
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -44,5 +40,3 @@ sp <- ggscatter(cars, x = "speed", y = "dist",
 sp + stat_cor(method = "pearson", label.x = 3, label.y = 30)
 #> `geom_smooth()` using formula 'y ~ x'# Plot means of car dataset
 ```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
