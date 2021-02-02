@@ -1,4 +1,11 @@
+<!-- Great work! Just a few comments below. -->
+
+<!-- After you merge a pull request, please delete the branch. -->
+
 # Han Lee's Data Programming Repository
+
+<!-- For best results, place blank lines between paragraphs, headings, etc. to get correct formatting. -->
+
 This repository contains files and folders related to the [*Data Programming class (Spring 21)*](https://progdata.netlify.app/#about). This includes HW assignments, experimental code, and storage for items such as images.
 
 ## Introduction - About Me
@@ -33,3 +40,4 @@ My area of research is in _**cognitive psychology**_. More specifically, I am in
 - [:ok_hand:] Data organization/management using R
 - [:thumbsdown:] Comfortability with cloud-based platforms
 
+<!-- What are you trying to do with the [] here? Are you trying to show the boxes (in which case, that's fine) or something technical? -->

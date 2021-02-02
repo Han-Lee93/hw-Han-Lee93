@@ -6,6 +6,7 @@ output:
     html_document: default
     github_document: default
 ---
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
@@ -17,7 +18,10 @@ library(ggpubr)
 
 Dataset used: cars
 
+<!-- Put blank lines between each paragraph, code chunk, etc. -->
+
 Details regarding dataset cars
+
 ```{r Cars}
 # Shows dataset
 cars
@@ -28,6 +32,9 @@ cor(cars$speed, cars$dist)
 ```
 
 ## Plots
+
+<!-- In future assignements, please use ggplot() and build the plots up with individual geom_*() commands. It is worth the effort to learn to build ggplots manually rather than relying on pre-rolled functions. -->
+
 ```{r Plots, echo=FALSE}
 # Scatter plot of the car dataset
 sp <- ggscatter(cars, x = "speed", y = "dist",
@@ -38,5 +45,5 @@ sp <- ggscatter(cars, x = "speed", y = "dist",
    )
 # Add correlation coefficient to plot
 sp + stat_cor(method = "pearson", label.x = 3, label.y = 30)
-#> `geom_smooth()` using formula 'y ~ x'# Plot means of car dataset
+#> `geom_smooth()` using formula 'y ~ x'# Plot means of car dataset # don't leave commented-out code in your final scripts.
 ```
