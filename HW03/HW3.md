@@ -104,7 +104,8 @@ gapminder %>% #Making Scatterplot
   filter(country=="Canada") %>% 
   ggplot(aes(x=lifeExp, y=gdpPercap))+
   geom_point(size=2) + #Plots each point by life Exp and gdpPercap
-  scale_y_continuous(trans='log10') #changes gdpPer cap scaling to log scale
+  scale_y_continuous(trans='log10')+ #changes gdpPer cap scaling to log scale
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ```
 
 ![](HW3_files/figure-gfm/cars-1.png)<!-- -->
@@ -131,7 +132,8 @@ mtcars %>% #Making summary table
 ``` r
 mtcars %>% #Making scatterplot
   ggplot(aes(x=mpg, y=wt))+
-  geom_point(size=2)
+  geom_point(size=2) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ```
 
 ![](HW3_files/figure-gfm/cars-2.png)<!-- -->
@@ -162,11 +164,12 @@ summary_mtcars
 
 ``` r
 summary_mtcars %>% #piping that table into bargraph
-  ggplot(aes(x=cyl,y=mu_mpg, fill=cyl))+
-  geom_bar(stat="identity") + #Making bar graph
-  geom_errorbar(aes(ymin=mu_mpg-SE, ymax=mu_mpg+SE), width=.2,position=position_dodge(.9))+ #Making error bars
+  ggplot(aes(x=cyl,y=mu_mpg,group = 1))+
+  geom_line() +
+  geom_point()+#Making line graph
+  geom_errorbar(aes(ymin=mu_mpg-SE, ymax=mu_mpg+SE), width=.15,position=position_dodge(.9))+ #Making error bars
   labs(title="Mean MPG by Cyl", x ="Cyl", y = "Mean MPG")+ #Relabeling
-  theme_dark() 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ```
 
 ![](HW3_files/figure-gfm/cars-3.png)<!-- -->

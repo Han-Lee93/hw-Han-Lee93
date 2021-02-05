@@ -3,8 +3,8 @@ title: "HW2"
 author: "han"
 date: "2/4/2021"
 output:
-    github_document: default
     html_document: default
+    github_document: default
     theme: paper
 ---
 
@@ -55,7 +55,9 @@ gapminder %>% #Making Scatterplot
   filter(country=="Canada") %>% 
   ggplot(aes(x=lifeExp, y=gdpPercap))+
   geom_point(size=2) + #Plots each point by life Exp and gdpPercap
-  scale_y_continuous(trans='log10') #changes gdpPer cap scaling to log scale
+  scale_y_continuous(trans='log10')+ #changes gdpPer cap scaling to log scale
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
 
 #Exercise 2: Explore two variables with dplyr and ggplot2 Use palmerpenguins::penguins or another dataset of your choice. (Check out a dataset from the datasets R package if you want!)
 
@@ -73,7 +75,9 @@ mtcars %>% #Making summary table
 
 mtcars %>% #Making scatterplot
   ggplot(aes(x=mpg, y=wt))+
-  geom_point(size=2)
+  geom_point(size=2) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
 
 #Exercise 2.2
 #Pick one categorical variable and one quantitative variable to explore.
@@ -91,11 +95,12 @@ summary_mtcars=mtcars %>% #Making summary table
 summary_mtcars
 
 summary_mtcars %>% #piping that table into bargraph
-  ggplot(aes(x=cyl,y=mu_mpg, fill=cyl))+
-  geom_bar(stat="identity") + #Making bar graph
-  geom_errorbar(aes(ymin=mu_mpg-SE, ymax=mu_mpg+SE), width=.2,position=position_dodge(.9))+ #Making error bars
+  ggplot(aes(x=cyl,y=mu_mpg,group = 1))+
+  geom_line() +
+  geom_point()+#Making line graph
+  geom_errorbar(aes(ymin=mu_mpg-SE, ymax=mu_mpg+SE), width=.15,position=position_dodge(.9))+ #Making error bars
   labs(title="Mean MPG by Cyl", x ="Cyl", y = "Mean MPG")+ #Relabeling
-  theme_dark() 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
   
 ```
