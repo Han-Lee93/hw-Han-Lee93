@@ -1,10 +1,10 @@
 ---
-title: "HW2"
+title: "HW3"
 author: "han"
 date: "2/4/2021"
 output:
-    html_document: default
     github_document: default
+    html_document: default
     theme: paper
 ---
 
