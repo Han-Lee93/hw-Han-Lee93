@@ -3,7 +3,7 @@ HW3
 han
 2/4/2021
 
-## R Markdown: Exercise 1
+## R Markdown: HW3 Exercise 1 and 2
 
 ``` r
 #Exercise 1.1

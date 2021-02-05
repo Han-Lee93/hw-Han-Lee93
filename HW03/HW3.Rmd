@@ -3,8 +3,8 @@ title: "HW3"
 author: "han"
 date: "2/4/2021"
 output:
-    github_document: default
     html_document: default
+    github_document: default
     theme: paper
 ---
 
@@ -14,7 +14,7 @@ library(gapminder)
 library(tidyverse)
 ```
 
-## R Markdown: Exercise 1
+## R Markdown: HW3 Exercise 1 and 2
 
 ```{r cars}
 #Exercise 1.1
