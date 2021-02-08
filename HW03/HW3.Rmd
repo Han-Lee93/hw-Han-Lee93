@@ -87,19 +87,18 @@ mtcars %>% #Making scatterplot
 summary_mtcars=mtcars %>% #Making summary table
   mutate(cyl=as.factor(cyl)) %>% 
   group_by(cyl) %>% 
-  summarize(mu_mpg = mean(mpg),
-          sigma_mpg=sd(mpg),
+  summarize(mu_wt = mean(wt),
+          sigma_wt=sd(wt),
           sample_size = n(),
-          SE=sigma_mpg/sqrt(sample_size))
-  
-summary_mtcars
+          SE=sigma_wt/sqrt(sample_size))
 
-summary_mtcars %>% #piping that table into bargraph
-  ggplot(aes(x=cyl,y=mu_mpg,group = 1))+
-  geom_line() +
-  geom_point()+#Making line graph
-  geom_errorbar(aes(ymin=mu_mpg-SE, ymax=mu_mpg+SE), width=.15,position=position_dodge(.9))+ #Making error bars
-  labs(title="Mean MPG by Cyl", x ="Cyl", y = "Mean MPG")+ #Relabeling
+summary_mtcars
+            
+mtcars %>% #Data visualization of car weights
+  mutate(cyl=as.factor(cyl)) %>% 
+  ggplot(aes(x=cyl,y=wt, fill=cyl))+
+  geom_bar(stat="identity") +
+  labs(title="Total weight of cars by Cyl", x ="Cyl", y = "Weight")+ #Relabeling
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
   
