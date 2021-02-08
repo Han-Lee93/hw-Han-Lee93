@@ -3,10 +3,11 @@ HW3
 han
 2/4/2021
 
-## R Markdown: HW3 Exercise 1 and 2
+## Exercise 1
+
+#### Exercise 1.1
 
 ``` r
-#Exercise 1.1
 #Use filter() to subset the gapminder data to three countries of your choice in the 1970’s.
 
 Ex1.1=gapminder %>% 
@@ -25,8 +26,9 @@ Ex1.1
     ## 5 Mexico  Americas   1972    62.4  55984294     6809.
     ## 6 Mexico  Americas   1977    65.0  63759976     7675.
 
+#### Exercise 1.2
+
 ``` r
-#Exercise 1.2
 #Use the pipe operator %>% to select “country” and “gdpPercap” from your filtered dataset in 1.1.
 
 Ex1.1 %>% 
@@ -43,8 +45,9 @@ Ex1.1 %>%
     ## 5 Mexico      6809.
     ## 6 Mexico      7675.
 
+#### Exercise 1.3
+
 ``` r
-#Exercise 1.3
 #Make a new variable in gapminder for the change in life expectancy from the previous measurement. Filter this table to show all of the entries that have experienced a drop in life expectancy.
 #Hint: you might find the lag() or diff() functions useful.
 
@@ -70,8 +73,9 @@ gapminder %>% #Adding new column
     ## 10 Burundi  Africa     1992    44.7 5809236      632.          -3.48 
     ## # ... with 92 more rows
 
+#### Exercise 1.4
+
 ``` r
-#Exercise 1.4
 #Filter gapminder so that it shows the max GDP per capita experienced by each country.
 #Hint: you might find the max() function useful here.
 
@@ -96,24 +100,17 @@ gapminder %>% #Making table based on max GDP per capita by country
     ## 10 Belgium     Europe     2007    79.4  10392226    33693.
     ## # ... with 132 more rows
 
-``` r
-#Exercise 1.5
-#Produce a scatterplot of Canada’s life expectancy vs. GDP per capita using ggplot2, without defining a new variable. That is, after filtering the gapminder data set, pipe it directly into the ggplot() function. In your plot, put GDP per capita on a log scale.
+#### Exercise 1.5 - Plot
 
-gapminder %>% #Making Scatterplot
-  filter(country=="Canada") %>% 
-  ggplot(aes(x=lifeExp, y=gdpPercap))+
-  geom_point(size=2) + #Plots each point by life Exp and gdpPercap
-  scale_y_continuous(trans='log10')+ #changes gdpPer cap scaling to log scale
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-```
+![](HW3_files/figure-gfm/Plots-1.png)<!-- -->
 
-![](HW3_files/figure-gfm/cars-1.png)<!-- -->
+## Exercise 2:
+
+##### Explore two variables with dplyr and ggplot2 Use palmerpenguins::penguins or another dataset of your choice. (Check out a dataset from the datasets R package if you want\!)
+
+#### Exercise 2.1
 
 ``` r
-#Exercise 2: Explore two variables with dplyr and ggplot2 Use palmerpenguins::penguins or another dataset of your choice. (Check out a dataset from the datasets R package if you want!)
-
-#Exercise 2.1
 #Pick two quantitative variables to explore.
 #Make a summary table of descriptive statistics for these variables using summarize().
 #Include whatever staistics you feel appropriate (mean, median sd, range, etc.).
@@ -129,17 +126,13 @@ mtcars %>% #Making summary table
     ##     mu_mpg sigma_mpg   mu_wt  sigma_wt
     ## 1 20.09062  6.026948 3.21725 0.9784574
 
-``` r
-mtcars %>% #Making scatterplot
-  ggplot(aes(x=mpg, y=wt))+
-  geom_point(size=2) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-```
+#### Ex. 2.1 Plot
 
-![](HW3_files/figure-gfm/cars-2.png)<!-- -->
+![](HW3_files/figure-gfm/Plots2-1.png)<!-- -->
+
+#### Exercise 2.2
 
 ``` r
-#Exercise 2.2
 #Pick one categorical variable and one quantitative variable to explore.
 #Make a summary table giving the sample size (hint: n()) and descriptive statistics for the quantitative variable by group.
 #Make one or more useful plots to visualize these variables.
@@ -162,13 +155,6 @@ summary_mtcars
     ## 2 6      3.12    0.356           7 0.135
     ## 3 8      4.00    0.759          14 0.203
 
-``` r
-mtcars %>% #Data visualization of car weights
-  mutate(cyl=as.factor(cyl)) %>% 
-  ggplot(aes(x=cyl,y=wt, fill=cyl))+
-  geom_bar(stat="identity") +
-  labs(title="Total weight of cars by Cyl", x ="Cyl", y = "Weight")+ #Relabeling
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-```
+#### Ex. 2.2 Plot
 
-![](HW3_files/figure-gfm/cars-3.png)<!-- -->
+![](HW3_files/figure-gfm/Plots3-1.png)<!-- -->
