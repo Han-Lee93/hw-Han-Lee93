@@ -386,7 +386,7 @@ summary {
 <pre class="r"><code>#Use filter() to subset the gapminder data to three countries of your choice in the 1970’s.
 
 Ex1.1=gapminder %&gt;% 
-  filter(country == &quot;Mexico&quot;&amp; year %in% 1970:1980|country ==&quot;India&quot;&amp; year %in% 1970:1980|country ==&quot;China&quot; &amp; year %in% 1970:1980)
+  filter(country %in% c(&quot;Mexico&quot;, &quot;India&quot;, &quot;China&quot;) &amp; year %in% 1970:1980)
 
 Ex1.1</code></pre>
 <pre><code>## # A tibble: 6 x 6
@@ -482,11 +482,8 @@ gapminder %&gt;% #Making table based on max GDP per capita by country
 #Make a scatterplot of these variables using ggplot().
 
 mtcars %&gt;% #Making summary table
-  summarize(mu_mpg = mean(mpg),#Mean mpg
-          sigma_mpg=sd(mpg), #SD mpg
-          mu_wt = mean(wt), #Mean wt
-          sigma_wt=sd(wt)) #SD wt</code></pre>
-<pre><code>##     mu_mpg sigma_mpg   mu_wt  sigma_wt
+  summarize(across(c(mpg,wt),list(Mean=mean,Sigma=sd)))</code></pre>
+<pre><code>##   mpg_Mean mpg_Sigma wt_Mean  wt_Sigma
 ## 1 20.09062  6.026948 3.21725 0.9784574</code></pre>
 </div>
 <div id="ex.-2.1-plot" class="section level4">
@@ -498,22 +495,18 @@ mtcars %&gt;% #Making summary table
 <pre class="r"><code>#Pick one categorical variable and one quantitative variable to explore.
 #Make a summary table giving the sample size (hint: n()) and descriptive statistics for the quantitative variable by group.
 #Make one or more useful plots to visualize these variables.
-
 summary_mtcars=mtcars %&gt;% #Making summary table
   mutate(cyl=as.factor(cyl)) %&gt;% 
   group_by(cyl) %&gt;% 
-  summarize(mu_wt = mean(wt),
-          sigma_wt=sd(wt),
-          sample_size = n(),
-          SE=sigma_wt/sqrt(sample_size))
+  summarize(across(c(wt), list(Mean=mean,Sigma=sd)),Sample_size=n())
 
 summary_mtcars</code></pre>
-<pre><code>## # A tibble: 3 x 5
-##   cyl   mu_wt sigma_wt sample_size    SE
-## * &lt;fct&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt; &lt;dbl&gt;
-## 1 4      2.29    0.570          11 0.172
-## 2 6      3.12    0.356           7 0.135
-## 3 8      4.00    0.759          14 0.203</code></pre>
+<pre><code>## # A tibble: 3 x 4
+##   cyl   wt_Mean wt_Sigma Sample_size
+## * &lt;fct&gt;   &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt;
+## 1 4        2.29    0.570          11
+## 2 6        3.12    0.356           7
+## 3 8        4.00    0.759          14</code></pre>
 </div>
 <div id="ex.-2.2-plot" class="section level4">
 <h4>Ex. 2.2 Plot</h4>

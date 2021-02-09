@@ -11,7 +11,7 @@ han
 #Use filter() to subset the gapminder data to three countries of your choice in the 1970’s.
 
 Ex1.1=gapminder %>% 
-  filter(country == "Mexico"& year %in% 1970:1980|country =="India"& year %in% 1970:1980|country =="China" & year %in% 1970:1980)
+  filter(country %in% c("Mexico", "India", "China") & year %in% 1970:1980)
 
 Ex1.1
 ```
@@ -102,7 +102,7 @@ gapminder %>% #Making table based on max GDP per capita by country
 
 #### Exercise 1.5 - Plot
 
-![](HW3_files/figure-gfm/Plots-1.png)<!-- -->
+![](HW3_files/figure-gfm/Ex1.5-1.png)<!-- -->
 
 ## Exercise 2:
 
@@ -117,18 +117,15 @@ gapminder %>% #Making table based on max GDP per capita by country
 #Make a scatterplot of these variables using ggplot().
 
 mtcars %>% #Making summary table
-  summarize(mu_mpg = mean(mpg),#Mean mpg
-          sigma_mpg=sd(mpg), #SD mpg
-          mu_wt = mean(wt), #Mean wt
-          sigma_wt=sd(wt)) #SD wt
+  summarize(across(c(mpg,wt),list(Mean=mean,Sigma=sd)))
 ```
 
-    ##     mu_mpg sigma_mpg   mu_wt  sigma_wt
+    ##   mpg_Mean mpg_Sigma wt_Mean  wt_Sigma
     ## 1 20.09062  6.026948 3.21725 0.9784574
 
 #### Ex. 2.1 Plot
 
-![](HW3_files/figure-gfm/Plots2-1.png)<!-- -->
+![](HW3_files/figure-gfm/Ex2.1%20Plot-1.png)<!-- -->
 
 #### Exercise 2.2
 
@@ -136,25 +133,21 @@ mtcars %>% #Making summary table
 #Pick one categorical variable and one quantitative variable to explore.
 #Make a summary table giving the sample size (hint: n()) and descriptive statistics for the quantitative variable by group.
 #Make one or more useful plots to visualize these variables.
-
 summary_mtcars=mtcars %>% #Making summary table
   mutate(cyl=as.factor(cyl)) %>% 
   group_by(cyl) %>% 
-  summarize(mu_wt = mean(wt),
-          sigma_wt=sd(wt),
-          sample_size = n(),
-          SE=sigma_wt/sqrt(sample_size))
+  summarize(across(c(wt), list(Mean=mean,Sigma=sd)),Sample_size=n())
 
 summary_mtcars
 ```
 
-    ## # A tibble: 3 x 5
-    ##   cyl   mu_wt sigma_wt sample_size    SE
-    ## * <fct> <dbl>    <dbl>       <int> <dbl>
-    ## 1 4      2.29    0.570          11 0.172
-    ## 2 6      3.12    0.356           7 0.135
-    ## 3 8      4.00    0.759          14 0.203
+    ## # A tibble: 3 x 4
+    ##   cyl   wt_Mean wt_Sigma Sample_size
+    ## * <fct>   <dbl>    <dbl>       <int>
+    ## 1 4        2.29    0.570          11
+    ## 2 6        3.12    0.356           7
+    ## 3 8        4.00    0.759          14
 
 #### Ex. 2.2 Plot
 
-![](HW3_files/figure-gfm/Plots3-1.png)<!-- -->
+![](HW3_files/figure-gfm/Ex2.2%20Plot-1.png)<!-- -->
