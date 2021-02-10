@@ -3,8 +3,8 @@ title: "HW1 - Cars dataset Finalized"
 author: "Han"
 date: "1/21/2021"
 output:
-    html_document: default
     github_document: default
+    html_document: default
 ---
 
 ```{r setup, include=FALSE}

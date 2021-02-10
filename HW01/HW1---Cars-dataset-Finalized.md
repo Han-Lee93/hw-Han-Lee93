@@ -7,6 +7,8 @@ Han
 
 Dataset used: cars
 
+<!-- Put blank lines between each paragraph, code chunk, etc. -->
+
 Details regarding dataset cars
 
 ``` r
@@ -87,5 +89,9 @@ cor(cars$speed, cars$dist)
     ## [1] 0.8068949
 
 ## Plots
+
+<!-- In future assignements, please use ggplot() and build the plots up with individual geom_*() commands. It is worth the effort to learn to build ggplots manually rather than relying on pre-rolled functions. -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
 
 ![](HW1---Cars-dataset-Finalized_files/figure-gfm/Plots-1.png)<!-- -->
