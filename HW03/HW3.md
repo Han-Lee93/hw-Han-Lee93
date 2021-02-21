@@ -5,10 +5,9 @@ han
 
 # Homework 03
 
-\#\#\#You will analyze data looking at the relationship between **green
-reputation** and three personality traits–**compassion**, **intellectual
-curiosity**, and **openness to experiences**. The dataset includes data
-from **students** and **non-students**.
+#### You will analyze data looking at the relationship between **green reputation** and three personality traits–**compassion**, **intellectual curiosity**, and **openness to experiences**.
+
+The dataset includes data from **students** and **non-students**.
 
 ``` r
 dictionary <- readr::read_csv("green_dictionary.csv")
@@ -35,20 +34,24 @@ green_data <- readr::read_csv("green_data.csv")
     ## )
     ## i Use `spec()` for the full column specifications.
 
-\#\#For your assignment, do the following.
+## For your assignment, do the following.
 
-### 1\. Inspect the item responses (e.g., with graphs or by summarizing distinct values).
-
-``` 
- Is anything unusual?
- 
-```
+### Q1: Inspect the item responses (e.g., with graphs or by summarizing distinct values).
 
 ``` r
+# Is anything unusual?
+
 green_data %>% #Summarizes data for each column by max value and min value.
-  summarize(across(c(green1:student),
-                      list(Max=~max(.x, na.rm = TRUE),
-                        Min=~min(.x, na.rm = TRUE))))
+  summarize(
+    across(
+      c(green1:student),
+      list(Max = ~ max(.x, 
+                       na.rm = TRUE),
+           Min = ~ min(.x, 
+                       na.rm = TRUE)
+           )
+      )
+    )
 ```
 
     ## # A tibble: 1 x 72
@@ -89,29 +92,47 @@ filter(green_data, id == 5549) #Searches id for value "5549"
     ## #   open5 <dbl>, open6 <dbl>, open7 <dbl>, open8 <dbl>, open9 <dbl>,
     ## #   open10 <dbl>, student <dbl>
 
-Dataset has several issues. 1. Duplicate participant data 2. Certain
-data values are off (e.g., -99)
-
-### 2\. Compute total scores for the four scales.
-
-``` 
- Recode variables as needed.
- 
+``` r
+#Dataset has several issues.
+#1. Duplicate participant data
+#2. Certain data values are off (e.g., -99)
 ```
 
+### Q2: Compute total scores for the four scales.
+
 ``` r
-temp_recode = dictionary %>% #Temporary array of names to be used later
+# Recode variables as needed.
+
+temp_recode <- dictionary %>% #Temporary array of names to be used later
   pull(Item) #Array of names are pulled from the list of values under the "item" column
 
-Q2set=green_data %>% #Dataset for Q2, recodes original dataset "green_data"
-  mutate(across(all_of(temp_recode), #Recodes across all the columns that match the temp_recode list
-           ~na_if(.x,-99))) %>% #All values that are -99 are recoded into NA
-  mutate(id2=ifelse(duplicated(id),paste0(id, "r"), id)) #Creates new id list and discriminates repeated ID numbers
+Q2set <- green_data %>% #Dataset for Q2, recodes original dataset "green_data"
+  mutate( #Recodes across all the columns that match the temp_recode list
+    across(
+      all_of(temp_recode), 
+           ~ na_if(.x, 
+                   -99)
+      )
+    ) %>% #All values that are -99 are recoded into NA
+  mutate( #Creates new id list and discriminates repeated ID numbers
+    id2 = ifelse(
+      duplicated(id),
+      paste0(id, 
+             "r"), 
+      id)
+    ) 
 
 Q2set %>% #Rechecking quick summary glance
-  summarize(across(c(green1:student),
-                      list(Max=~max(.x, na.rm = TRUE),
-                        Min=~min(.x, na.rm = TRUE))))
+  summarize(
+    across(
+      c(green1 : student),
+      list(Max = ~ max(.x, 
+                       na.rm = TRUE),
+           Min = ~ min(.x, 
+                       na.rm = TRUE)
+           )
+      )
+    )
 ```
 
     ## # A tibble: 1 x 72
@@ -137,23 +158,41 @@ Q2set %>% #Rechecking quick summary glance
     ## #   open10_Min <dbl>, student_Max <dbl>, student_Min <dbl>
 
 ``` r
-reverse_recode = dictionary %>% #Separate temporary array of names to be used later
+reverse_recode <- dictionary %>% #Separate temporary array of names to be used later
   filter(Keying == -1 | Keying ==-2) %>% #Filters the list by the reverse codes (based off dictionary)
   pull(Item)    
 
-Q2set.1 = Q2set%>% #New dataset with reverse coding 
+Q2set.1 <- Q2set%>% #New dataset with reverse coding 
   mutate(
-    across(all_of(reverse_recode),
-           ~recode(.x,"5" = 1, "4" = 2, "3" = 3, "2" = 4, "1" = 5))) #Reverse codes based off the dictionary (reverse_recode)
+    across(
+      all_of(reverse_recode),
+           ~ recode(.x, 
+                    "5" = 1, 
+                    "4" = 2, 
+                    "3" = 3, 
+                    "2" = 4, 
+                    "1" = 5)
+      )
+    ) #Reverse codes based off the dictionary (reverse_recode)
 
 Q2set.1 %>% #Print out summary statistics
   rowwise() %>% #By row
   group_by(id2) %>% #By id
-  mutate(Total_green=sum(c_across(green1:green5), na.rm = TRUE), #Summary statistics - sum of all green (20), comp (50), intel (50) and open(50)
-         Total_comp=sum(c_across(comp1:comp10), na.rm = TRUE),
-         Total_intel=sum(c_across(intel1:intel10), na.rm = TRUE),
-         Total_open=sum(c_across(open1:open10), na.rm = TRUE))%>% 
-  select(id2,Total_green,Total_comp,Total_intel,Total_open)
+  mutate(
+    Total_green = sum(c_across(green1 : green5), #Summary - sum of all green (20), comp, intel, and open (50)
+                      na.rm = TRUE), 
+    Total_comp = sum(c_across(comp1 : comp10), 
+                     na.rm = TRUE),
+    Total_intel = sum(c_across(intel1 : intel10), 
+                      na.rm = TRUE),
+    Total_open = sum(c_across(open1 : open10), 
+                     na.rm = TRUE)
+    ) %>% 
+  select(id2,
+         Total_green,
+         Total_comp,
+         Total_intel,
+         Total_open)
 ```
 
     ## # A tibble: 373 x 5
@@ -172,29 +211,41 @@ Q2set.1 %>% #Print out summary statistics
     ## 10 0512           22         38          37         38
     ## # ... with 363 more rows
 
-### 3\. Rescale the variables so that they go from 0-100 instead of the original range.
-
-``` 
- Name the recaled variables `*_pomp`.
-```
+### Q3: Rescale the variables so that they go from 0-100 instead of the original range.
 
 ``` r
-Q3set= Q2set.1%>% #Dataset for Q3
-  mutate(across(c(green1:green5), #Change for green data
-           ~.x * 4, #Multiply green data by 4 (Total equals 100)
-           .names="{.col}_pomp")) %>% #creates new columns for ^^ named *column*_pomp 
-  mutate(across(c(comp1:open10),
-           ~.x * 2, #Same as before but multiply rest by 2 (Total equal 100)
-           .names="{.col}_pomp"))
+# Name the recaled variables `*_pomp`.
 
-Q3set_Final=Q3set %>% #Create summary table for question (Same as Q2set.1 but with 100 as total)
+Q3set <- Q2set.1 %>% #Dataset for Q3
+  mutate(
+    across(c(green1 : green5), #Change for green data
+           ~.x * 4, #Multiply green data by 4 (Total equals 100)
+           .names = "{.col}_pomp") #creates new columns for ^^ named *column*_pomp 
+    ) %>% 
+  mutate(
+    across(c(comp1 : open10),
+           ~.x * 2, #Same as before but multiply rest by 2 (Total equal 100)
+           .names = "{.col}_pomp")
+    )
+
+Q3set_Final <- Q3set %>% #Create summary table for question (Same as Q2set.1 but with 100 as total)
   rowwise() %>%
   group_by(id2) %>% 
-  mutate(Total_green=sum(c_across(green1_pomp:green5_pomp), na.rm = TRUE),
-         Total_comp=sum(c_across(comp1_pomp:comp10_pomp), na.rm = TRUE),
-         Total_intel=sum(c_across(intel1_pomp:intel10_pomp), na.rm = TRUE),
-         Total_open=sum(c_across(open1_pomp:open10_pomp), na.rm = TRUE)) %>% 
-  select(id2,Total_green,Total_comp,Total_intel,Total_open,student)
+  mutate(Total_green = sum(c_across(green1_pomp : green5_pomp), 
+                           na.rm = TRUE),
+         Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
+                          na.rm = TRUE),
+         Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
+                          na.rm = TRUE),
+         Total_open = sum(c_across(open1_pomp : open10_pomp), 
+                          na.rm = TRUE)
+         ) %>% 
+  select(id2,
+         Total_green,
+         Total_comp,
+         Total_intel,
+         Total_open,
+         student)
 
 Q3set_Final
 ```
@@ -215,79 +266,148 @@ Q3set_Final
     ## 10 0512           88         76          74         76       2
     ## # ... with 363 more rows
 
-### 4\. Make plots that illustrate the distributions of the 4 POMP-scored variables.
+### Q4: Make plots that illustrate the distributions of the 4 POMP-scored variables.
 
 ``` r
-Q4set = Q3set_Final %>% #Creates plot based off Q3
-  select(id2,Total_green, Total_comp, Total_intel, Total_open) %>%
-  pivot_longer(., cols = c(Total_green,Total_comp,Total_intel,Total_open), names_to = "POMP_variables", values_to = "POMP_scores") #Reformats dataset to have all the categories as a factor for easier graph
+Q4set <- Q3set_Final %>% #Creates plot based off Q3
+  select(id2,
+         Total_green, 
+         Total_comp, 
+         Total_intel, 
+         Total_open) %>%
+  pivot_longer(., 
+               cols = c(Total_green,
+                        Total_comp,
+                        Total_intel,
+                        Total_open), 
+               names_to = "POMP_variables", 
+               values_to = "POMP_scores") #Reformats dataset to have all the categories as a factor for easier graph
 
 ggplot(Q4set) +
-  aes(x=id2,y=POMP_scores) + 
-  facet_grid(~ POMP_variables)+ #Split by POMP_variables
+  aes(x = id2, 
+      y = POMP_scores) + 
+  facet_grid(~ POMP_variables) + #Split by POMP_variables
   geom_point() +
-  scale_x_discrete("ID")+
+  scale_x_discrete("ID") +
   scale_y_continuous("POMP Scores")
 ```
 
-![](HW3_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](HW3_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
-### 5\. Make scatterplots showing the relationships between **green reputation** and each personality trait.
-
-``` 
- Include trend lines for **students** and **non-students**.
- What do these plots show?
- 
-```
+### Q5: Make scatterplots showing the relationships between **green reputation** and each personality trait.
 
 ``` r
-Q5set=Q3set_Final %>% #Dataset for Q5
+# Include trend lines for **students** and **non-students**.
+# What do these plots show?
+
+Q5set <- Q3set_Final %>% #Dataset for Q5
   mutate(
-    student = recode(student, "1" = "Not a student", "2" = "Student", .default = "No Response", .missing="No Response"))#Recode to student and not a student
+    student = recode(student, 
+                     "1" = "Not a student", 
+                     "2" = "Student", 
+                     .default = "No Response", 
+                     .missing="No Response")
+    ) #Recode to student and not a student
 
 #These are a set of ggplots showing a scatterplot of student, not a student and no responses
-a = ggplot(Q5set) +
-  aes(x=Total_green,y=Total_comp, group=student, color = student) +
-  geom_point(alpha = 0.3, na.rm =TRUE)+
-  scale_color_manual(values=c("black", "red", "blue"))+
+a <- ggplot(Q5set) +
+  aes(x = Total_green,
+      y = Total_comp, 
+      group = student, 
+      color = student) +
+  geom_point(alpha = 0.3, 
+             na.rm =TRUE) +
+  scale_color_manual(values = c("black", 
+                                "red", 
+                                "blue")) +
   geom_smooth(method = "lm")
 
-b = ggplot(Q5set) +
-  aes(x=Total_green,y=Total_intel,group=student,color = student) +
-  scale_color_manual(values=c("black", "red", "blue"))+
-  geom_point(alpha = 0.3, na.rm =TRUE)+
-  geom_smooth(method = "lm") 
+b <- ggplot(Q5set) +
+  aes(x = Total_green,
+      y = Total_intel, 
+      group = student, 
+      color = student) +
+  geom_point(alpha = 0.3, 
+             na.rm =TRUE) +
+  scale_color_manual(values = c("black", 
+                                "red", 
+                                "blue")) +
+  geom_smooth(method = "lm")
 
-c = ggplot(Q5set) +
-  aes(x=Total_green,y=Total_open,group=student,color = student) +
-  scale_color_manual(values=c("black", "red", "blue"))+
-  geom_point(alpha = 0.3, na.rm =TRUE)+
+c <- ggplot(Q5set) +
+  aes(x = Total_green,
+      y = Total_open, 
+      group = student, 
+      color = student) +
+  geom_point(alpha = 0.3, 
+             na.rm =TRUE) +
+  scale_color_manual(values = c("black", 
+                                "red", 
+                                "blue")) +
   geom_smooth(method = "lm")
 
 #Same dataset as last one but removed all NA and incorrect data
-Q5set.1=Q3set_Final %>% 
-  mutate(student = recode(student, "1" = "Not a student", "2" = "Student"))
+Q5set.1 <- Q3set_Final %>% 
+  mutate(
+    student = recode(student, 
+                     "1" = "Not a student", 
+                     "2" = "Student")
+    )
 
 #Same plots as last time but without NA and incorrect data
-d = ggplot(data=subset(Q5set.1, !is.na(student))) +
-  aes(x=Total_green,y=Total_comp, group=student, color = student) +
-  scale_color_manual(values=c("red", "blue"))+
-  geom_point(alpha = 0.3, na.rm =TRUE)+
+d <- ggplot(data = subset(Q5set.1, 
+                          !is.na(student)
+                          )
+            ) +
+  aes(x = Total_green,
+      y = Total_comp, 
+      group = student, 
+      color = student) +
+  scale_color_manual(values=c("red", 
+                              "blue")
+                     ) +
+  geom_point(alpha = 0.3, 
+             na.rm =TRUE)+
   geom_smooth(method = "lm")
 
-e = ggplot(data=subset(Q5set.1, !is.na(student))) +
-  aes(x=Total_green,y=Total_intel,group=student,color = student) +
-  scale_color_manual(values=c("red", "blue"))+
-  geom_point(alpha = 0.3, na.rm =TRUE)+
-  geom_smooth(method = "lm") 
-
-f = ggplot(data=subset(Q5set.1, !is.na(student))) +
-  aes(x=Total_green,y=Total_open,group=student,color = student) +
-  scale_color_manual(values=c("red", "blue"))+
-  geom_point(alpha = 0.3, na.rm =TRUE)+
+e <- ggplot(data = subset(Q5set.1, 
+                          !is.na(student)
+                          )
+            ) +
+  aes(x = Total_green,
+      y = Total_intel, 
+      group = student, 
+      color = student) +
+  scale_color_manual(values=c("red", 
+                              "blue")
+                     ) +
+  geom_point(alpha = 0.3, 
+             na.rm =TRUE)+
   geom_smooth(method = "lm")
 
-grid.arrange(a,b,c,d,e,f, nrow=2)#Merges all the graphs into 1 image
+f <- ggplot(data = subset(Q5set.1, 
+                          !is.na(student)
+                          )
+            ) +
+  aes(x = Total_green,
+      y = Total_open, 
+      group = student, 
+      color = student) +
+  scale_color_manual(values=c("red", 
+                              "blue")
+                     ) +
+  geom_point(alpha = 0.3, 
+             na.rm =TRUE)+
+  geom_smooth(method = "lm")
+
+
+grid.arrange(a,
+             b,
+             c,
+             d,
+             e,
+             f, 
+             nrow = 2)#Merges all the graphs into 1 image
 ```
 
     ## `geom_smooth()` using formula 'y ~ x'
@@ -297,25 +417,29 @@ grid.arrange(a,b,c,d,e,f, nrow=2)#Merges all the graphs into 1 image
     ## `geom_smooth()` using formula 'y ~ x'
     ## `geom_smooth()` using formula 'y ~ x'
 
-<img src="HW3_files/figure-gfm/fig2-1.png" style="display: block; margin: auto;" />
+<img src="HW3_files/figure-gfm/Q5 fig2-1.png" style="display: block; margin: auto;" />
 
-6.  Compare **green reputation** for students and non-students using a
-    **rainfall plot** (bar + density + data points).
+### Q6: Compare **green reputation** for students and non-students using a **rainfall plot** (bar + density + data points).
 
-7.  Compute a summary table of means, SDs, medians, minima, and maxima
-    for the four total scores for students and non-students.
-
-<!-- end list -->
+### Q7: Compute a summary table of means, SDs, medians, minima, and maxima for the four total scores for students and non-students.
 
 ``` r
 Q5set %>%
   group_by(student) %>% 
   summarize(across(c(Total_green:Total_open),
-                    list(Mu = ~mean(.x, na.rm = TRUE),
-                         Sigma = ~sd(.x, na.rm=TRUE),
-                         Median = ~median(.x,na.rm=TRUE),
-                         Max=~max(.x, na.rm = TRUE),
-                         Min=~min(.x, na.rm = TRUE))))
+                    list(Mu = ~mean(.x,
+                                    na.rm = TRUE),
+                         Sigma = ~sd(.x,
+                                     na.rm=TRUE),
+                         Median = ~median(.x,
+                                          na.rm=TRUE),
+                         Max=~max(.x, 
+                                  na.rm = TRUE),
+                         Min=~min(.x, 
+                                  na.rm = TRUE)
+                         )
+                   )
+            )
 ```
 
     ## # A tibble: 3 x 21
