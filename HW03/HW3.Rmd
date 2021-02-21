@@ -68,28 +68,27 @@ summary(green_data.melt)
 temp_recode <- dictionary %>% #Temporary array of names to be used later
   pull(Item) #Array of names are pulled from the list of values under the "item" column
 
-Q2set <- green_data %>% #Dataset for Q2, recodes original dataset "green_data"
-  mutate( #Recodes across all the columns that match the temp_recode list
-    across(all_of(temp_recode), 
-           ~ na_if(.x, 
-                   -99
-                   )
-           )
-    ) %>% #All values that are -99 are recoded into NA
-  mutate(#Creates new id list and discriminates repeated ID numbers
-    id2 = ifelse(duplicated(id),
-                 paste0(id,
-                        "r"
-                        ),
-                 id
-                 )
-    ) 
-
 reverse_recode <- dictionary %>% #Separate temporary array of names to be used later
   filter(Keying == -1 | Keying == -2) %>% #Filters the list by the reverse codes (based off dictionary)
-  pull(Item)    
+  pull(Item) 
 
-Q2set.1 <- Q2set %>% #New dataset with reverse coding 
+#Dataset for Q2, recodes original dataset "green_data"
+Q2set <- green_data %>% 
+  mutate( 
+    across(all_of(temp_recode), #Recodes across all the columns that match the temp_recode list
+           ~ na_if(.x, 
+                   -99
+                   ) #All values that are -99 are recoded into NA
+           )
+    ) %>% 
+  mutate(
+    id2 = ifelse(duplicated(id), #Creates new id list and discriminates repeated ID numbers
+                 paste0(id,
+                        "r"
+                        ), #renames duplicate ids  as "id"r
+                 id
+                 )
+    ) %>% 
   mutate(
     across(all_of(reverse_recode),
            ~ recode(.x, 
@@ -116,7 +115,7 @@ ggplot(Q2.melt) +
 summary(Q2.melt) 
 
 #Print out summary statistics
-Q2set.1 %>% 
+Q2set %>% 
   rowwise() %>% #By row
   group_by(id2) %>% #By id
   mutate(
@@ -150,7 +149,7 @@ Q2set.1 %>%
 # Name the recaled variables `*_pomp`.
 
 #Dataset for Q3
-Q3set <- Q2set.1 %>% 
+Q3set <- Q2set %>% 
   mutate(
     across(c(green1 : green5), #Change for green data
            ~.x * 4, #Multiply green data by 4 (Total equals 100)
@@ -168,19 +167,20 @@ Q3set <- Q2set.1 %>%
 Q3set_Final <- Q3set %>% 
   rowwise() %>%
   group_by(id2) %>% 
-  mutate(Total_green = sum(c_across(green1_pomp : green5_pomp), 
-                           na.rm = TRUE
-                           ),
-         Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
-                          na.rm = TRUE
-                          ),
-         Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
-                          na.rm = TRUE
-                          ),
-         Total_open = sum(c_across(open1_pomp : open10_pomp), 
-                          na.rm = TRUE
-                          )
-         ) %>% 
+  mutate(
+    Total_green = sum(c_across(green1_pomp : green5_pomp), 
+                      na.rm = TRUE
+                      ),
+    Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
+                     na.rm = TRUE
+                     ),
+    Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
+                      na.rm = TRUE
+                      ),
+    Total_open = sum(c_across(open1_pomp : open10_pomp), 
+                     na.rm = TRUE
+                     )
+    ) %>% 
   select(id2,
          Total_green,
          Total_comp,
@@ -229,19 +229,20 @@ ggplot(Q4set) +
 Q5set <- Q3set %>% 
   rowwise() %>%
   group_by(id2) %>% 
-  mutate(Total_green = sum(c_across(green1_pomp : green5_pomp), 
-                           na.rm = TRUE
-                           ),
-         Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
-                          na.rm = TRUE
-                          ),
-         Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
-                          na.rm = TRUE
-                          ),
-         Total_open = sum(c_across(open1_pomp : open10_pomp), 
-                          na.rm = TRUE
-                          )
-         ) %>% 
+  mutate(
+    Total_green = sum(c_across(green1_pomp : green5_pomp), 
+                      na.rm = TRUE
+                      ),
+    Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
+                     na.rm = TRUE
+                     ),
+    Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
+                      na.rm = TRUE
+                      ),
+    Total_open = sum(c_across(open1_pomp : open10_pomp), 
+                     na.rm = TRUE
+                     )
+    ) %>% 
   select(id2,
          Total_green,
          Total_comp,
@@ -272,7 +273,7 @@ a <- ggplot(Q5set.1) +
                                 "blue"
                                 )
                      ) +
-  geom_smooth(method = "lm") 
+  geom_smooth(method = "lm") #Produces lm line in the graph
 
 b <- ggplot(Q5set.1) +
   aes(x = Total_green,

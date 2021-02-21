@@ -78,28 +78,27 @@ summary(green_data.melt)
 temp_recode <- dictionary %>% #Temporary array of names to be used later
   pull(Item) #Array of names are pulled from the list of values under the "item" column
 
-Q2set <- green_data %>% #Dataset for Q2, recodes original dataset "green_data"
-  mutate( #Recodes across all the columns that match the temp_recode list
-    across(all_of(temp_recode), 
+reverse_recode <- dictionary %>% #Separate temporary array of names to be used later
+  filter(Keying == -1 | Keying == -2) %>% #Filters the list by the reverse codes (based off dictionary)
+  pull(Item) 
+
+#Dataset for Q2, recodes original dataset "green_data"
+Q2set <- green_data %>% 
+  mutate( 
+    across(all_of(temp_recode), #Recodes across all the columns that match the temp_recode list
            ~ na_if(.x, 
                    -99
-                   )
+                   ) #All values that are -99 are recoded into NA
            )
-    ) %>% #All values that are -99 are recoded into NA
-  mutate(#Creates new id list and discriminates repeated ID numbers
-    id2 = ifelse(duplicated(id),
+    ) %>% 
+  mutate(
+    id2 = ifelse(duplicated(id), #Creates new id list and discriminates repeated ID numbers
                  paste0(id,
                         "r"
                         ),
                  id
                  )
-    ) 
-
-reverse_recode <- dictionary %>% #Separate temporary array of names to be used later
-  filter(Keying == -1 | Keying == -2) %>% #Filters the list by the reverse codes (based off dictionary)
-  pull(Item)    
-
-Q2set.1 <- Q2set %>% #New dataset with reverse coding 
+    ) %>% 
   mutate(
     across(all_of(reverse_recode),
            ~ recode(.x, 
@@ -138,16 +137,16 @@ summary(Q2.melt)
 
     ##       id                id2               variable         value      
     ##  Length:13428       Length:13428       green1 :  373   Min.   :1.000  
-    ##  Class :character   Class :character   green2 :  373   1st Qu.:2.000  
-    ##  Mode  :character   Mode  :character   green3 :  373   Median :3.000  
-    ##                                        green4 :  373   Mean   :3.188  
+    ##  Class :character   Class :character   green2 :  373   1st Qu.:3.000  
+    ##  Mode  :character   Mode  :character   green3 :  373   Median :4.000  
+    ##                                        green4 :  373   Mean   :3.603  
     ##                                        green5 :  373   3rd Qu.:4.000  
     ##                                        comp1  :  373   Max.   :5.000  
     ##                                        (Other):11190   NA's   :2966
 
 ``` r
 #Print out summary statistics
-Q2set.1 %>% 
+Q2set %>% 
   rowwise() %>% #By row
   group_by(id2) %>% #By id
   mutate(
@@ -194,7 +193,7 @@ Q2set.1 %>%
 # Name the recaled variables `*_pomp`.
 
 #Dataset for Q3
-Q3set <- Q2set.1 %>% 
+Q3set <- Q2set %>% 
   mutate(
     across(c(green1 : green5), #Change for green data
            ~.x * 4, #Multiply green data by 4 (Total equals 100)
