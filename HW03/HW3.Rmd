@@ -214,7 +214,10 @@ ggplot(Q4set) +
   scale_x_discrete("ID") +
   scale_y_continuous("POMP Scores")
 
-#This graph shows that most of participant scores for all four scales are above half. One possiblity is that these scales are positively correlated to one another. At first glance, this graph shows that, there are more higher total score values for comp than rest. Additionally, the graph shows that there are more lower total score values for green than the rest .
+#This graph shows that most of participant scores for all four scales are above half. 
+#One possiblity is that these scales are positively correlated to one another. 
+#At first glance, this graph shows that, there are more high total score values for comp than rest. 
+#Additionally, the graph shows that there are more low total score values for green than the rest.
 
 ```  
 
@@ -251,7 +254,7 @@ Q5set <- Q3set %>%
          student
          )
 
-Q5set.1 = Q5set %>%  
+Q5set.1 <- Q5set %>%  
   mutate(
     student = recode(student, 
                      "1" = "Not a student", 
@@ -261,7 +264,7 @@ Q5set.1 = Q5set %>%
                      )
     ) #Recode to student and not a student
 
-#These are a set of ggplots showing a scatterplot of student, not a student and no responses
+#3 scatter plots of student, not a student and no responses
 a <- ggplot(Q5set.1) +
   aes(x = Total_green,
       y = Total_comp, 
@@ -367,7 +370,10 @@ grid.arrange(a,
              nrow = 2
              )#Merges all the graphs into 1 image
 
-# Based only from the graphs, there seem to be a potential positive correlation between the green trait survey and each of the other personality trait surveys. Additionally the graphs show interactions between the green survey and both intel personality trait survey and the open personality trait survey. When comparing the scores between student, non-student and people who did not answer (no response), there is a difference in the scaling and scores between the people who did not respond and those who did. Those who did not respond seem to show a lower total score value for all of the personality traits but higher scaling (i.e., larger increase in personality trait total score value per total score value for the green survey).
+# Based only from the graphs, there seem to be a potential positive correlation between the green trait survey and each of the other personality trait surveys. 
+#Additionally the graphs show interactions between the green survey and both intel personality trait survey and the open personality trait survey. 
+#When comparing the scores between student, non-student and people who did not answer (no response), there is a difference in the scaling and scores between the people who did not respond and those who did.
+#Those who did not respond seem to show a lower total score value for all of the personality traits but higher scaling (i.e., larger increase in personality trait total score value per total score value for the green survey).
 
 ```  
 
@@ -402,7 +408,7 @@ ggplot(data = subset(Q5set.2,
                  ) +
   geom_density(alpha = .2)
 
-#Overall, the plot does not seem to indicate a notable difference between students and non-students in terms of he green reputation scale.
+#Overall, the plot does not seem to indicate a notable difference between students and non-students for the green reputation scale.
 
 ```
 
@@ -432,7 +438,8 @@ Q5set.1 %>%
                    )
             )
 
-#Judging purely by the summary statistics, there does not seem to be a difference between students and non-students in any of the personality trait scores (with the possible exception for the mean total score value for comp) or the green scores. Nearly all the means between the two groups are the same and around 70 for the personality trait scores, with the exception of comp (76-81) and green (65-67)
+#Judging purely by the summary statistics, there does not seem to be a difference between students and non-students for any of the personality trait scores (with the possible exception for the mean total score value for comp) or the green reputation scores. 
+#Nearly all the means between the two groups are the same and around 70 for the scores, with the exception of comp (76-81) and green (65-67)
 
 ```  
   

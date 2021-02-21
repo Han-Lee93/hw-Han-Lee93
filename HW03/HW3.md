@@ -95,7 +95,7 @@ Q2set <- green_data %>%
     id2 = ifelse(duplicated(id), #Creates new id list and discriminates repeated ID numbers
                  paste0(id,
                         "r"
-                        ),
+                        ), #renames duplicate ids  as "id"r
                  id
                  )
     ) %>% 
@@ -211,19 +211,20 @@ Q3set <- Q2set %>%
 Q3set_Final <- Q3set %>% 
   rowwise() %>%
   group_by(id2) %>% 
-  mutate(Total_green = sum(c_across(green1_pomp : green5_pomp), 
-                           na.rm = TRUE
-                           ),
-         Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
-                          na.rm = TRUE
-                          ),
-         Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
-                          na.rm = TRUE
-                          ),
-         Total_open = sum(c_across(open1_pomp : open10_pomp), 
-                          na.rm = TRUE
-                          )
-         ) %>% 
+  mutate(
+    Total_green = sum(c_across(green1_pomp : green5_pomp), 
+                      na.rm = TRUE
+                      ),
+    Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
+                     na.rm = TRUE
+                     ),
+    Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
+                      na.rm = TRUE
+                      ),
+    Total_open = sum(c_across(open1_pomp : open10_pomp), 
+                     na.rm = TRUE
+                     )
+    ) %>% 
   select(id2,
          Total_green,
          Total_comp,
@@ -289,7 +290,10 @@ ggplot(Q4set) +
 ![](HW3_files/figure-gfm/Q4-1.png)<!-- -->
 
 ``` r
-#This graph shows that most of participant scores for all four scales are above half. One possiblity is that these scales are positively correlated to one another. At first glance, this graph shows that, there are more higher total score values for comp than rest. Additionally, the graph shows that there are more lower total score values for green than the rest .
+#This graph shows that most of participant scores for all four scales are above half. 
+#One possiblity is that these scales are positively correlated to one another. 
+#At first glance, this graph shows that, there are more high total score values for comp than rest. 
+#Additionally, the graph shows that there are more low total score values for green than the rest.
 ```
 
 ### Q5: Make scatterplots showing the relationships between **green reputation** and each personality trait.
@@ -302,19 +306,20 @@ ggplot(Q4set) +
 Q5set <- Q3set %>% 
   rowwise() %>%
   group_by(id2) %>% 
-  mutate(Total_green = sum(c_across(green1_pomp : green5_pomp), 
-                           na.rm = TRUE
-                           ),
-         Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
-                          na.rm = TRUE
-                          ),
-         Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
-                          na.rm = TRUE
-                          ),
-         Total_open = sum(c_across(open1_pomp : open10_pomp), 
-                          na.rm = TRUE
-                          )
-         ) %>% 
+  mutate(
+    Total_green = sum(c_across(green1_pomp : green5_pomp), 
+                      na.rm = TRUE
+                      ),
+    Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
+                     na.rm = TRUE
+                     ),
+    Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
+                      na.rm = TRUE
+                      ),
+    Total_open = sum(c_across(open1_pomp : open10_pomp), 
+                     na.rm = TRUE
+                     )
+    ) %>% 
   select(id2,
          Total_green,
          Total_comp,
@@ -323,7 +328,7 @@ Q5set <- Q3set %>%
          student
          )
 
-Q5set.1 = Q5set %>%  
+Q5set.1 <- Q5set %>%  
   mutate(
     student = recode(student, 
                      "1" = "Not a student", 
@@ -333,7 +338,7 @@ Q5set.1 = Q5set %>%
                      )
     ) #Recode to student and not a student
 
-#These are a set of ggplots showing a scatterplot of student, not a student and no responses
+#3 scatter plots of student, not a student and no responses
 a <- ggplot(Q5set.1) +
   aes(x = Total_green,
       y = Total_comp, 
@@ -345,7 +350,7 @@ a <- ggplot(Q5set.1) +
                                 "blue"
                                 )
                      ) +
-  geom_smooth(method = "lm") 
+  geom_smooth(method = "lm") #Produces lm line in the graph
 
 b <- ggplot(Q5set.1) +
   aes(x = Total_green,
@@ -450,7 +455,10 @@ grid.arrange(a,
 <img src="HW3_files/figure-gfm/Q5 fig2-1.png" style="display: block; margin: auto;" />
 
 ``` r
-# Based only from the graphs, there seem to be a potential positive correlation between the green trait survey and each of the other personality trait surveys. Additionally the graphs show interactions between the green survey and both intel personality trait survey and the open personality trait survey. When comparing the scores between student, non-student and people who did not answer (no response), there is a difference in the scaling and scores between the people who did not respond and those who did. Those who did not respond seem to show a lower total score value for all of the personality traits but higher scaling (i.e., larger increase in personality trait total score value per total score value for the green survey).
+# Based only from the graphs, there seem to be a potential positive correlation between the green trait survey and each of the other personality trait surveys. 
+#Additionally the graphs show interactions between the green survey and both intel personality trait survey and the open personality trait survey. 
+#When comparing the scores between student, non-student and people who did not answer (no response), there is a difference in the scaling and scores between the people who did not respond and those who did.
+#Those who did not respond seem to show a lower total score value for all of the personality traits but higher scaling (i.e., larger increase in personality trait total score value per total score value for the green survey).
 ```
 
 ### Q6: Compare **green reputation** for students and non-students using a **rainfall plot** (bar + density + data points).
@@ -486,7 +494,7 @@ ggplot(data = subset(Q5set.2,
 ![](HW3_files/figure-gfm/Q6-1.png)<!-- -->
 
 ``` r
-#Overall, the plot does not seem to indicate a notable difference between students and non-students in terms of he green reputation scale.
+#Overall, the plot does not seem to indicate a notable difference between students and non-students for the green reputation scale.
 ```
 
 ### Q7: Compute a summary table of means, SDs, medians, minima, and maxima for the four total scores for students and non-students.
@@ -529,7 +537,8 @@ Q5set.1 %>%
     ## #   Total_open_Max <dbl>, Total_open_Min <dbl>
 
 ``` r
-#Judging purely by the summary statistics, there does not seem to be a difference between students and non-students in any of the personality trait scores (with the possible exception for the mean total score value for comp) or the green scores. Nearly all the means between the two groups are the same and around 70 for the personality trait scores, with the exception of comp (76-81) and green (65-67)
+#Judging purely by the summary statistics, there does not seem to be a difference between students and non-students for any of the personality trait scores (with the possible exception for the mean total score value for comp) or the green reputation scores. 
+#Nearly all the means between the two groups are the same and around 70 for the scores, with the exception of comp (76-81) and green (65-67)
 ```
 
 In your assignment, prepare an RMarkdown file that includes both the
