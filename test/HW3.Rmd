@@ -1,3 +1,10 @@
+---
+title: "HW3"
+author: "han"
+date: "2/19/2021"
+output: html_document
+---
+
 # Homework 03
 
 You will analyze data looking at the relationship between **green reputation** and three personality traits--**compassion**, **intellectual curiosity**, and **openness to experiences**.
@@ -188,3 +195,4 @@ test8 %>%
 ```  
   
 In your assignment, prepare an RMarkdown file that includes both the coding and (for 4-7) narrative descriptions of your results.
+
