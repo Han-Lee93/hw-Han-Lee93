@@ -16,6 +16,8 @@ library(tibble)
 library(ggplot2)
 library(tidyverse)
 library(gridExtra)
+library(reshape2)
+theme_set(theme_classic())
 dictionary <- readr::read_csv("green_dictionary.csv")
 green_data <- readr::read_csv("green_data.csv")
 ```
@@ -35,19 +37,19 @@ The dataset includes data from **students** and **non-students**.
 
 # Is anything unusual?
 
-green_data %>% #Summarizes data for each column by max value and min value.
-  summarize(
-    across(
-      c(green1:student),
-      list(Max = ~ max(.x, 
-                       na.rm = TRUE),
-           Min = ~ min(.x, 
-                       na.rm = TRUE)
-           )
-      )
-    )
-
 filter(green_data, id == 5549) #Searches id for value "5549" 
+
+#Quick summary check
+green_data.melt <- melt(green_data, measures.var = across(c:green1:open10)) #Reformat dataset, sets all columns into 1 column to separate as factors
+
+ggplot(green_data.melt) +
+  aes(y = value,
+      x = id
+      ) +
+  geom_point()
+
+summary(green_data.melt)
+
 
 #Dataset has several issues.
 #1. Duplicate participant data
@@ -62,72 +64,81 @@ filter(green_data, id == 5549) #Searches id for value "5549"
 
 # Recode variables as needed.
 
+#RECODING
 temp_recode <- dictionary %>% #Temporary array of names to be used later
   pull(Item) #Array of names are pulled from the list of values under the "item" column
 
 Q2set <- green_data %>% #Dataset for Q2, recodes original dataset "green_data"
   mutate( #Recodes across all the columns that match the temp_recode list
-    across(
-      all_of(temp_recode), 
+    across(all_of(temp_recode), 
            ~ na_if(.x, 
-                   -99)
-      )
+                   -99
+                   )
+           )
     ) %>% #All values that are -99 are recoded into NA
-  mutate( #Creates new id list and discriminates repeated ID numbers
-    id2 = ifelse(
-      duplicated(id),
-      paste0(id, 
-             "r"), 
-      id)
+  mutate(#Creates new id list and discriminates repeated ID numbers
+    id2 = ifelse(duplicated(id),
+                 paste0(id,
+                        "r"
+                        ),
+                 id
+                 )
     ) 
 
-Q2set %>% #Rechecking quick summary glance
-  summarize(
-    across(
-      c(green1 : student),
-      list(Max = ~ max(.x, 
-                       na.rm = TRUE),
-           Min = ~ min(.x, 
-                       na.rm = TRUE)
-           )
-      )
-    )
-
 reverse_recode <- dictionary %>% #Separate temporary array of names to be used later
-  filter(Keying == -1 | Keying ==-2) %>% #Filters the list by the reverse codes (based off dictionary)
+  filter(Keying == -1 | Keying == -2) %>% #Filters the list by the reverse codes (based off dictionary)
   pull(Item)    
 
-Q2set.1 <- Q2set%>% #New dataset with reverse coding 
+Q2set.1 <- Q2set %>% #New dataset with reverse coding 
   mutate(
-    across(
-      all_of(reverse_recode),
+    across(all_of(reverse_recode),
            ~ recode(.x, 
                     "5" = 1, 
                     "4" = 2, 
                     "3" = 3, 
                     "2" = 4, 
-                    "1" = 5)
-      )
+                    "1" = 5
+                    )
+           )
     ) #Reverse codes based off the dictionary (reverse_recode)
 
-Q2set.1 %>% #Print out summary statistics
+#Rechecking quick summary glance
+Q2.melt <- melt(Q2set, 
+                measures.var = across(c:green1:open10)
+                )
+
+ggplot(Q2.melt) +
+  aes(y = value,
+      x = id
+      ) +
+  geom_point()
+
+summary(Q2.melt) 
+
+#Print out summary statistics
+Q2set.1 %>% 
   rowwise() %>% #By row
   group_by(id2) %>% #By id
   mutate(
     Total_green = sum(c_across(green1 : green5), #Summary - sum of all green (20), comp, intel, and open (50)
-                      na.rm = TRUE), 
+                      na.rm = TRUE
+                      ), 
     Total_comp = sum(c_across(comp1 : comp10), 
-                     na.rm = TRUE),
+                     na.rm = TRUE
+                     ),
     Total_intel = sum(c_across(intel1 : intel10), 
-                      na.rm = TRUE),
+                      na.rm = TRUE
+                      ),
     Total_open = sum(c_across(open1 : open10), 
-                     na.rm = TRUE)
+                     na.rm = TRUE
+                     )
     ) %>% 
   select(id2,
          Total_green,
          Total_comp,
          Total_intel,
-         Total_open)
+         Total_open
+         )
 
 ```
      
@@ -138,36 +149,44 @@ Q2set.1 %>% #Print out summary statistics
 
 # Name the recaled variables `*_pomp`.
 
-Q3set <- Q2set.1 %>% #Dataset for Q3
+#Dataset for Q3
+Q3set <- Q2set.1 %>% 
   mutate(
     across(c(green1 : green5), #Change for green data
            ~.x * 4, #Multiply green data by 4 (Total equals 100)
-           .names = "{.col}_pomp") #creates new columns for ^^ named *column*_pomp 
+           .names = "{.col}_pomp" #creates new columns for ^^ named *column*_pomp
+           )  
     ) %>% 
   mutate(
     across(c(comp1 : open10),
            ~.x * 2, #Same as before but multiply rest by 2 (Total equal 100)
-           .names = "{.col}_pomp")
+           .names = "{.col}_pomp"
+           )
     )
 
-Q3set_Final <- Q3set %>% #Create summary table for question (Same as Q2set.1 but with 100 as total)
+#Create summary table for question (Same as Q2set.1 but with 100 as total)
+Q3set_Final <- Q3set %>% 
   rowwise() %>%
   group_by(id2) %>% 
   mutate(Total_green = sum(c_across(green1_pomp : green5_pomp), 
-                           na.rm = TRUE),
+                           na.rm = TRUE
+                           ),
          Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
-                          na.rm = TRUE),
+                          na.rm = TRUE
+                          ),
          Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
-                          na.rm = TRUE),
+                          na.rm = TRUE
+                          ),
          Total_open = sum(c_across(open1_pomp : open10_pomp), 
-                          na.rm = TRUE)
+                          na.rm = TRUE
+                          )
          ) %>% 
   select(id2,
          Total_green,
          Total_comp,
          Total_intel,
-         Total_open,
-         student)
+         Total_open
+         )
 
 Q3set_Final
 
@@ -175,30 +194,27 @@ Q3set_Final
 
 ### Q4: Make plots that illustrate the distributions of the 4 POMP-scored variables.
 
-```{r}     
+```{r Q4}     
 
-Q4set <- Q3set_Final %>% #Creates plot based off Q3
-  select(id2,
-         Total_green, 
-         Total_comp, 
-         Total_intel, 
-         Total_open) %>%
-  pivot_longer(., 
-               cols = c(Total_green,
-                        Total_comp,
-                        Total_intel,
-                        Total_open), 
-               names_to = "POMP_variables", 
-               values_to = "POMP_scores") #Reformats dataset to have all the categories as a factor for easier graph
+#Reformats dataset to have all the categories as a factor for easier graph (same as before)
+Q4set <- melt(Q3set_Final, 
+              value.name = "POMP_scores", 
+              variable.name = "POMP_variables"
+              )
 
-ggplot(Q4set) +
+summary(Q4set)
+
+#Creates plot based off Q4set
+ggplot(Q4set) + 
   aes(x = id2, 
-      y = POMP_scores) + 
+      y = POMP_scores
+      ) + 
   facet_grid(~ POMP_variables) + #Split by POMP_variables
   geom_point() +
   scale_x_discrete("ID") +
-  scale_y_continuous("POMP Scores") +
-  theme_bw()
+  scale_y_continuous("POMP Scores")
+
+#This graph shows that most of participant scores for all four scales are above half. One possiblity is that these scales are positively correlated to one another. At first glance, this graph shows that, there are more higher total score values for comp than rest. Additionally, the graph shows that there are more lower total score values for green than the rest .
 
 ```  
 
@@ -209,102 +225,136 @@ ggplot(Q4set) +
 # Include trend lines for **students** and **non-students**.
 # What do these plots show?
 
-Q5set <- Q3set_Final %>% #Dataset for Q5
+#Dataset for Q5
+Q5set <- Q3set %>% 
+  rowwise() %>%
+  group_by(id2) %>% 
+  mutate(Total_green = sum(c_across(green1_pomp : green5_pomp), 
+                           na.rm = TRUE
+                           ),
+         Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
+                          na.rm = TRUE
+                          ),
+         Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
+                          na.rm = TRUE
+                          ),
+         Total_open = sum(c_across(open1_pomp : open10_pomp), 
+                          na.rm = TRUE
+                          )
+         ) %>% 
+  select(id2,
+         Total_green,
+         Total_comp,
+         Total_intel,
+         Total_open,
+         student
+         )
+
+Q5set.1 = Q5set %>%  
   mutate(
     student = recode(student, 
                      "1" = "Not a student", 
                      "2" = "Student", 
                      .default = "No Response", 
-                     .missing = "No Response")
+                     .missing = "No Response"
+                     )
     ) #Recode to student and not a student
 
 #These are a set of ggplots showing a scatterplot of student, not a student and no responses
-a <- ggplot(Q5set) +
+a <- ggplot(Q5set.1) +
   aes(x = Total_green,
       y = Total_comp, 
-      color = student) +
+      color = student
+      ) +
   geom_point() +
   scale_color_manual(values = c("black", 
                                 "red", 
-                                "blue")
+                                "blue"
+                                )
                      ) +
-  geom_smooth(method = "lm") +
-  theme_classic()
+  geom_smooth(method = "lm") 
 
-b <- ggplot(Q5set) +
+b <- ggplot(Q5set.1) +
   aes(x = Total_green,
       y = Total_intel, 
-      color = student) +
+      color = student
+      ) +
   geom_point() +
   scale_color_manual(values = c("black", 
                                 "red", 
-                                "blue")
+                                "blue"
+                                )
                      ) +
-  geom_smooth(method = "lm") +
-  theme_classic()
+  geom_smooth(method = "lm")
 
-c <- ggplot(Q5set) +
+c <- ggplot(Q5set.1) +
   aes(x = Total_green,
       y = Total_open,  
-      color = student) +
+      color = student
+      ) +
   geom_point() +
   scale_color_manual(values = c("black", 
                                 "red", 
-                                "blue")
+                                "blue"
+                                )
                      ) +
-  geom_smooth(method = "lm") +
-  theme_classic()
+  geom_smooth(method = "lm")
 
 #Same dataset as last one but removed all NA and incorrect data
-Q5set.1 <- Q3set_Final %>% 
+Q5set.2 <- Q5set %>% 
   mutate(
     student = recode(student, 
                      "1" = "Not a student", 
-                     "2" = "Student")
+                     "2" = "Student"
+                     )
     )
 
 #Same plots as last time but without NA and incorrect data
-d <- ggplot(data = subset(Q5set.1, 
+d <- ggplot(data = subset(Q5set.2, 
                           !is.na(student)
                           )
             ) +
   aes(x = Total_green,
       y = Total_comp, 
-      color = student) +
+      color = student
+      ) +
   scale_color_manual(values = c("red", 
-                              "blue")
+                                "blue"
+                                )
                      ) +
   geom_point() +
-  geom_smooth(method = "lm") +
-  theme_classic()
+  geom_smooth(method = "lm")
 
-e <- ggplot(data = subset(Q5set.1, 
+e <- ggplot(data = subset(Q5set.2, 
                           !is.na(student)
                           )
             ) +
   aes(x = Total_green,
       y = Total_intel, 
-      color = student) +
+      color = student
+      ) +
   scale_color_manual(values = c("red", 
-                              "blue")
+                                "blue"
+                                )
                      ) +
   geom_point() +
-  geom_smooth(method = "lm") +
-  theme_classic()
+  geom_smooth(method = "lm")
 
-f <- ggplot(data = subset(Q5set.1, 
+f <- ggplot(data = subset(Q5set.2, 
                           !is.na(student)
                           )
             ) +
   aes(x = Total_green,
       y = Total_open, 
-      color = student) +
+      color = student
+      ) +
   scale_color_manual(values = c("red", 
-                              "blue")
+                                "blue"
+                                )
                      ) +
   geom_point() +
-  geom_smooth(method = "lm") +
-  theme_classic()
+  geom_smooth(method = "lm") 
+
 
 
 grid.arrange(a,
@@ -313,8 +363,10 @@ grid.arrange(a,
              d,
              e,
              f, 
-             nrow = 2)#Merges all the graphs into 1 image
+             nrow = 2
+             )#Merges all the graphs into 1 image
 
+# Based only from the graphs, there seem to be a potential positive correlation between the green trait survey and each of the other personality trait surveys. Additionally the graphs show interactions between the green survey and both intel personality trait survey and the open personality trait survey. When comparing the scores between student, non-student and people who did not answer (no response), there is a difference in the scaling and scores between the people who did not respond and those who did. Those who did not respond seem to show a lower total score value for all of the personality traits but higher scaling (i.e., larger increase in personality trait total score value per total score value for the green survey).
 
 ```  
 
@@ -323,29 +375,63 @@ grid.arrange(a,
   
 ```{r Q6}
 
+ggplot(data = subset(Q5set.2, 
+                          !is.na(student)
+                     )
+       ) +
+  aes(x = Total_green, 
+      fill = student,
+      group = student,
+      alpha = student,
+      color = student
+      ) +
+  scale_color_manual(values = c("red", 
+                                "blue"
+                               )
+                     ) +
+  scale_fill_manual(values = c("red2",
+                               "aquamarine"
+                               )
+                    ) +
+  geom_histogram(position = "identity",
+                 binwidth = 1.5,
+                 aes(y = ..density.., 
+                     alpha = .4
+                     )
+                 ) +
+  geom_density(alpha = .2)
 
-```  
+#Overall, the plot does not seem to indicate a notable difference between students and non-students in terms of he green reputation scale.
+
+```
 
 ### Q7: Compute a summary table of means, SDs, medians, minima, and maxima for the four total scores for students and non-students.
 
 ```{r Q7}
 
-Q5set %>%
+Q5set.1 %>%
   group_by(student) %>% 
   summarize(across(c(Total_green:Total_open),
-                    list(Mu = ~mean(.x,
-                                    na.rm = TRUE),
-                         Sigma = ~sd(.x,
-                                     na.rm=TRUE),
-                         Median = ~median(.x,
-                                          na.rm=TRUE),
-                         Max=~max(.x, 
-                                  na.rm = TRUE),
-                         Min=~min(.x, 
-                                  na.rm = TRUE)
+                    list(Mu = ~ mean(.x,
+                                      na.rm = TRUE
+                                     ),
+                         Sigma = ~ sd(.x,
+                                      na.rm = TRUE
+                                     ),
+                         Median = ~ median(.x,
+                                           na.rm = TRUE
+                                           ),
+                         Max = ~ max(.x, 
+                                     na.rm = TRUE
+                                     ),
+                         Min = ~ min(.x, 
+                                     na.rm = TRUE
+                                     )
                          )
                    )
             )
+
+#Judging purely by the summary statistics, there does not seem to be a difference between students and non-students in any of the personality trait scores (with the possible exception for the mean total score value for comp) or the green scores. Nearly all the means between the two groups are the same and around 70 for the personality trait scores, with the exception of comp (76-81) and green (65-67)
 
 ```  
   
