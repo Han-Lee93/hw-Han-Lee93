@@ -9,31 +9,6 @@ han
 
 The dataset includes data from **students** and **non-students**.
 
-``` r
-dictionary <- readr::read_csv("green_dictionary.csv")
-```
-
-    ## 
-    ## -- Column specification --------------------------------------------------------
-    ## cols(
-    ##   Item = col_character(),
-    ##   Content = col_character(),
-    ##   Options = col_character(),
-    ##   Keying = col_double()
-    ## )
-
-``` r
-green_data <- readr::read_csv("green_data.csv")
-```
-
-    ## 
-    ## -- Column specification --------------------------------------------------------
-    ## cols(
-    ##   .default = col_double(),
-    ##   id = col_character()
-    ## )
-    ## i Use `spec()` for the full column specifications.
-
 ## For your assignment, do the following.
 
 ### Q1: Inspect the item responses (e.g., with graphs or by summarizing distinct values).
@@ -293,7 +268,7 @@ ggplot(Q4set) +
   theme_bw()
 ```
 
-![](HW3_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](HW3_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
 ### Q5: Make scatterplots showing the relationships between **green reputation** and each personality trait.
 
