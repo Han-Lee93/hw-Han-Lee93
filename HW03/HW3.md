@@ -289,7 +289,8 @@ ggplot(Q4set) +
   facet_grid(~ POMP_variables) + #Split by POMP_variables
   geom_point() +
   scale_x_discrete("ID") +
-  scale_y_continuous("POMP Scores")
+  scale_y_continuous("POMP Scores") +
+  theme_bw()
 ```
 
 ![](HW3_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
@@ -306,45 +307,45 @@ Q5set <- Q3set_Final %>% #Dataset for Q5
                      "1" = "Not a student", 
                      "2" = "Student", 
                      .default = "No Response", 
-                     .missing="No Response")
+                     .missing = "No Response")
     ) #Recode to student and not a student
 
 #These are a set of ggplots showing a scatterplot of student, not a student and no responses
 a <- ggplot(Q5set) +
   aes(x = Total_green,
       y = Total_comp, 
-      group = student, 
       color = student) +
-  geom_point(alpha = 0.3, 
-             na.rm =TRUE) +
+  geom_point() +
   scale_color_manual(values = c("black", 
                                 "red", 
-                                "blue")) +
-  geom_smooth(method = "lm")
+                                "blue")
+                     ) +
+  geom_smooth(method = "lm") +
+  theme_classic()
 
 b <- ggplot(Q5set) +
   aes(x = Total_green,
       y = Total_intel, 
-      group = student, 
       color = student) +
-  geom_point(alpha = 0.3, 
-             na.rm =TRUE) +
+  geom_point() +
   scale_color_manual(values = c("black", 
                                 "red", 
-                                "blue")) +
-  geom_smooth(method = "lm")
+                                "blue")
+                     ) +
+  geom_smooth(method = "lm") +
+  theme_classic()
 
 c <- ggplot(Q5set) +
   aes(x = Total_green,
-      y = Total_open, 
-      group = student, 
+      y = Total_open,  
       color = student) +
-  geom_point(alpha = 0.3, 
-             na.rm =TRUE) +
+  geom_point() +
   scale_color_manual(values = c("black", 
                                 "red", 
-                                "blue")) +
-  geom_smooth(method = "lm")
+                                "blue")
+                     ) +
+  geom_smooth(method = "lm") +
+  theme_classic()
 
 #Same dataset as last one but removed all NA and incorrect data
 Q5set.1 <- Q3set_Final %>% 
@@ -361,14 +362,13 @@ d <- ggplot(data = subset(Q5set.1,
             ) +
   aes(x = Total_green,
       y = Total_comp, 
-      group = student, 
       color = student) +
-  scale_color_manual(values=c("red", 
+  scale_color_manual(values = c("red", 
                               "blue")
                      ) +
-  geom_point(alpha = 0.3, 
-             na.rm =TRUE)+
-  geom_smooth(method = "lm")
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_classic()
 
 e <- ggplot(data = subset(Q5set.1, 
                           !is.na(student)
@@ -376,14 +376,13 @@ e <- ggplot(data = subset(Q5set.1,
             ) +
   aes(x = Total_green,
       y = Total_intel, 
-      group = student, 
       color = student) +
-  scale_color_manual(values=c("red", 
+  scale_color_manual(values = c("red", 
                               "blue")
                      ) +
-  geom_point(alpha = 0.3, 
-             na.rm =TRUE)+
-  geom_smooth(method = "lm")
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_classic()
 
 f <- ggplot(data = subset(Q5set.1, 
                           !is.na(student)
@@ -391,14 +390,13 @@ f <- ggplot(data = subset(Q5set.1,
             ) +
   aes(x = Total_green,
       y = Total_open, 
-      group = student, 
       color = student) +
-  scale_color_manual(values=c("red", 
+  scale_color_manual(values = c("red", 
                               "blue")
                      ) +
-  geom_point(alpha = 0.3, 
-             na.rm =TRUE)+
-  geom_smooth(method = "lm")
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_classic()
 
 
 grid.arrange(a,
