@@ -311,17 +311,37 @@ summary(Q4set)
 Q4set.1 = Q4set %>% 
   filter(POMP_scores != 0) #Removes NA or incorrect data (values = 0)
 
-ggplot(Q4set.1) + 
-  aes(x = id2, 
-      y = POMP_scores
+a <- ggplot(Q4set.1) + 
+  aes(x = POMP_scores,
+      group = POMP_variables,
+      color = POMP_variables,
+      fill = POMP_variables,
       ) + 
-  facet_grid(~ POMP_variables) + #Split by POMP_variables
-  geom_point() +
-  scale_x_discrete("ID") +
-  scale_y_continuous("POMP Scores")
+  geom_histogram(alpha = .5, 
+                 color = "black", 
+                 position = "identity"
+                 ) +
+  scale_x_continuous("POMP Scores")
+
+b <- ggplot(Q4set.1) + 
+  aes(x = POMP_scores,
+      group = POMP_variables,
+      color = POMP_variables,
+      fill = POMP_variables,
+      ) + 
+  geom_histogram(color = "black") +
+    facet_grid(~ POMP_variables) + #Split by POMP_variables
+  scale_x_continuous("POMP Scores")
+
+grid.arrange(a,
+             b)#Merges all the graphs into 1 image
 ```
 
-![](HW3_files/figure-gfm/Q4-1.png)<!-- -->
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+<img src="HW3_files/figure-gfm/Q4 fig2-1.png" style="display: block; margin: auto;" />
 
 ``` r
 #This graph shows that most of participant scores for all four scales are above half. 
@@ -468,7 +488,7 @@ grid.arrange(a,
              e,
              f, 
              nrow = 2
-             )#Merges all the graphs into 1 image
+             )
 ```
 
     ## `geom_smooth()` using formula 'y ~ x'

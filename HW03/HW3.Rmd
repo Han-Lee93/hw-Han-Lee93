@@ -199,7 +199,7 @@ Q3set.1
 
 ### Q4: Make plots that illustrate the distributions of the 4 POMP-scored variables.
 
-```{r Q4}     
+```{r Q4 fig2, fig.height = 10, fig.width = 15, fig.align = "center"}     
 
 #Reformats dataset to have all the categories as a factor for easier graph (same as before)
 Q4set <- melt(Q3set.1, 
@@ -213,14 +213,30 @@ summary(Q4set)
 Q4set.1 = Q4set %>% 
   filter(POMP_scores != 0) #Removes NA or incorrect data (values = 0)
 
-ggplot(Q4set.1) + 
-  aes(x = id2, 
-      y = POMP_scores
+a <- ggplot(Q4set.1) + 
+  aes(x = POMP_scores,
+      group = POMP_variables,
+      color = POMP_variables,
+      fill = POMP_variables,
       ) + 
-  facet_grid(~ POMP_variables) + #Split by POMP_variables
-  geom_point() +
-  scale_x_discrete("ID") +
-  scale_y_continuous("POMP Scores")
+  geom_histogram(alpha = .5, 
+                 color = "black", 
+                 position = "identity"
+                 ) +
+  scale_x_continuous("POMP Scores")
+
+b <- ggplot(Q4set.1) + 
+  aes(x = POMP_scores,
+      group = POMP_variables,
+      color = POMP_variables,
+      fill = POMP_variables,
+      ) + 
+  geom_histogram(color = "black") +
+    facet_grid(~ POMP_variables) + #Split by POMP_variables
+  scale_x_continuous("POMP Scores")
+
+grid.arrange(a,
+             b)#Merges all the graphs into 1 image
 
 #This graph shows that most of participant scores for all four scales are above half. 
 #One possiblity is that these scales are positively correlated to one another. 
@@ -368,7 +384,7 @@ grid.arrange(a,
              e,
              f, 
              nrow = 2
-             )#Merges all the graphs into 1 image
+             )
 
 #Based on the graphs, there seem to be a potential positive correlation between the green reputation survey and each of the other personality trait surveys. 
 #Additionally the graphs show interactions between the green survey and both intel personality trait survey and open personality trait survey. 
