@@ -17,6 +17,7 @@ library(ggplot2)
 library(tidyverse)
 library(gridExtra)
 library(reshape2)
+library(ggdist)
 theme_set(theme_classic())
 dictionary <- readr::read_csv("green_dictionary.csv")
 green_data <- readr::read_csv("green_data.csv")
@@ -37,7 +38,11 @@ The dataset includes data from **students** and **non-students**.
 
 # Is anything unusual?
 
-filter(green_data, id == 5549) #Searches id for value "5549" 
+Q1set = filter(green_data, id == 5549) #Searches id for value "5549" 
+Q1set.1 <- as.data.frame(t(as.matrix(Q1set) #Flips columns and rows
+                           )
+                         )
+Q1set.1
 
 #Quick summary check
 green_data.melt <- melt(green_data, measures.var = across(c:green1:open10)) #Reformat dataset, sets all columns into 1 column to separate as factors
@@ -205,7 +210,10 @@ Q4set <- melt(Q3set_Final,
 summary(Q4set)
 
 #Creates plot based off Q4set
-ggplot(Q4set) + 
+Q4set.1 = Q4set %>% 
+  filter(POMP_scores != 0) #Removes NA or incorrect data (values = 0)
+
+ggplot(Q4set.1) + 
   aes(x = id2, 
       y = POMP_scores
       ) + 
@@ -271,7 +279,7 @@ a <- ggplot(Q5set.1) +
       color = student
       ) +
   geom_point() +
-  scale_color_manual(values = c("black", 
+  scale_color_manual(values = c("black",
                                 "red", 
                                 "blue"
                                 )
@@ -314,9 +322,7 @@ Q5set.2 <- Q5set %>%
     )
 
 #Same plots as last time but without NA and incorrect data
-d <- ggplot(data = subset(Q5set.2, 
-                          !is.na(student)
-                          )
+d <- ggplot(na.omit(Q5set.2)
             ) +
   aes(x = Total_green,
       y = Total_comp, 
@@ -329,9 +335,7 @@ d <- ggplot(data = subset(Q5set.2,
   geom_point() +
   geom_smooth(method = "lm")
 
-e <- ggplot(data = subset(Q5set.2, 
-                          !is.na(student)
-                          )
+e <- ggplot(na.omit(Q5set.2)
             ) +
   aes(x = Total_green,
       y = Total_intel, 
@@ -344,9 +348,7 @@ e <- ggplot(data = subset(Q5set.2,
   geom_point() +
   geom_smooth(method = "lm")
 
-f <- ggplot(data = subset(Q5set.2, 
-                          !is.na(student)
-                          )
+f <- ggplot(na.omit(Q5set.2)
             ) +
   aes(x = Total_green,
       y = Total_open, 
@@ -382,33 +384,27 @@ grid.arrange(a,
   
 ```{r Q6}
 
-ggplot(data = subset(Q5set.2, 
-                          !is.na(student)
-                     )
+ggplot(na.omit(Q5set.2)
        ) +
-  aes(x = Total_green, 
+  aes(y = student,
+      x = Total_green,
       fill = student,
-      group = student,
-      alpha = student,
       color = student
       ) +
-  scale_color_manual(values = c("red", 
-                                "blue"
-                               )
-                     ) +
-  scale_fill_manual(values = c("red2",
-                               "aquamarine"
-                               )
-                    ) +
-  geom_histogram(position = "identity",
-                 binwidth = 1.5,
-                 aes(y = ..density.., 
-                     alpha = .4
-                     )
-                 ) +
-  geom_density(alpha = .2)
+  geom_jitter(height =.15) +
+  geom_boxplot(color = "black",
+               alpha = .5,
+               width = .3,
+               size = .8
+               ) +
+  ggdist::stat_slab(height = .4,
+                    color = "black",
+                    size = .2,
+                    alpha = .5,
+                    position = position_nudge(y = .2)
+                    )
 
-#Overall, the plot does not seem to indicate a notable difference between students and non-students for the green reputation scale.
+#Overall, the plot does not seem to indicate a notable difference between students and non-students for the green reputation scale. However, the plot seems to show that students seem to have larger variance and a lower mean.
 
 ```
 
@@ -416,7 +412,7 @@ ggplot(data = subset(Q5set.2,
 
 ```{r Q7}
 
-Q5set.1 %>%
+Q7set <- Q5set.1 %>%
   group_by(student) %>% 
   summarize(across(c(Total_green:Total_open),
                     list(Mu = ~ mean(.x,
@@ -436,9 +432,12 @@ Q5set.1 %>%
                                      )
                          )
                    )
-            )
-
-#Judging purely by the summary statistics, there does not seem to be a difference between students and non-students for any of the personality trait scores (with the possible exception for the mean total score value for comp) or the green reputation scores. 
+            ) 
+Q7set.1 <- as.data.frame(t(as.matrix(Q7set)
+                           )
+                         )
+Q7set.1
+#Judging only by the summary statistics, there does not seem to be a difference between students and non-students for any of the personality trait scores (with the possible exception for the mean total score value for comp) or the green reputation scores. 
 #Nearly all the means between the two groups are the same and around 70 for the scores, with the exception of comp (76-81) and green (65-67)
 
 ```  

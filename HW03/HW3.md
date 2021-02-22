@@ -16,20 +16,51 @@ The dataset includes data from **students** and **non-students**.
 ``` r
 # Is anything unusual?
 
-filter(green_data, id == 5549) #Searches id for value "5549" 
+Q1set = filter(green_data, id == 5549) #Searches id for value "5549" 
+Q1set.1 <- as.data.frame(t(as.matrix(Q1set) #Flips columns and rows
+                           )
+                         )
+Q1set.1
 ```
 
-    ## # A tibble: 2 x 37
-    ##   id    green1 green2 green3 green4 green5 comp1 comp2 comp3 comp4 comp5 comp6
-    ##   <chr>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-    ## 1 5549       3      4      4      4      3     4     2     4     4     4     4
-    ## 2 5549       4      2      4      3      4     4     5     4     5     5     1
-    ## # ... with 25 more variables: comp7 <dbl>, comp8 <dbl>, comp9 <dbl>,
-    ## #   comp10 <dbl>, intel1 <dbl>, intel2 <dbl>, intel3 <dbl>, intel4 <dbl>,
-    ## #   intel5 <dbl>, intel6 <dbl>, intel7 <dbl>, intel8 <dbl>, intel9 <dbl>,
-    ## #   intel10 <dbl>, open1 <dbl>, open2 <dbl>, open3 <dbl>, open4 <dbl>,
-    ## #   open5 <dbl>, open6 <dbl>, open7 <dbl>, open8 <dbl>, open9 <dbl>,
-    ## #   open10 <dbl>, student <dbl>
+    ##           V1   V2
+    ## id      5549 5549
+    ## green1     3    4
+    ## green2     4    2
+    ## green3     4    4
+    ## green4     4    3
+    ## green5     3    4
+    ## comp1      4    4
+    ## comp2      2    5
+    ## comp3      4    4
+    ## comp4      4    5
+    ## comp5      4    5
+    ## comp6      4    1
+    ## comp7      2    2
+    ## comp8      4    2
+    ## comp9      4    2
+    ## comp10     4    2
+    ## intel1     4    4
+    ## intel2     4    5
+    ## intel3     2    5
+    ## intel4     2    4
+    ## intel5     4    5
+    ## intel6     4    4
+    ## intel7     4    2
+    ## intel8     4    2
+    ## intel9     4    2
+    ## intel10    2    1
+    ## open1      4    5
+    ## open2      2    4
+    ## open3      4    5
+    ## open4      2    4
+    ## open5      4    5
+    ## open6      2    4
+    ## open7      5    2
+    ## open8      4    2
+    ## open9      2    2
+    ## open10     2    2
+    ## student    2    2
 
 ``` r
 #Quick summary check
@@ -277,7 +308,10 @@ summary(Q4set)
 
 ``` r
 #Creates plot based off Q4set
-ggplot(Q4set) + 
+Q4set.1 = Q4set %>% 
+  filter(POMP_scores != 0) #Removes NA or incorrect data (values = 0)
+
+ggplot(Q4set.1) + 
   aes(x = id2, 
       y = POMP_scores
       ) + 
@@ -345,7 +379,7 @@ a <- ggplot(Q5set.1) +
       color = student
       ) +
   geom_point() +
-  scale_color_manual(values = c("black", 
+  scale_color_manual(values = c("black",
                                 "red", 
                                 "blue"
                                 )
@@ -388,9 +422,7 @@ Q5set.2 <- Q5set %>%
     )
 
 #Same plots as last time but without NA and incorrect data
-d <- ggplot(data = subset(Q5set.2, 
-                          !is.na(student)
-                          )
+d <- ggplot(na.omit(Q5set.2)
             ) +
   aes(x = Total_green,
       y = Total_comp, 
@@ -403,9 +435,7 @@ d <- ggplot(data = subset(Q5set.2,
   geom_point() +
   geom_smooth(method = "lm")
 
-e <- ggplot(data = subset(Q5set.2, 
-                          !is.na(student)
-                          )
+e <- ggplot(na.omit(Q5set.2)
             ) +
   aes(x = Total_green,
       y = Total_intel, 
@@ -418,9 +448,7 @@ e <- ggplot(data = subset(Q5set.2,
   geom_point() +
   geom_smooth(method = "lm")
 
-f <- ggplot(data = subset(Q5set.2, 
-                          !is.na(student)
-                          )
+f <- ggplot(na.omit(Q5set.2)
             ) +
   aes(x = Total_green,
       y = Total_open, 
@@ -464,43 +492,37 @@ grid.arrange(a,
 ### Q6: Compare **green reputation** for students and non-students using a **rainfall plot** (bar + density + data points).
 
 ``` r
-ggplot(data = subset(Q5set.2, 
-                          !is.na(student)
-                     )
+ggplot(na.omit(Q5set.2)
        ) +
-  aes(x = Total_green, 
+  aes(y = student,
+      x = Total_green,
       fill = student,
-      group = student,
-      alpha = student,
       color = student
       ) +
-  scale_color_manual(values = c("red", 
-                                "blue"
-                               )
-                     ) +
-  scale_fill_manual(values = c("red2",
-                               "aquamarine"
-                               )
-                    ) +
-  geom_histogram(position = "identity",
-                 binwidth = 1.5,
-                 aes(y = ..density.., 
-                     alpha = .4
-                     )
-                 ) +
-  geom_density(alpha = .2)
+  geom_jitter(height =.15) +
+  geom_boxplot(color = "black",
+               alpha = .5,
+               width = .3,
+               size = .8
+               ) +
+  ggdist::stat_slab(height = .4,
+                    color = "black",
+                    size = .2,
+                    alpha = .5,
+                    position = position_nudge(y = .2)
+                    )
 ```
 
 ![](HW3_files/figure-gfm/Q6-1.png)<!-- -->
 
 ``` r
-#Overall, the plot does not seem to indicate a notable difference between students and non-students for the green reputation scale.
+#Overall, the plot does not seem to indicate a notable difference between students and non-students for the green reputation scale. However, the plot seems to show that students seem to have larger variance and a lower mean.
 ```
 
 ### Q7: Compute a summary table of means, SDs, medians, minima, and maxima for the four total scores for students and non-students.
 
 ``` r
-Q5set.1 %>%
+Q7set <- Q5set.1 %>%
   group_by(student) %>% 
   summarize(across(c(Total_green:Total_open),
                     list(Mu = ~ mean(.x,
@@ -520,24 +542,38 @@ Q5set.1 %>%
                                      )
                          )
                    )
-            )
+            ) 
+Q7set.1 <- as.data.frame(t(as.matrix(Q7set)
+                           )
+                         )
+Q7set.1
 ```
 
-    ## # A tibble: 3 x 21
-    ##   student Total_green_Mu Total_green_Sig~ Total_green_Med~ Total_green_Max
-    ## * <chr>            <dbl>            <dbl>            <dbl>           <dbl>
-    ## 1 No Res~           25.8             33.1                0              92
-    ## 2 Not a ~           66.9             13.2               68             100
-    ## 3 Student           65.1             13.7               64              96
-    ## # ... with 16 more variables: Total_green_Min <dbl>, Total_comp_Mu <dbl>,
-    ## #   Total_comp_Sigma <dbl>, Total_comp_Median <dbl>, Total_comp_Max <dbl>,
-    ## #   Total_comp_Min <dbl>, Total_intel_Mu <dbl>, Total_intel_Sigma <dbl>,
-    ## #   Total_intel_Median <dbl>, Total_intel_Max <dbl>, Total_intel_Min <dbl>,
-    ## #   Total_open_Mu <dbl>, Total_open_Sigma <dbl>, Total_open_Median <dbl>,
-    ## #   Total_open_Max <dbl>, Total_open_Min <dbl>
+    ##                              1             2         3
+    ## student            No Response Not a student   Student
+    ## Total_green_Mu        25.79167      66.94505  65.13978
+    ## Total_green_Sigma     33.10650      13.19711  13.68020
+    ## Total_green_Median           0            68        64
+    ## Total_green_Max             92           100        96
+    ## Total_green_Min              0            28        32
+    ## Total_comp_Mu          8.87500      75.97802  81.69892
+    ## Total_comp_Sigma      21.17359      11.94616  11.80177
+    ## Total_comp_Median            0            78        81
+    ## Total_comp_Max              82           100       100
+    ## Total_comp_Min               0            22        38
+    ## Total_intel_Mu         7.93750      71.25275  70.26882
+    ## Total_intel_Sigma     19.26536      12.06150  11.47466
+    ## Total_intel_Median           0            72        71
+    ## Total_intel_Max             94            96        98
+    ## Total_intel_Min              0            24        40
+    ## Total_open_Mu         8.416667     70.879121 73.010753
+    ## Total_open_Sigma      20.52555      10.55445  11.92453
+    ## Total_open_Median            0            70        72
+    ## Total_open_Max              88            96        96
+    ## Total_open_Min               0            36        36
 
 ``` r
-#Judging purely by the summary statistics, there does not seem to be a difference between students and non-students for any of the personality trait scores (with the possible exception for the mean total score value for comp) or the green reputation scores. 
+#Judging only by the summary statistics, there does not seem to be a difference between students and non-students for any of the personality trait scores (with the possible exception for the mean total score value for comp) or the green reputation scores. 
 #Nearly all the means between the two groups are the same and around 70 for the scores, with the exception of comp (76-81) and green (65-67)
 ```
 
