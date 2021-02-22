@@ -239,7 +239,7 @@ Q3set <- Q2set %>%
     )
 
 #Create summary table for question (Same as Q2set.1 but with 100 as total)
-Q3set_Final <- Q3set %>% 
+Q3set.1 <- Q3set %>% 
   rowwise() %>%
   group_by(id2) %>% 
   mutate(
@@ -263,7 +263,7 @@ Q3set_Final <- Q3set %>%
          Total_open
          )
 
-Q3set_Final
+Q3set.1
 ```
 
     ## # A tibble: 373 x 5
@@ -286,7 +286,7 @@ Q3set_Final
 
 ``` r
 #Reformats dataset to have all the categories as a factor for easier graph (same as before)
-Q4set <- melt(Q3set_Final, 
+Q4set <- melt(Q3set.1, 
               value.name = "POMP_scores", 
               variable.name = "POMP_variables"
               )
@@ -369,10 +369,10 @@ Q5set.1 <- Q5set %>%
                      "2" = "Student", 
                      .default = "No Response", 
                      .missing = "No Response"
-                     )
-    ) #Recode to student and not a student
+                     ) #Recode to student, not a student, and no responses
+    ) 
 
-#3 scatter plots of student, not a student and no responses
+#3 scatterplots of student, not a student and no responses
 a <- ggplot(Q5set.1) +
   aes(x = Total_green,
       y = Total_comp, 
@@ -461,8 +461,6 @@ f <- ggplot(na.omit(Q5set.2)
   geom_point() +
   geom_smooth(method = "lm") 
 
-
-
 grid.arrange(a,
              b,
              c,
@@ -483,10 +481,10 @@ grid.arrange(a,
 <img src="HW3_files/figure-gfm/Q5 fig2-1.png" style="display: block; margin: auto;" />
 
 ``` r
-# Based only from the graphs, there seem to be a potential positive correlation between the green trait survey and each of the other personality trait surveys. 
-#Additionally the graphs show interactions between the green survey and both intel personality trait survey and the open personality trait survey. 
-#When comparing the scores between student, non-student and people who did not answer (no response), there is a difference in the scaling and scores between the people who did not respond and those who did.
-#Those who did not respond seem to show a lower total score value for all of the personality traits but higher scaling (i.e., larger increase in personality trait total score value per total score value for the green survey).
+#Based on the graphs, there seem to be a potential positive correlation between the green reputation survey and each of the other personality trait surveys. 
+#Additionally the graphs show interactions between the green survey and both intel personality trait survey and open personality trait survey. 
+#When comparing the scores between people who answered and people who did not answer (no response), there is a difference in the scaling and scores between the people who did not respond and those who did.
+#Those who did not respond seem to show a lower total score value for all of the personality traits.
 ```
 
 ### Q6: Compare **green reputation** for students and non-students using a **rainfall plot** (bar + density + data points).
@@ -516,7 +514,8 @@ ggplot(na.omit(Q5set.2)
 ![](HW3_files/figure-gfm/Q6-1.png)<!-- -->
 
 ``` r
-#Overall, the plot does not seem to indicate a notable difference between students and non-students for the green reputation scale. However, the plot seems to show that students seem to have larger variance and a lower mean.
+#Overall, the plot does not seem to indicate a notable difference between students and non-students for the green reputation scale. 
+#However, the plot seems to show that students seem to have larger variance and a lower mean.
 ```
 
 ### Q7: Compute a summary table of means, SDs, medians, minima, and maxima for the four total scores for students and non-students.
@@ -573,8 +572,10 @@ Q7set.1
     ## Total_open_Min               0            36        36
 
 ``` r
-#Judging only by the summary statistics, there does not seem to be a difference between students and non-students for any of the personality trait scores (with the possible exception for the mean total score value for comp) or the green reputation scores. 
-#Nearly all the means between the two groups are the same and around 70 for the scores, with the exception of comp (76-81) and green (65-67)
+#Judging only by the summary statistics, there does not seem to be a difference between students and non-students for any of the personality trait scores,
+#(with the possible exception for the mean total score value for comp) or the green reputation scores. 
+#Nearly all the means between the two groups are the same and around 70 for the scores, 
+#with the exception of comp (76-81) and green (65-67)
 ```
 
 In your assignment, prepare an RMarkdown file that includes both the
