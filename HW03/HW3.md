@@ -16,7 +16,7 @@ The dataset includes data from **students** and **non-students**.
 ``` r
 # Is anything unusual?
 
-Q1set = filter(green_data, id == 5549) #Searches id for value "5549" 
+Q1set <- filter(green_data, id == 5549) #Searches id for value "5549" 
 Q1set.1 <- as.data.frame(t(as.matrix(Q1set) #Flips columns and rows
                            )
                          )
