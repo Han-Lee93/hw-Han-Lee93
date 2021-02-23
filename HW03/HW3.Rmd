@@ -71,7 +71,8 @@ summary(green_data.melt)
 
 #RECODING
 temp_recode <- dictionary %>% #Temporary array of names to be used later
-  pull(Item) #Array of names are pulled from the list of values under the "item" column
+    filter(Keying<=3) %>% #Removes student from list
+    pull(Item) #Array of names are pulled from the list of values under the "item" column
 
 reverse_recode <- dictionary %>% #Separate temporary array of names to be used later
   filter(Keying == -1 | Keying == -2) %>% #Filters the list by the reverse codes (based off dictionary)
@@ -120,6 +121,7 @@ ggplot(Q2.melt) +
 summary(Q2.melt) 
 
 #Print out summary statistics
+#"Total" scores
 Q2set %>% 
   rowwise() %>% #By row
   group_by(id2) %>% #By id
@@ -144,6 +146,31 @@ Q2set %>%
          Total_open
          )
 
+#"Mean" Scores
+Q2set %>% 
+  rowwise() %>% #By row
+  group_by(id2) %>% #By id
+  mutate(
+    Total_green = mean(c_across(green1 : green5), 
+                      na.rm = TRUE
+                      ), 
+    Total_comp = mean(c_across(comp1 : comp10), 
+                     na.rm = TRUE
+                     ),
+    Total_intel = mean(c_across(intel1 : intel10), 
+                      na.rm = TRUE
+                      ),
+    Total_open = mean(c_across(open1 : open10), 
+                     na.rm = TRUE
+                     )
+    ) %>% 
+  select(id2,
+         Total_green,
+         Total_comp,
+         Total_intel,
+         Total_open
+         )
+
 ```
      
 ### Q3: Rescale the variables so that they go from 0-100 instead of the original range.
@@ -152,40 +179,45 @@ Q2set %>%
 ```{r Q3}     
 
 # Name the recaled variables `*_pomp`.
-
 #Dataset for Q3
 Q3set <- Q2set %>% 
   mutate(
-    across(c(green1 : green5), #Change for green data
-           ~.x * 4, #Multiply green data by 4 (Total equals 100)
-           .names = "{.col}_pomp" #creates new columns for ^^ named *column*_pomp
+    across(all_of(temp_recode),
+           ~ recode(.x, 
+                    "1" = 0,
+                    "2" = 25,
+                    "3" = 50,
+                    "4" = 75,
+                    "5" = 100
+                   ), 
+                   .names = "{.col}_pomp"
            )  
     ) %>% 
-  mutate(
-    across(c(comp1 : open10),
-           ~.x * 2, #Same as before but multiply rest by 2 (Total equal 100)
-           .names = "{.col}_pomp"
-           )
-    )
-
-#Create summary table for question (Same as Q2set.1 but with 100 as total)
-Q3set.1 <- Q3set %>% 
   rowwise() %>%
   group_by(id2) %>% 
   mutate(
-    Total_green = sum(c_across(green1_pomp : green5_pomp), 
+    Total_green = mean(c_across(green1_pomp : green5_pomp), 
                       na.rm = TRUE
                       ),
-    Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
+    Total_comp = mean(c_across(comp1_pomp : comp10_pomp), 
                      na.rm = TRUE
                      ),
-    Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
+    Total_intel = mean(c_across(intel1_pomp : intel10_pomp), 
                       na.rm = TRUE
                       ),
-    Total_open = sum(c_across(open1_pomp : open10_pomp), 
+    Total_open = mean(c_across(open1_pomp : open10_pomp), 
                      na.rm = TRUE
                      )
     ) %>% 
+  mutate(
+    student = recode(student, 
+                     "1" = "Not a student", 
+                     "2" = "Student",
+                     .default = "No Response",
+                     .missing = "No Response")
+    )
+#Create summary table for question (Same as Q2set.1 but with 100 as total)
+Q3set.1 <- Q3set %>% 
   select(id2,
          Total_green,
          Total_comp,
@@ -213,7 +245,7 @@ summary(Q4set)
 Q4set.1 = Q4set %>% 
   filter(POMP_scores != 0) #Removes NA or incorrect data (values = 0)
 
-a <- ggplot(Q4set.1) + 
+Full_hist <- ggplot(Q4set.1) + 
   aes(x = POMP_scores,
       group = POMP_variables,
       color = POMP_variables,
@@ -225,7 +257,7 @@ a <- ggplot(Q4set.1) +
                  ) +
   scale_x_continuous("POMP Scores")
 
-b <- ggplot(Q4set.1) + 
+Sep_hist <- ggplot(Q4set.1) + 
   aes(x = POMP_scores,
       group = POMP_variables,
       color = POMP_variables,
@@ -235,10 +267,11 @@ b <- ggplot(Q4set.1) +
     facet_grid(~ POMP_variables) + #Split by POMP_variables
   scale_x_continuous("POMP Scores")
 
-grid.arrange(a,
-             b)#Merges all the graphs into 1 image
+grid.arrange(Full_hist,
+             Sep_hist)#Merges all the graphs into 1 image
 
-#This graph shows that most of participant scores for all four scales are above half. 
+#This graph shows that the green scores are normally distributed while the rest are slightly skewed left.
+#Participant scores for all four scales are above half. 
 #One possiblity is that these scales are positively correlated to one another. 
 #At first glance, this graph shows that, there are more high total score values for comp than rest. 
 #Additionally, the graph shows that there are more low total score values for green than the rest.
@@ -254,22 +287,7 @@ grid.arrange(a,
 
 #Dataset for Q5
 Q5set <- Q3set %>% 
-  rowwise() %>%
-  group_by(id2) %>% 
-  mutate(
-    Total_green = sum(c_across(green1_pomp : green5_pomp), 
-                      na.rm = TRUE
-                      ),
-    Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
-                     na.rm = TRUE
-                     ),
-    Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
-                      na.rm = TRUE
-                      ),
-    Total_open = sum(c_across(open1_pomp : open10_pomp), 
-                     na.rm = TRUE
-                     )
-    ) %>% 
+  filter(student!="No Response") %>% 
   select(id2,
          Total_green,
          Total_comp,
@@ -278,68 +296,10 @@ Q5set <- Q3set %>%
          student
          )
 
-Q5set.1 <- Q5set %>%  
-  mutate(
-    student = recode(student, 
-                     "1" = "Not a student", 
-                     "2" = "Student", 
-                     .default = "No Response", 
-                     .missing = "No Response"
-                     ) #Recode to student, not a student, and no responses
-    ) 
+#3 scatterplots with data separated by student and not a student
 
-#3 scatterplots of student, not a student and no responses
-a <- ggplot(Q5set.1) +
-  aes(x = Total_green,
-      y = Total_comp, 
-      color = student
-      ) +
-  geom_point() +
-  scale_color_manual(values = c("black",
-                                "red", 
-                                "blue"
-                                )
-                     ) +
-  geom_smooth(method = "lm") #Produces lm line in the graph
 
-b <- ggplot(Q5set.1) +
-  aes(x = Total_green,
-      y = Total_intel, 
-      color = student
-      ) +
-  geom_point() +
-  scale_color_manual(values = c("black", 
-                                "red", 
-                                "blue"
-                                )
-                     ) +
-  geom_smooth(method = "lm")
-
-c <- ggplot(Q5set.1) +
-  aes(x = Total_green,
-      y = Total_open,  
-      color = student
-      ) +
-  geom_point() +
-  scale_color_manual(values = c("black", 
-                                "red", 
-                                "blue"
-                                )
-                     ) +
-  geom_smooth(method = "lm")
-
-#Same dataset as last one but removed all NA and incorrect data
-Q5set.2 <- Q5set %>% 
-  mutate(
-    student = recode(student, 
-                     "1" = "Not a student", 
-                     "2" = "Student"
-                     )
-    )
-
-#Same plots as last time but without NA and incorrect data
-d <- ggplot(na.omit(Q5set.2)
-            ) +
+GreenXcomp <- ggplot(Q5set) +
   aes(x = Total_green,
       y = Total_comp, 
       color = student
@@ -351,8 +311,7 @@ d <- ggplot(na.omit(Q5set.2)
   geom_point() +
   geom_smooth(method = "lm")
 
-e <- ggplot(na.omit(Q5set.2)
-            ) +
+GreenXintel <- ggplot(Q5set) +
   aes(x = Total_green,
       y = Total_intel, 
       color = student
@@ -364,8 +323,7 @@ e <- ggplot(na.omit(Q5set.2)
   geom_point() +
   geom_smooth(method = "lm")
 
-f <- ggplot(na.omit(Q5set.2)
-            ) +
+GreenXopen <- ggplot(Q5set) +
   aes(x = Total_green,
       y = Total_open, 
       color = student
@@ -377,19 +335,14 @@ f <- ggplot(na.omit(Q5set.2)
   geom_point() +
   geom_smooth(method = "lm") 
 
-grid.arrange(a,
-             b,
-             c,
-             d,
-             e,
-             f, 
-             nrow = 2
+grid.arrange(GreenXcomp,
+             GreenXintel,
+             GreenXopen,
+             nrow=1
              )
 
 #Based on the graphs, there seem to be a potential positive correlation between the green reputation survey and each of the other personality trait surveys. 
 #Additionally the graphs show interactions between the green survey and both intel personality trait survey and open personality trait survey. 
-#When comparing the scores between people who answered and people who did not answer (no response), there is a difference in the scaling and scores between the people who did not respond and those who did.
-#Those who did not respond seem to show a lower total score value for all of the personality traits.
 
 ```  
 
@@ -398,8 +351,7 @@ grid.arrange(a,
   
 ```{r Q6}
 
-ggplot(na.omit(Q5set.2)
-       ) +
+ggplot(Q5set) +
   aes(y = student,
       x = Total_green,
       fill = student,
@@ -427,7 +379,7 @@ ggplot(na.omit(Q5set.2)
 
 ```{r Q7}
 
-Q7set <- Q5set.1 %>%
+Q7set <- Q5set %>%
   group_by(student) %>% 
   summarize(across(c(Total_green:Total_open),
                     list(Mu = ~ mean(.x,
@@ -454,8 +406,8 @@ Q7set.1 <- as.data.frame(t(as.matrix(Q7set)
 Q7set.1
 #Judging only by the summary statistics, there does not seem to be a difference between students and non-students for any of the personality trait scores,
 #(with the possible exception for the mean total score value for comp) or the green reputation scores. 
-#Nearly all the means between the two groups are the same and around 70 for the scores, 
-#with the exception of comp (76-81) and green (65-67)
+#Nearly all the means between the two groups are the same and around 65 for the scores, 
+#with the exception of comp (above 70) and green (below 60)
 
 ```  
   

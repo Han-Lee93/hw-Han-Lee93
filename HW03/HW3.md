@@ -107,7 +107,8 @@ summary(green_data.melt)
 
 #RECODING
 temp_recode <- dictionary %>% #Temporary array of names to be used later
-  pull(Item) #Array of names are pulled from the list of values under the "item" column
+    filter(Keying<=3) %>% #Removes student from list
+    pull(Item) #Array of names are pulled from the list of values under the "item" column
 
 reverse_recode <- dictionary %>% #Separate temporary array of names to be used later
   filter(Keying == -1 | Keying == -2) %>% #Filters the list by the reverse codes (based off dictionary)
@@ -158,7 +159,7 @@ ggplot(Q2.melt) +
   geom_point()
 ```
 
-    ## Warning: Removed 2966 rows containing missing values (geom_point).
+    ## Warning: Removed 2965 rows containing missing values (geom_point).
 
 ![](HW3_files/figure-gfm/Q2-1.png)<!-- -->
 
@@ -166,17 +167,18 @@ ggplot(Q2.melt) +
 summary(Q2.melt) 
 ```
 
-    ##       id                id2               variable         value      
-    ##  Length:13428       Length:13428       green1 :  373   Min.   :1.000  
-    ##  Class :character   Class :character   green2 :  373   1st Qu.:3.000  
-    ##  Mode  :character   Mode  :character   green3 :  373   Median :4.000  
-    ##                                        green4 :  373   Mean   :3.603  
-    ##                                        green5 :  373   3rd Qu.:4.000  
-    ##                                        comp1  :  373   Max.   :5.000  
-    ##                                        (Other):11190   NA's   :2966
+    ##       id                id2               variable         value        
+    ##  Length:13428       Length:13428       green1 :  373   Min.   :-99.000  
+    ##  Class :character   Class :character   green2 :  373   1st Qu.:  3.000  
+    ##  Mode  :character   Mode  :character   green3 :  373   Median :  4.000  
+    ##                                        green4 :  373   Mean   :  3.593  
+    ##                                        green5 :  373   3rd Qu.:  4.000  
+    ##                                        comp1  :  373   Max.   :  5.000  
+    ##                                        (Other):11190   NA's   :2965
 
 ``` r
 #Print out summary statistics
+#"Total" scores
 Q2set %>% 
   rowwise() %>% #By row
   group_by(id2) %>% #By id
@@ -218,44 +220,92 @@ Q2set %>%
     ## 10 0512           22         38          37         38
     ## # ... with 363 more rows
 
+``` r
+#"Mean" Scores
+Q2set %>% 
+  rowwise() %>% #By row
+  group_by(id2) %>% #By id
+  mutate(
+    Total_green = mean(c_across(green1 : green5), 
+                      na.rm = TRUE
+                      ), 
+    Total_comp = mean(c_across(comp1 : comp10), 
+                     na.rm = TRUE
+                     ),
+    Total_intel = mean(c_across(intel1 : intel10), 
+                      na.rm = TRUE
+                      ),
+    Total_open = mean(c_across(open1 : open10), 
+                     na.rm = TRUE
+                     )
+    ) %>% 
+  select(id2,
+         Total_green,
+         Total_comp,
+         Total_intel,
+         Total_open
+         )
+```
+
+    ## # A tibble: 373 x 5
+    ## # Groups:   id2 [373]
+    ##    id2   Total_green Total_comp Total_intel Total_open
+    ##    <chr>       <dbl>      <dbl>       <dbl>      <dbl>
+    ##  1 9099          4          3.7         2.8       3.5 
+    ##  2 6275          2.2        4.8         3.5       3.1 
+    ##  3 8116          4          4.4         3.6       3.9 
+    ##  4 8586          3.8        4.6         3         3.9 
+    ##  5 0406          3.8        4           3.7       3.7 
+    ##  6 5645          3.6        4.2         3.8       3.8 
+    ##  7 3788          1.8        3           3         3   
+    ##  8 8424          2.6        1.9         4.3       1.8 
+    ##  9 8450          3.6        4.2         4         4.33
+    ## 10 0512          4.4        3.8         3.7       3.8 
+    ## # ... with 363 more rows
+
 ### Q3: Rescale the variables so that they go from 0-100 instead of the original range.
 
 ``` r
 # Name the recaled variables `*_pomp`.
-
 #Dataset for Q3
 Q3set <- Q2set %>% 
   mutate(
-    across(c(green1 : green5), #Change for green data
-           ~.x * 4, #Multiply green data by 4 (Total equals 100)
-           .names = "{.col}_pomp" #creates new columns for ^^ named *column*_pomp
+    across(all_of(temp_recode),
+           ~ recode(.x, 
+                    "1" = 0,
+                    "2" = 25,
+                    "3" = 50,
+                    "4" = 75,
+                    "5" = 100
+                   ), 
+                   .names = "{.col}_pomp"
            )  
     ) %>% 
-  mutate(
-    across(c(comp1 : open10),
-           ~.x * 2, #Same as before but multiply rest by 2 (Total equal 100)
-           .names = "{.col}_pomp"
-           )
-    )
-
-#Create summary table for question (Same as Q2set.1 but with 100 as total)
-Q3set.1 <- Q3set %>% 
   rowwise() %>%
   group_by(id2) %>% 
   mutate(
-    Total_green = sum(c_across(green1_pomp : green5_pomp), 
+    Total_green = mean(c_across(green1_pomp : green5_pomp), 
                       na.rm = TRUE
                       ),
-    Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
+    Total_comp = mean(c_across(comp1_pomp : comp10_pomp), 
                      na.rm = TRUE
                      ),
-    Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
+    Total_intel = mean(c_across(intel1_pomp : intel10_pomp), 
                       na.rm = TRUE
                       ),
-    Total_open = sum(c_across(open1_pomp : open10_pomp), 
+    Total_open = mean(c_across(open1_pomp : open10_pomp), 
                      na.rm = TRUE
                      )
     ) %>% 
+  mutate(
+    student = recode(student, 
+                     "1" = "Not a student", 
+                     "2" = "Student",
+                     .default = "No Response",
+                     .missing = "No Response")
+    )
+#Create summary table for question (Same as Q2set.1 but with 100 as total)
+Q3set.1 <- Q3set %>% 
   select(id2,
          Total_green,
          Total_comp,
@@ -270,16 +320,16 @@ Q3set.1
     ## # Groups:   id2 [373]
     ##    id2   Total_green Total_comp Total_intel Total_open
     ##    <chr>       <dbl>      <dbl>       <dbl>      <dbl>
-    ##  1 9099           80         74          56         70
-    ##  2 6275           44         96          70         62
-    ##  3 8116           80         88          72         78
-    ##  4 8586           76         92          60         78
-    ##  5 0406           76         80          74         74
-    ##  6 5645           72         84          76         76
-    ##  7 3788           36         60          60         60
-    ##  8 8424           52         38          86         36
-    ##  9 8450           72         84          80         78
-    ## 10 0512           88         76          74         76
+    ##  1 9099           75       67.5        45         62.5
+    ##  2 6275           30       95          62.5       52.5
+    ##  3 8116           75       85          65         72.5
+    ##  4 8586           70       90          50         72.5
+    ##  5 0406           70       75          67.5       67.5
+    ##  6 5645           65       80          70         70  
+    ##  7 3788           20       50          50         50  
+    ##  8 8424           40       22.5        82.5       20  
+    ##  9 8450           65       80          75         83.3
+    ## 10 0512           85       70          67.5       70  
     ## # ... with 363 more rows
 
 ### Q4: Make plots that illustrate the distributions of the 4 POMP-scored variables.
@@ -298,20 +348,21 @@ Q4set <- melt(Q3set.1,
 summary(Q4set)
 ```
 
-    ##      id2                POMP_variables  POMP_scores    
-    ##  Length:1492        Total_green:373    Min.   :  0.00  
-    ##  Class :character   Total_comp :373    1st Qu.: 48.00  
-    ##  Mode  :character   Total_intel:373    Median : 68.00  
-    ##                     Total_open :373    Mean   : 56.84  
-    ##                                        3rd Qu.: 80.00  
-    ##                                        Max.   :100.00
+    ##      id2                POMP_variables  POMP_scores   
+    ##  Length:1492        Total_green:373    Min.   :  0.0  
+    ##  Class :character   Total_comp :373    1st Qu.: 55.0  
+    ##  Mode  :character   Total_intel:373    Median : 65.0  
+    ##                     Total_open :373    Mean   : 65.2  
+    ##                                        3rd Qu.: 75.0  
+    ##                                        Max.   :100.0  
+    ##                                        NA's   :289
 
 ``` r
 #Creates plot based off Q4set
 Q4set.1 = Q4set %>% 
   filter(POMP_scores != 0) #Removes NA or incorrect data (values = 0)
 
-a <- ggplot(Q4set.1) + 
+Full_hist <- ggplot(Q4set.1) + 
   aes(x = POMP_scores,
       group = POMP_variables,
       color = POMP_variables,
@@ -323,7 +374,7 @@ a <- ggplot(Q4set.1) +
                  ) +
   scale_x_continuous("POMP Scores")
 
-b <- ggplot(Q4set.1) + 
+Sep_hist <- ggplot(Q4set.1) + 
   aes(x = POMP_scores,
       group = POMP_variables,
       color = POMP_variables,
@@ -333,8 +384,8 @@ b <- ggplot(Q4set.1) +
     facet_grid(~ POMP_variables) + #Split by POMP_variables
   scale_x_continuous("POMP Scores")
 
-grid.arrange(a,
-             b)#Merges all the graphs into 1 image
+grid.arrange(Full_hist,
+             Sep_hist)#Merges all the graphs into 1 image
 ```
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
@@ -344,7 +395,8 @@ grid.arrange(a,
 <img src="HW3_files/figure-gfm/Q4 fig2-1.png" style="display: block; margin: auto;" />
 
 ``` r
-#This graph shows that most of participant scores for all four scales are above half. 
+#This graph shows that the green scores are normally distributed while the rest are slightly skewed left.
+#Participant scores for all four scales are above half. 
 #One possiblity is that these scales are positively correlated to one another. 
 #At first glance, this graph shows that, there are more high total score values for comp than rest. 
 #Additionally, the graph shows that there are more low total score values for green than the rest.
@@ -358,22 +410,7 @@ grid.arrange(a,
 
 #Dataset for Q5
 Q5set <- Q3set %>% 
-  rowwise() %>%
-  group_by(id2) %>% 
-  mutate(
-    Total_green = sum(c_across(green1_pomp : green5_pomp), 
-                      na.rm = TRUE
-                      ),
-    Total_comp = sum(c_across(comp1_pomp : comp10_pomp), 
-                     na.rm = TRUE
-                     ),
-    Total_intel = sum(c_across(intel1_pomp : intel10_pomp), 
-                      na.rm = TRUE
-                      ),
-    Total_open = sum(c_across(open1_pomp : open10_pomp), 
-                     na.rm = TRUE
-                     )
-    ) %>% 
+  filter(student!="No Response") %>% 
   select(id2,
          Total_green,
          Total_comp,
@@ -382,68 +419,10 @@ Q5set <- Q3set %>%
          student
          )
 
-Q5set.1 <- Q5set %>%  
-  mutate(
-    student = recode(student, 
-                     "1" = "Not a student", 
-                     "2" = "Student", 
-                     .default = "No Response", 
-                     .missing = "No Response"
-                     ) #Recode to student, not a student, and no responses
-    ) 
+#3 scatterplots with data separated by student and not a student
 
-#3 scatterplots of student, not a student and no responses
-a <- ggplot(Q5set.1) +
-  aes(x = Total_green,
-      y = Total_comp, 
-      color = student
-      ) +
-  geom_point() +
-  scale_color_manual(values = c("black",
-                                "red", 
-                                "blue"
-                                )
-                     ) +
-  geom_smooth(method = "lm") #Produces lm line in the graph
 
-b <- ggplot(Q5set.1) +
-  aes(x = Total_green,
-      y = Total_intel, 
-      color = student
-      ) +
-  geom_point() +
-  scale_color_manual(values = c("black", 
-                                "red", 
-                                "blue"
-                                )
-                     ) +
-  geom_smooth(method = "lm")
-
-c <- ggplot(Q5set.1) +
-  aes(x = Total_green,
-      y = Total_open,  
-      color = student
-      ) +
-  geom_point() +
-  scale_color_manual(values = c("black", 
-                                "red", 
-                                "blue"
-                                )
-                     ) +
-  geom_smooth(method = "lm")
-
-#Same dataset as last one but removed all NA and incorrect data
-Q5set.2 <- Q5set %>% 
-  mutate(
-    student = recode(student, 
-                     "1" = "Not a student", 
-                     "2" = "Student"
-                     )
-    )
-
-#Same plots as last time but without NA and incorrect data
-d <- ggplot(na.omit(Q5set.2)
-            ) +
+GreenXcomp <- ggplot(Q5set) +
   aes(x = Total_green,
       y = Total_comp, 
       color = student
@@ -455,8 +434,7 @@ d <- ggplot(na.omit(Q5set.2)
   geom_point() +
   geom_smooth(method = "lm")
 
-e <- ggplot(na.omit(Q5set.2)
-            ) +
+GreenXintel <- ggplot(Q5set) +
   aes(x = Total_green,
       y = Total_intel, 
       color = student
@@ -468,8 +446,7 @@ e <- ggplot(na.omit(Q5set.2)
   geom_point() +
   geom_smooth(method = "lm")
 
-f <- ggplot(na.omit(Q5set.2)
-            ) +
+GreenXopen <- ggplot(Q5set) +
   aes(x = Total_green,
       y = Total_open, 
       color = student
@@ -481,19 +458,13 @@ f <- ggplot(na.omit(Q5set.2)
   geom_point() +
   geom_smooth(method = "lm") 
 
-grid.arrange(a,
-             b,
-             c,
-             d,
-             e,
-             f, 
-             nrow = 2
+grid.arrange(GreenXcomp,
+             GreenXintel,
+             GreenXopen,
+             nrow=1
              )
 ```
 
-    ## `geom_smooth()` using formula 'y ~ x'
-    ## `geom_smooth()` using formula 'y ~ x'
-    ## `geom_smooth()` using formula 'y ~ x'
     ## `geom_smooth()` using formula 'y ~ x'
     ## `geom_smooth()` using formula 'y ~ x'
     ## `geom_smooth()` using formula 'y ~ x'
@@ -503,15 +474,12 @@ grid.arrange(a,
 ``` r
 #Based on the graphs, there seem to be a potential positive correlation between the green reputation survey and each of the other personality trait surveys. 
 #Additionally the graphs show interactions between the green survey and both intel personality trait survey and open personality trait survey. 
-#When comparing the scores between people who answered and people who did not answer (no response), there is a difference in the scaling and scores between the people who did not respond and those who did.
-#Those who did not respond seem to show a lower total score value for all of the personality traits.
 ```
 
 ### Q6: Compare **green reputation** for students and non-students using a **rainfall plot** (bar + density + data points).
 
 ``` r
-ggplot(na.omit(Q5set.2)
-       ) +
+ggplot(Q5set) +
   aes(y = student,
       x = Total_green,
       fill = student,
@@ -541,7 +509,7 @@ ggplot(na.omit(Q5set.2)
 ### Q7: Compute a summary table of means, SDs, medians, minima, and maxima for the four total scores for students and non-students.
 
 ``` r
-Q7set <- Q5set.1 %>%
+Q7set <- Q5set %>%
   group_by(student) %>% 
   summarize(across(c(Total_green:Total_open),
                     list(Mu = ~ mean(.x,
@@ -568,34 +536,34 @@ Q7set.1 <- as.data.frame(t(as.matrix(Q7set)
 Q7set.1
 ```
 
-    ##                              1             2         3
-    ## student            No Response Not a student   Student
-    ## Total_green_Mu        25.79167      66.94505  65.13978
-    ## Total_green_Sigma     33.10650      13.19711  13.68020
-    ## Total_green_Median           0            68        64
-    ## Total_green_Max             92           100        96
-    ## Total_green_Min              0            28        32
-    ## Total_comp_Mu          8.87500      75.97802  81.69892
-    ## Total_comp_Sigma      21.17359      11.94616  11.80177
-    ## Total_comp_Median            0            78        81
-    ## Total_comp_Max              82           100       100
-    ## Total_comp_Min               0            22        38
-    ## Total_intel_Mu         7.93750      71.25275  70.26882
-    ## Total_intel_Sigma     19.26536      12.06150  11.47466
-    ## Total_intel_Median           0            72        71
-    ## Total_intel_Max             94            96        98
-    ## Total_intel_Min              0            24        40
-    ## Total_open_Mu         8.416667     70.879121 73.010753
-    ## Total_open_Sigma      20.52555      10.55445  11.92453
-    ## Total_open_Median            0            70        72
-    ## Total_open_Max              88            96        96
-    ## Total_open_Min               0            36        36
+    ##                                1        2
+    ## student            Not a student  Student
+    ## Total_green_Mu          58.68132 56.42473
+    ## Total_green_Sigma       16.49638 17.10025
+    ## Total_green_Median            60       55
+    ## Total_green_Max              100       95
+    ## Total_green_Min               10       15
+    ## Total_comp_Mu           70.67766 77.26852
+    ## Total_comp_Sigma        13.11565 14.59682
+    ## Total_comp_Median          72.50    76.25
+    ## Total_comp_Max               100      100
+    ## Total_comp_Min              40.0     22.5
+    ## Total_intel_Mu          65.14042 63.02121
+    ## Total_intel_Sigma       13.71986 14.24613
+    ## Total_intel_Median          67.5     65.0
+    ## Total_intel_Max             95.0     97.5
+    ## Total_intel_Min             37.5     25.0
+    ## Total_open_Mu           64.31013 66.40233
+    ## Total_open_Sigma        12.45282 14.83111
+    ## Total_open_Median       62.50000 65.83333
+    ## Total_open_Max                95       95
+    ## Total_open_Min              37.5     20.0
 
 ``` r
 #Judging only by the summary statistics, there does not seem to be a difference between students and non-students for any of the personality trait scores,
 #(with the possible exception for the mean total score value for comp) or the green reputation scores. 
-#Nearly all the means between the two groups are the same and around 70 for the scores, 
-#with the exception of comp (76-81) and green (65-67)
+#Nearly all the means between the two groups are the same and around 65 for the scores, 
+#with the exception of comp (above 70) and green (below 60)
 ```
 
 In your assignment, prepare an RMarkdown file that includes both the
