@@ -17,7 +17,6 @@ dat_bfi <- dat_bfi %>%
 head(dat_bfi)
 filter(dat_bfi, .id == 61617)
 
-
 # ==================================================
 
 # converting between data.frame and tibble
