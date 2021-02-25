@@ -47,8 +47,10 @@ family %>%
 
 ```{r}
 family_longest <- family %>% 
-  pivot_longer()
-
+  pivot_longer(cols=c( -family_id),
+               names_to = c("wave", "scale", "family_member"),
+               names_sep = "_",
+               values_to = "score")
 print(family_longest)
 ```
 
@@ -59,7 +61,10 @@ print(family_longest)
 
 ```{r}
 family_long <- family %>% 
-  pivot_longer()
+  pivot_longer(cols=c( -family_id),
+               names_to = c("wave", ".value", "family_member"),
+               names_sep = "_",
+              )
 
 print(family_long)
 ```
@@ -68,7 +73,9 @@ print(family_long)
    Which families are missing wave 2 data for at least one person?
 
 ```{r}
-
+family_longest %>% 
+filter(is.na (score))
 ```
 
 Question: Is is easier to easier to find the missing data in the wide or long format?
+Longer
