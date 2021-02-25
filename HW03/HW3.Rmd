@@ -1,0 +1,415 @@
+---
+title: "HW3"
+author: "han"
+date: "2/19/2021"
+output:
+    html_document: default
+    github_document: default
+    theme: paper
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(ggplot2)
+library(tidyverse)
+library(gridExtra)
+library(reshape2)
+library(ggdist)
+theme_set(theme_classic())
+dictionary <- readr::read_csv("green_dictionary.csv")
+green_data <- readr::read_csv("green_data.csv")
+```
+
+# Homework 03
+
+#### You will analyze data looking at the relationship between **green reputation** and three personality traits--**compassion**, **intellectual curiosity**, and **openness to experiences**.
+The dataset includes data from **students** and **non-students**.
+
+
+## For your assignment, do the following.
+
+### Q1: Inspect the item responses (e.g., with graphs or by summarizing distinct values). 
+
+     
+```{r Q1}
+
+# Is anything unusual?
+
+Q1set <- filter(green_data, id == 5549) #Searches id for value "5549" 
+Q1set.1 <- as.data.frame(t(as.matrix(Q1set) #Flips columns and rows
+                           )
+                         )
+Q1set.1
+
+#Quick summary check
+green_data.melt <- melt(green_data, measures.var = across(c:green1:open10)) #Reformat dataset, sets all columns into 1 column to separate as factors
+
+ggplot(green_data.melt) +
+  aes(y = value,
+      x = id
+      ) +
+  geom_point()
+
+summary(green_data.melt)
+
+
+#Dataset has several issues.
+#1. Duplicate participant data
+#2. Certain data values are off (e.g., -99)
+
+```
+
+### Q2: Compute total scores for the four scales. 
+
+     
+```{r Q2}
+
+# Recode variables as needed.
+
+#RECODING
+temp_recode <- dictionary %>% #Temporary array of names to be used later
+    filter(Keying<=3) %>% #Removes student from list
+    pull(Item) #Array of names are pulled from the list of values under the "item" column
+
+reverse_recode <- dictionary %>% #Separate temporary array of names to be used later
+  filter(Keying == -1 | Keying == -2) %>% #Filters the list by the reverse codes (based off dictionary)
+  pull(Item) 
+
+#Dataset for Q2, recodes original dataset "green_data"
+Q2set <- green_data %>% 
+  mutate( 
+    across(all_of(temp_recode), #Recodes across all the columns that match the temp_recode list
+           ~ na_if(.x, 
+                   -99
+                   ) #All values that are -99 are recoded into NA
+           )
+    ) %>% 
+  mutate(
+    id2 = ifelse(duplicated(id), #Creates new id list and discriminates repeated ID numbers
+                 paste0(id,
+                        "r"
+                        ), #renames duplicate ids  as "id"r
+                 id
+                 )
+    ) %>% 
+  mutate(
+    across(all_of(reverse_recode),
+           ~ recode(.x, 
+                    "5" = 1, 
+                    "4" = 2, 
+                    "3" = 3, 
+                    "2" = 4, 
+                    "1" = 5
+                    )
+           )
+    ) #Reverse codes based off the dictionary (reverse_recode)
+
+#Rechecking quick summary glance
+Q2.melt <- melt(Q2set, 
+                measures.var = across(c:green1:open10)
+                )
+
+ggplot(Q2.melt) +
+  aes(y = value,
+      x = id
+      ) +
+  geom_point()
+
+summary(Q2.melt) 
+
+#Print out summary statistics
+#"Total" scores
+Q2set %>% 
+  rowwise() %>% #By row
+  group_by(id2) %>% #By id
+  mutate(
+    Total_green = sum(c_across(green1 : green5), #Summary - sum of all green (20), comp, intel, and open (50)
+                      na.rm = TRUE
+                      ), 
+    Total_comp = sum(c_across(comp1 : comp10), 
+                     na.rm = TRUE
+                     ),
+    Total_intel = sum(c_across(intel1 : intel10), 
+                      na.rm = TRUE
+                      ),
+    Total_open = sum(c_across(open1 : open10), 
+                     na.rm = TRUE
+                     )
+    ) %>% 
+  select(id2,
+         Total_green,
+         Total_comp,
+         Total_intel,
+         Total_open
+         )
+
+#"Mean" Scores
+Q2set %>% 
+  rowwise() %>% #By row
+  group_by(id2) %>% #By id
+  mutate(
+    Total_green = mean(c_across(green1 : green5), 
+                      na.rm = TRUE
+                      ), 
+    Total_comp = mean(c_across(comp1 : comp10), 
+                     na.rm = TRUE
+                     ),
+    Total_intel = mean(c_across(intel1 : intel10), 
+                      na.rm = TRUE
+                      ),
+    Total_open = mean(c_across(open1 : open10), 
+                     na.rm = TRUE
+                     )
+    ) %>% 
+  select(id2,
+         Total_green,
+         Total_comp,
+         Total_intel,
+         Total_open
+         )
+
+```
+     
+### Q3: Rescale the variables so that they go from 0-100 instead of the original range.
+
+
+```{r Q3}     
+
+# Name the recaled variables `*_pomp`.
+#Dataset for Q3
+Q3set <- Q2set %>% 
+  mutate(
+    across(all_of(temp_recode),
+           ~ recode(.x, 
+                    "1" = 0,
+                    "2" = 25,
+                    "3" = 50,
+                    "4" = 75,
+                    "5" = 100
+                   ), 
+                   .names = "{.col}_pomp"
+           )  
+    ) %>% 
+  rowwise() %>%
+  group_by(id2) %>% 
+  mutate(
+    Total_green = mean(c_across(green1_pomp : green5_pomp), 
+                      na.rm = TRUE
+                      ),
+    Total_comp = mean(c_across(comp1_pomp : comp10_pomp), 
+                     na.rm = TRUE
+                     ),
+    Total_intel = mean(c_across(intel1_pomp : intel10_pomp), 
+                      na.rm = TRUE
+                      ),
+    Total_open = mean(c_across(open1_pomp : open10_pomp), 
+                     na.rm = TRUE
+                     )
+    ) %>% 
+  mutate(
+    student = recode(student, 
+                     "1" = "Not a student", 
+                     "2" = "Student",
+                     .default = "No Response",
+                     .missing = "No Response")
+    )
+#Create summary table for question (Same as Q2set.1 but with 100 as total)
+Q3set.1 <- Q3set %>% 
+  select(id2,
+         Total_green,
+         Total_comp,
+         Total_intel,
+         Total_open
+         )
+
+Q3set.1
+
+```     
+
+### Q4: Make plots that illustrate the distributions of the 4 POMP-scored variables.
+
+```{r Q4 fig2, fig.height = 10, fig.width = 15, fig.align = "center"}     
+
+#Reformats dataset to have all the categories as a factor for easier graph (same as before)
+Q4set <- melt(Q3set.1, 
+              value.name = "POMP_scores", 
+              variable.name = "POMP_variables"
+              )
+
+summary(Q4set)
+
+#Creates plot based off Q4set
+Q4set.1 = Q4set %>% 
+  filter(POMP_scores != 0) #Removes NA or incorrect data (values = 0)
+
+Full_hist <- ggplot(Q4set.1) + 
+  aes(x = POMP_scores,
+      group = POMP_variables,
+      color = POMP_variables,
+      fill = POMP_variables,
+      ) + 
+  geom_histogram(alpha = .5, 
+                 color = "black", 
+                 position = "identity"
+                 ) +
+  scale_x_continuous("POMP Scores")
+
+Sep_hist <- ggplot(Q4set.1) + 
+  aes(x = POMP_scores,
+      group = POMP_variables,
+      color = POMP_variables,
+      fill = POMP_variables,
+      ) + 
+  geom_histogram(color = "black") +
+    facet_grid(~ POMP_variables) + #Split by POMP_variables
+  scale_x_continuous("POMP Scores")
+
+grid.arrange(Full_hist,
+             Sep_hist)#Merges all the graphs into 1 image
+
+#This graph shows that the green scores are normally distributed while the rest are slightly skewed left.
+#Participant scores for all four scales are above half. 
+#One possiblity is that these scales are positively correlated to one another. 
+#At first glance, this graph shows that, there are more high total score values for comp than rest. 
+#Additionally, the graph shows that there are more low total score values for green than the rest.
+
+```  
+
+### Q5: Make scatterplots showing the relationships between **green reputation** and each personality trait.
+
+```{r Q5 fig2, fig.height = 10, fig.width = 15, fig.align = "center"}     
+
+# Include trend lines for **students** and **non-students**.
+# What do these plots show?
+
+#Dataset for Q5
+Q5set <- Q3set %>% 
+  filter(student!="No Response") %>% 
+  select(id2,
+         Total_green,
+         Total_comp,
+         Total_intel,
+         Total_open,
+         student
+         )
+
+#3 scatterplots with data separated by student and not a student
+
+
+GreenXcomp <- ggplot(Q5set) +
+  aes(x = Total_green,
+      y = Total_comp, 
+      color = student
+      ) +
+  scale_color_manual(values = c("red", 
+                                "blue"
+                                )
+                     ) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+GreenXintel <- ggplot(Q5set) +
+  aes(x = Total_green,
+      y = Total_intel, 
+      color = student
+      ) +
+  scale_color_manual(values = c("red", 
+                                "blue"
+                                )
+                     ) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+GreenXopen <- ggplot(Q5set) +
+  aes(x = Total_green,
+      y = Total_open, 
+      color = student
+      ) +
+  scale_color_manual(values = c("red", 
+                                "blue"
+                                )
+                     ) +
+  geom_point() +
+  geom_smooth(method = "lm") 
+
+grid.arrange(GreenXcomp,
+             GreenXintel,
+             GreenXopen,
+             nrow=1
+             )
+
+#Based on the graphs, there seem to be a potential positive correlation between the green reputation survey and each of the other personality trait surveys. 
+#Additionally the graphs show interactions between the green survey and both intel personality trait survey and open personality trait survey. 
+
+```  
+
+### Q6: Compare **green reputation** for students and non-students using a **rainfall plot** (bar + density + data points).
+
+  
+```{r Q6}
+
+ggplot(Q5set) +
+  aes(y = student,
+      x = Total_green,
+      fill = student,
+      color = student
+      ) +
+  geom_jitter(height =.15) +
+  geom_boxplot(color = "black",
+               alpha = .5,
+               width = .3,
+               size = .8
+               ) +
+  ggdist::stat_slab(height = .4,
+                    color = "black",
+                    size = .2,
+                    alpha = .5,
+                    position = position_nudge(y = .2)
+                    )
+
+#Overall, the plot does not seem to indicate a notable difference between students and non-students for the green reputation scale. 
+#However, the plot seems to show that students seem to have larger variance and a lower mean.
+
+```
+
+### Q7: Compute a summary table of means, SDs, medians, minima, and maxima for the four total scores for students and non-students.
+
+```{r Q7}
+
+Q7set <- Q5set %>%
+  group_by(student) %>% 
+  summarize(across(c(Total_green:Total_open),
+                    list(Mu = ~ mean(.x,
+                                      na.rm = TRUE
+                                     ),
+                         Sigma = ~ sd(.x,
+                                      na.rm = TRUE
+                                     ),
+                         Median = ~ median(.x,
+                                           na.rm = TRUE
+                                           ),
+                         Max = ~ max(.x, 
+                                     na.rm = TRUE
+                                     ),
+                         Min = ~ min(.x, 
+                                     na.rm = TRUE
+                                     )
+                         )
+                   )
+            ) 
+Q7set.1 <- as.data.frame(t(as.matrix(Q7set)
+                           )
+                         )
+Q7set.1
+#Judging only by the summary statistics, there does not seem to be a difference between students and non-students for any of the personality trait scores,
+#(with the possible exception for the mean total score value for comp) or the green reputation scores. 
+#Nearly all the means between the two groups are the same and around 65 for the scores, 
+#with the exception of comp (above 70) and green (below 60)
+
+```  
+  
+In your assignment, prepare an RMarkdown file that includes both the coding and (for 4-7) narrative descriptions of your results.
+
