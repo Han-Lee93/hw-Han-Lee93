@@ -107,7 +107,6 @@ summary(green_data.melt)
 
 #RECODING
 temp_recode <- dictionary %>% #Temporary array of names to be used later
-    filter(Keying<=3) %>% #Removes student from list
     pull(Item) #Array of names are pulled from the list of values under the "item" column
 
 reverse_recode <- dictionary %>% #Separate temporary array of names to be used later
@@ -159,7 +158,7 @@ ggplot(Q2.melt) +
   geom_point()
 ```
 
-    ## Warning: Removed 2965 rows containing missing values (geom_point).
+    ## Warning: Removed 2966 rows containing missing values (geom_point).
 
 ![](HW3_files/figure-gfm/Q2-1.png)<!-- -->
 
@@ -167,14 +166,14 @@ ggplot(Q2.melt) +
 summary(Q2.melt) 
 ```
 
-    ##       id                id2               variable         value        
-    ##  Length:13428       Length:13428       green1 :  373   Min.   :-99.000  
-    ##  Class :character   Class :character   green2 :  373   1st Qu.:  3.000  
-    ##  Mode  :character   Mode  :character   green3 :  373   Median :  4.000  
-    ##                                        green4 :  373   Mean   :  3.593  
-    ##                                        green5 :  373   3rd Qu.:  4.000  
-    ##                                        comp1  :  373   Max.   :  5.000  
-    ##                                        (Other):11190   NA's   :2965
+    ##       id                id2               variable         value      
+    ##  Length:13428       Length:13428       green1 :  373   Min.   :1.000  
+    ##  Class :character   Class :character   green2 :  373   1st Qu.:3.000  
+    ##  Mode  :character   Mode  :character   green3 :  373   Median :4.000  
+    ##                                        green4 :  373   Mean   :3.603  
+    ##                                        green5 :  373   3rd Qu.:4.000  
+    ##                                        comp1  :  373   Max.   :5.000  
+    ##                                        (Other):11190   NA's   :2966
 
 ``` r
 #Print out summary statistics

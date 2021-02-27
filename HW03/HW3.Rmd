@@ -71,7 +71,6 @@ summary(green_data.melt)
 
 #RECODING
 temp_recode <- dictionary %>% #Temporary array of names to be used later
-    filter(Keying<=3) %>% #Removes student from list
     pull(Item) #Array of names are pulled from the list of values under the "item" column
 
 reverse_recode <- dictionary %>% #Separate temporary array of names to be used later
