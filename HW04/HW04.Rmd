@@ -47,7 +47,9 @@ dat <- read_csv(here::here("raw_data","RepeatedExposureReverseRdata.csv"),
                   StimuliType = col_character()
                   ),
                   na=c("","NA")
-                )
+                ) %>% 
+    filter(TrialType == "Experiment", ConditionType == "Critical", Error == "0", (RT>=50 & RT<= 1999)) 
+
 write_csv(dat,
           here::here("HW04_data.csv")
           )
@@ -57,16 +59,17 @@ write_csv(dat,
 ```{r}
 graph = ggplot(dat) +
   aes(RT) +
-  geom_histogram()
+  geom_histogram(binwidth = 50)
 
 ggsave(here::here("Plots", "RTdististribution.pdf"), graph)
 
 graph
+
 ```
 
 ```{r}
 summarytable = dat %>%
-  group_by (ID, Condition,ConditionType, `RunPosition#`) %>% 
+  group_by (ID, Condition, `RunPosition#`) %>% 
   summarize(across(c(RT),
                      list(Mu = ~ mean(.x,
                                       na.rm = TRUE
@@ -81,6 +84,8 @@ summarytable = dat %>%
 write_csv(summarytable,
           here::here("Summaries", "Mean_by_condition-id-conditiontype.csv")
           )
-kable(summarytable)
+
+kable(summarytable) %>% 
+  kable_styling(full_width = F)
 
 ```
