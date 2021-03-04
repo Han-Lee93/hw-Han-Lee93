@@ -1,0 +1,86 @@
+---
+title: "Beer Advocate: ABV and quality ratings"
+author: "Your Name Here"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(here)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(ggplot2)
+library(tidyverse)
+library(gridExtra)
+library(reshape2)
+library(kableExtra)
+library(ggdist)
+```
+
+
+```{r}
+dir.create(here::here("raw_data"), recursive = TRUE)
+dir.create(here::here("Plots"), recursive = TRUE)
+dir.create(here::here("Summaries"), recursive = TRUE)
+```
+
+```{r}
+dat <- read_csv(here::here("raw_data","RepeatedExposureReverseRdata.csv"),
+                col_types = cols(
+                  `F/L/Sex` = col_character(),
+                  ID = col_double(),
+                  TrialType = col_character(),
+                  `Trial#` = col_double(),
+                  `RunPosition#` = col_double(),
+                  `Run#` = col_double(),
+                  ConditionType = col_character(),
+                  Condition = col_character(),
+                  RT = col_double(),
+                  Error = col_double(),
+                  TotalError = col_double(),
+                  RepeatedError = col_double(),
+                  Target = col_character(),
+                  Globality = col_character(),
+                  RunType = col_character(),
+                  StimuliType = col_character()
+                  ),
+                  na=c("","NA")
+                )
+write_csv(dat,
+          here::here("HW04_data.csv")
+          )
+
+```
+
+```{r}
+graph = ggplot(dat) +
+  aes(RT) +
+  geom_histogram()
+
+ggsave(here::here("Plots", "RTdististribution.pdf"), graph)
+
+graph
+```
+
+```{r}
+summarytable = dat %>%
+  group_by (ID, Condition,ConditionType, `RunPosition#`) %>% 
+  summarize(across(c(RT),
+                     list(Mu = ~ mean(.x,
+                                      na.rm = TRUE
+                                     ),
+                         Sigma = ~ sd(.x,
+                                      na.rm = TRUE
+                                     ),
+                         n = ~ n()
+                         )
+                  )
+            )
+write_csv(summarytable,
+          here::here("Summaries", "Mean_by_condition-id-conditiontype.csv")
+          )
+kable(summarytable)
+
+```

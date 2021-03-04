@@ -6,6 +6,16 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(here)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(ggplot2)
+library(tidyverse)
+library(gridExtra)
+library(reshape2)
+library(ggdist)
 ```
 
 For this activity, download the data file at this location to the `data` subfolder in your `participation` folder. 
@@ -13,7 +23,39 @@ This dataset contains information about different catagories of beer as rated on
 The data are originally from [here](http://scottjanish.com/relationship-of-abv-to-beer-scores/).
 
 ```{r}
-url <- "https://raw.githubusercontent.com/USF-Psych-DataSci/Classroom/master/data/beer-advocate.csv"
+dir.create(here::here("3_4_21"), recursive = TRUE)
+dat <- read_csv("https://raw.githubusercontent.com/USF-Psych-DataSci/Classroom/master/data/beer-advocate.csv",
+                col_types = cols(
+                  `Beer Category` = col_character(),
+                  `Average ABV` = col_double(),
+                  rAVG = col_double()
+                  )
+)
+
+graph = ggplot(dat) +
+  aes(x=`Average ABV`, y=rAVG) +
+  geom_jitter()
+
+ggsave(here::here("3_4_21", "plotforworksheet_3_4_21.pdf"), graph)
+
+summarytable = dat %>% 
+  summarize(across(c(`Average ABV`: rAVG),
+                     list(Mu = ~ mean(.x,
+                                      na.rm = TRUE
+                                     ),
+                         Sigma = ~ sd(.x,
+                                      na.rm = TRUE
+                                     )
+                         )
+                  ),
+            r = cor(`Average ABV`, rAVG, use = "pairwise")
+            )
+write_csv(dat,
+          here::here("3_4_21", "newtable_3_4_21.csv")
+          )
+write_csv(summarytable,
+          here::here("3_4_21", "summarytable_3_4_21.csv")
+          )
 ```
 
 The dataset contains 3 variables:
