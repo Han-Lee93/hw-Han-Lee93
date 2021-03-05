@@ -1,7 +1,11 @@
 ---
-title: "Beer Advocate: ABV and quality ratings"
-author: "Your Name Here"
-output: html_document
+title: "HW04"
+author: "Han Lee"
+date: "3/5/2021"
+output:
+    html_document: default
+    github_document: default
+    theme: paper
 ---
 
 ```{r setup, include=FALSE}
@@ -17,13 +21,6 @@ library(gridExtra)
 library(reshape2)
 library(kableExtra)
 library(ggdist)
-```
-
-
-```{r}
-dir.create(here::here("raw_data"), recursive = TRUE)
-dir.create(here::here("Plots"), recursive = TRUE)
-dir.create(here::here("Summaries"), recursive = TRUE)
 ```
 
 ```{r}
