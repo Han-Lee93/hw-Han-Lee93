@@ -5,15 +5,13 @@ This repository contains files and folders related to the final project for the 
 
 ## Repository directory:
 
-Plots: Contains plots drawn from analyses made in R
-
 Images: Storage for misc images.
 
-raw_data: Contains raw data for final project (*should not be changed*)
+Projects: Contains all files related to the project (HWs as well)
 
-Analyses: Contains R files used for analyses.
-
-Data: Contains data files used for analyses.
+- Analyses: Contains R files/folders (data, raw data) used for analyses and outputs.
+- Raw_data: Contains raw data for final project (*should not be changed*)
+- Data: Contains data files used for analyses.
 
 ## About the Study
 
