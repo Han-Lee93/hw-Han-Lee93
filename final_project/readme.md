@@ -7,7 +7,7 @@ This repository contains files and folders related to the final project for the 
 
 Images: Storage for misc images.
 
-Raw_data: Contains raw data for final project (*should not be changed*)
+Raw_data: Contains raw data for final project (**should not be changed**)
 
 Analyses: Contains R files/folders used for analyses and outputs. Each Analyses folder will contain a output, raw_data, and data folder.
 
@@ -20,11 +20,13 @@ Analyses: Contains R files/folders used for analyses and outputs. Each Analyses 
 
 ### Objective:
 
-This study tested whether multiple consecutive repetitions of compound stimuli would reduce the RT advantage and asymmetrical interference effects for the holistic form or global level when searching the lower details, or local level.  
+This study tested whether multiple consecutive repetitions of compound stimuli (_see left image_) would reduce the RT advantage and asymmetrical interference effects for the holistic form or global level when searching the lower details, or local level.  
 
 ### Procedure:
 
-The study was organized into blocks, or *_runs_*, of seven trials. Before each run, participants were assigned to a *_target_* (A, E, G, K, U) and focus level. Within each run, participants saw incongruent compound stimuli and had to locate the target at the focused level. The target was present at the focused level in each trial. We manipulated whether position two or six showed a congruent compound stimulus or an incongruent stimulus. Within each trial, participants had to either press the "present" key or "absent" key to indicate target presence. Participants had 2000 msec. to respond before the study moved participants to the next trial. Response times to press these keys were recorded along with errors or timed out trials. 
+The study was organized into blocks, or **runs**, of seven trials. Before each run, participants were assigned to a **target** (A, E, G, K, U) and focus level. Within each run, participants saw incongruent compound stimuli and had to locate the target at the focused level. The target was present at the focused level in each trial. We manipulated whether position two or six showed a congruent compound stimulus or an incongruent stimulus (_see right image_). 
+
+Within each trial, participants had to either press the "present" key or "absent" key to indicate target presence. Participants had 2000 msec. to respond before the study moved participants to the next trial. Response times to press these keys were recorded along with errors or timed out trials. 
 
 <img src="https://github.com/usf-progdata/hw-Han-Lee93/blob/HW4/final_project/Images/Slide16.PNG" width="250" height="250" align="left"> 
 <img src="https://github.com/usf-progdata/hw-Han-Lee93/blob/HW4/final_project/Images/run_breakdown.png" width="500" height="250" align="right">
@@ -33,14 +35,14 @@ The study was organized into blocks, or *_runs_*, of seven trials. Before each r
 
 ### Study Breakdown:
 
-Total number of runs: 190 - Broken down into *_Practice_* and *_Experimental_* runs.
+Total number of runs: 190 - Broken down into **Practice** and **Experimental** runs.
 
 - 10 Practice Runs: Feedbacks for correct, incorrect or timed out responses were given.
-- 180 Experimental runs: Feedback for timed out responses were given and further broken down into *_Critical_* and *_Control_* runs 
+- 180 Experimental runs: Feedback for timed out responses were given and further broken down into **Critical** and **Control** runs 
 - 60 Control runs: Used as filler runs to add noise. Contained runs with a randomized number of missing, incongruent and congruent trials.
 - 120 Critical runs: 20 runs per condition
 
-### Study Dictionary:
+### Study Dictionary: For reading raw data file
 
 - F/L/Sex: First name, last name, biological sex
 - ID: ID number of participant
@@ -49,11 +51,11 @@ Total number of runs: 190 - Broken down into *_Practice_* and *_Experimental_* r
 - RunPosition#: Position within the run (e.g., 3 = third trial in the run)
 - Run#: Current run number
 - ConditionType: Distinguish the condition type - Critical or control
-- Condition: Current condition for the given *_run_* (e.g., "Local Congruent at 6" = Focus on local level and - 6th trial had congruent stimulus)
+- Condition: Current condition for the given **run** (e.g., "Local Congruent at 6" = Focus on local level and - 6th trial had congruent stimulus)
 - RT: Response time
 - Error: Whether or not participants answered correctly (0 = correct, 1 = incorrect, 2 = no response in given time)
 - TotalError: Current aggregate number of errors made.
-- Target: Current target for the given *_run_* (e.g., "A" = Look for letter "A" at a given level.)
-- Globality: Current focus level for the given *_run_* (e.g., "global" = look for target at only the global level)
-- RunType: Current run type for the given *_run_* (e.g., "Congruent at 6" = Congruent stimulus on the 6th trial.)
+- Target: Current target for the given **run** (e.g., "A" = Look for letter "A" at a given level.)
+- Globality: Current focus level for the given **run** (e.g., "global" = look for target at only the global level)
+- RunType: Current run type for the given **run** (e.g., "Congruent at 6" = Congruent stimulus on the 6th trial.)
 - StimuliType: Type of stimulus shown on current trial(e.g., "Incongruent Stimulus with target" = Participants were shown an incongruent stimulus with the target at the focused level)
