@@ -1,7 +1,7 @@
 ---
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 # Han Lee's Final Project
 
@@ -20,8 +20,8 @@ This study tested whether multiple consecutive repetitions of compound stimuli w
 
 The study was organized into blocks, or *_runs_*, of seven trials. Before each run, participants were assigned to a *_target_* (A, E, G, K, U) and focus level. Within each run, participants saw incongruent compound stimuli and had to locate the target at the focused level. The target was present at the focused level in each trial. We manipulated whether position two or six showed a congruent compound stimulus or an incongruent stimulus. Within each trial, participants had to either press the "present" key or "absent" key to indicate target presence. Participants had 2000 msec. to respond before the study moved participants to the next trial. Response times to press these keys were recorded along with errors or timed out trials. 
 
-<img src="https://github.com/usf-progdata/hw-Han-Lee93/blob/master/final_project/Images/Slide16.PNG" width="250" height="250" align="left"> 
-<img src="https://github.com/usf-progdata/hw-Han-Lee93/blob/master/final_project/Images/run_breakdown.PNG" width="500" height="250" align="right">
+<img src="https://github.com/usf-progdata/hw-Han-Lee93/blob/HW4/final_project/Images/Slide16.PNG" width="250" height="250" align="left"> 
+<img src="https://github.com/usf-progdata/hw-Han-Lee93/blob/HW4/final_project/Images/run_breakdown.png" width="500" height="250" align="right">
 
 <br clear="right"/>
 
