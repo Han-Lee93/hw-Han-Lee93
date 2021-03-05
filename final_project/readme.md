@@ -7,11 +7,11 @@ This repository contains files and folders related to the final project for the 
 
 Images: Storage for misc images.
 
-Projects: Contains all files related to the project (HWs as well)
+Raw_data: Contains raw data for final project (*should not be changed*)
 
-- Analyses: Contains R files/folders used for analyses and outputs. Each Analyses folder will contain a output, raw_data, and data folder.
+Analyses: Contains R files/folders used for analyses and outputs. Each Analyses folder will contain a output, raw_data, and data folder.
+
 - Output: Contains outputs ranging from plots to summary tables.
-- Raw_data: Contains raw data for final project (*should not be changed*)
 - Data: Contains data files used for analyses.
 
 ## About the Study:
