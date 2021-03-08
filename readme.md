@@ -34,10 +34,10 @@ My area of research is in _**cognitive psychology**_. More specifically, I am in
 | Adequate       | :ok_hand:     |
 | Needs work     | :thumbsdown:  |
 
-- [:thumbsdown:] Using Github
+- [:ok_hand:] Using Github
 - [:ok_hand:] Programming
 - [:thumbsup:] Using R
 - [:ok_hand:] Data organization/management using R
-- [:thumbsdown:] Comfortability with cloud-based platforms
+- [:ok_hand:] Comfortability with cloud-based platforms
 
 <!-- What are you trying to do with the [] here? Are you trying to show the boxes (in which case, that's fine) or something technical? -->
