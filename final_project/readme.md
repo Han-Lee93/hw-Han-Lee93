@@ -5,14 +5,13 @@ This repository contains files and folders related to the final project for the 
 
 ## Repository directory:
 
-Images: Storage for misc images.
-
-Raw_data: Contains raw data for final project (**should not be changed**)
-
-Analyses: Contains R files/folders used for analyses and outputs. Each Analyses folder will contain a output, raw_data, and data folder.
-
-- Output: Contains outputs ranging from plots to summary tables.
-- Data: Contains data files used for analyses.
+| Folder Name   | Contains |
+| ----------- | ----------- |
+| Images     | Misc Images |
+| Raw_data  | Raw data for final project (**SHOULD NOT BE CHANGED**) |
+| Analyses  | R files/folders used for analyses and outputs. Each analysis folder contains an **_output_** and **_data_** folder.|
+| **_Output_** | Outputs ranging from plots to summary tables |
+| **_Data_**  |  Specific data files used for analysis  |
 
 ## About the Study:
 
@@ -35,27 +34,29 @@ Within each trial, participants had to either press the "present" key or "absent
 
 ### Study Breakdown:
 
-Total number of runs: 190 - Broken down into **Practice** and **Experimental** runs.
-
-- 10 Practice Runs: Feedbacks for correct, incorrect or timed out responses were given.
-- 180 Experimental runs: Feedback for timed out responses were given and further broken down into **Critical** and **Control** runs 
-- 60 Control runs: Used as filler runs to add noise. Contained runs with a randomized number of missing, incongruent and congruent trials.
-- 120 Critical runs: 20 runs per condition
+| Run Type | Number of Runs |  Descriptions  |
+| ----------- | ----------- |----------- |
+| All Runs     | 190 |  Broken down into **Practice** and **Experimental** runs. |
+| Practice     | 10 |  Feedbacks for correct, incorrect or timed out responses were given. |
+| Experimental     | 180 |  Feedback for timed out responses were given and further broken down into **Critical** and **Control** runs. | 
+| **Control**     | 60 |  Used as filler runs to add noise. Contained runs with a randomized number of missing, incongruent and congruent trials. |
+| **Critical**     | 120 | 20 runs per condition |
 
 ### Study Dictionary: For reading raw data file
-
-- F/L/Sex: First name, last name, biological sex
-- ID: ID number of participant
-- TrialType: Distinguish the trial type - Experimental or Practice
-- Trial#: Current trial number
-- RunPosition#: Position within the run (e.g., 3 = third trial in the run)
-- Run#: Current run number
-- ConditionType: Distinguish the condition type - Critical or control
-- Condition: Current condition for the given **run** (e.g., "Local Congruent at 6" = Focus on local level and - 6th trial had congruent stimulus)
-- RT: Response time
-- Error: Whether or not participants answered correctly (0 = correct, 1 = incorrect, 2 = no response in given time)
-- TotalError: Current aggregate number of errors made.
-- Target: Current target for the given **run** (e.g., "A" = Look for letter "A" at a given level.)
-- Globality: Current focus level for the given **run** (e.g., "global" = look for target at only the global level)
-- RunType: Current run type for the given **run** (e.g., "Congruent at 6" = Congruent stimulus on the 6th trial.)
-- StimuliType: Type of stimulus shown on current trial(e.g., "Incongruent Stimulus with target" = Participants were shown an incongruent stimulus with the target at the focused level)
+| Column Name | Description |  Example  |
+| ----------- | ----------- |----------- |
+| F/L/Sex | First name, last name, biological sex | HJM = Hugh Jackman, Male |
+| ID | ID number of participant | 1 = First Participant |
+| TrialType | Distinguish the trial type - Experimental or Practice | Experimental = Trial is in the experimental block |
+| Trial# | Current trial number | 30 = 30th trial in the entire study |
+| RunPosition# | Position within the run | 3 = third trial in the run |
+| Run# | Current run number | 7 = Trial is within the 7th run of the study |
+| ConditionType | Distinguish the condition type - Critical or control | Critical = Trial is in a critical run |
+| Condition | Current condition for the given **run** | Local Congruent at 6 = Focused on local level and - 6th trial had congruent stimulus |
+| RT | Response time to press key | 375 = 375 msec from stimulus presentation to keypress |
+| Error | Whether or not participants answered correctly (0 = correct, 1 = incorrect, 2 = no response in given time) | 2 = Participant did not answer in time |
+| TotalError | Current aggregate number of errors made | 32 = Up to this trial, 32 errors were made |
+| Target | Current target for the given **run** | A = Look for letter "A" at a given level |
+| Globality | Current focus level for the given **run** | Global = look for target at only the global level |
+| RunType |  Current run type for the given **run** | Congruent at 6" = Congruent stimulus on the 6th trial |
+| StimuliType | Type of stimulus shown on current trial | Incongruent Stimulus with target = Participants were shown an incongruent stimulus with the target at the focused level) |
