@@ -398,16 +398,16 @@ dat &lt;- read_csv(here::here(&quot;raw_data&quot;,&quot;RepeatedExposureReverse
                   RunType = col_character(),
                   StimuliType = col_character()
                   ),
-                  na=c(&quot;&quot;,&quot;NA&quot;)
+                  na = c(&quot;&quot;,&quot;NA&quot;)
                 ) %&gt;% 
-    filter(TrialType == &quot;Experiment&quot;, ConditionType == &quot;Critical&quot;, Error == &quot;0&quot;, (RT&gt;=50 &amp; RT&lt;= 1999)) #Filtering out to relevant data (i.e., cleaning raw data)
+    filter(TrialType == &quot;Experiment&quot;, ConditionType == &quot;Critical&quot;, Error == &quot;0&quot;, (RT &gt;= 50 &amp; RT &lt;= 1999)) #Filtering out to relevant data (i.e., cleaning raw data)
 
 #Creating clean csv file from filtering
 write_csv(dat,
           here::here(&quot;Analyses&quot;, &quot;HW04&quot;, &quot;Data&quot;, &quot;HW04_cleaned_data.csv&quot;)
           )</code></pre>
 <pre class="r"><code>#Histogram of RT distribution
-graph = ggplot(dat) +
+graph &lt;- ggplot(dat) +
   aes(RT) +
   geom_histogram(binwidth = 50) #Bins are 50 msecs apart.
 
@@ -420,7 +420,7 @@ ggsave(here::here(&quot;Analyses&quot;, &quot;HW04&quot;, &quot;Output&quot;, &q
 <pre class="r"><code>ggsave(here::here(&quot;Analyses&quot;, &quot;HW04&quot;, &quot;Output&quot;, &quot;Plots&quot;,&quot;RTdististribution.eps&quot;), graph)</code></pre>
 <pre><code>## Saving 7 x 5 in image</code></pre>
 <pre class="r"><code>#Creating summary table (mean and SD) by ID (within subject design), condition, and run position
-summarytable = dat %&gt;%
+summarytable &lt;- dat %&gt;%
   group_by (ID, Condition, `RunPosition#`) %&gt;% 
   summarize(across(c(RT),
                      list(Mu = ~ mean(.x,
