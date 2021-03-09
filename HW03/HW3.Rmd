@@ -3,10 +3,15 @@ title: "HW3"
 author: "han"
 date: "2/19/2021"
 output:
-    html_document: default
-    github_document: default
+  html_document:
     theme: paper
+  github_document: default
 ---
+
+<!-- BMW: In your YAML header, indent subsections by 2 spaces, not 4.
+          Sub-options, like the theme for html_document, need to be indented under the parent option. When you have a sub-option like theme, don't include "default" for the parent option. 
+          See what I edited above.
+-->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -16,7 +21,7 @@ library(tibble)
 library(ggplot2)
 library(tidyverse)
 library(gridExtra)
-library(reshape2)
+library(reshape2) # BMW: Don't use reshape2 and tidyverse packages (eg, dplyr or tidyr) together in the same script. reshape2 isn't supported anymore, and I suggest moving to using tidyr::pivot_longer() and tidyr::pivot_wider() like we practiced in class instead.
 library(ggdist)
 theme_set(theme_classic())
 dictionary <- readr::read_csv("green_dictionary.csv")
@@ -25,7 +30,9 @@ green_data <- readr::read_csv("green_data.csv")
 
 # Homework 03
 
-#### You will analyze data looking at the relationship between **green reputation** and three personality traits--**compassion**, **intellectual curiosity**, and **openness to experiences**.
+<!-- BMW: In general, don't use headings with long blocks of text. It is hard to read. Use regular text instead. -->
+
+You will analyze data looking at the relationship between **green reputation** and three personality traits--**compassion**, **intellectual curiosity**, and **openness to experiences**.
 The dataset includes data from **students** and **non-students**.
 
 
@@ -46,6 +53,10 @@ Q1set.1
 
 #Quick summary check
 green_data.melt <- melt(green_data, measures.var = across(c:green1:open10)) #Reformat dataset, sets all columns into 1 column to separate as factors
+
+# BMW: I strongly recommend not using melt. It isn't maintained anymore. pivot_longer() and pivot_wider() are the replacements for melt/cast
+
+# BMW: As a stylistic note, avoid using . in object names. '.' sometimes has special meaning in R, and it's best to avoid and using camelCase or snake_case format names instead.
 
 ggplot(green_data.melt) +
   aes(y = value,
@@ -81,6 +92,7 @@ reverse_recode <- dictionary %>% #Separate temporary array of names to be used l
 Q2set <- green_data %>% 
   mutate( 
     across(all_of(temp_recode), #Recodes across all the columns that match the temp_recode list
+           # BMW: Since this is just all the items, you could do `across(everything(), ...)` instead
            ~ na_if(.x, 
                    -99
                    ) #All values that are -99 are recoded into NA
@@ -109,7 +121,7 @@ Q2set <- green_data %>%
 #Rechecking quick summary glance
 Q2.melt <- melt(Q2set, 
                 measures.var = across(c:green1:open10)
-                )
+                ) # BMW: Again use pivot_longer()
 
 ggplot(Q2.melt) +
   aes(y = value,
@@ -121,32 +133,29 @@ summary(Q2.melt)
 
 #Print out summary statistics
 #"Total" scores
-Q2set %>% 
+Q2set %>% # BMW: You didn't assign this result to an object. Also, these aren't summary statistics. This is the whole dataset. Don't print out a full dataset in your report. 
   rowwise() %>% #By row
   group_by(id2) %>% #By id
   mutate(
-    Total_green = sum(c_across(green1 : green5), #Summary - sum of all green (20), comp, intel, and open (50)
-                      na.rm = TRUE
-                      ), 
-    Total_comp = sum(c_across(comp1 : comp10), 
-                     na.rm = TRUE
-                     ),
-    Total_intel = sum(c_across(intel1 : intel10), 
-                      na.rm = TRUE
-                      ),
-    Total_open = sum(c_across(open1 : open10), 
-                     na.rm = TRUE
-                     )
-    ) %>% 
+    Total_green = sum(c_across(green1:green5), #Summary - sum of all green (20), comp, intel, and open (50)
+                      na.rm = TRUE),
+    Total_comp = sum(c_across(comp1:comp10),
+                     na.rm = TRUE),
+    Total_intel = sum(c_across(intel1:intel10),
+                      na.rm = TRUE),
+    Total_open = sum(c_across(open1:open10),
+                     na.rm = TRUE)
+  ) %>%
   select(id2,
          Total_green,
          Total_comp,
          Total_intel,
-         Total_open
-         )
+         Total_open)
+
+# BMW: In general, always compute "total" scores for measures as the mean, not the sum. If someone has missing data for an item, that won't affect the mean but will the sum.
 
 #"Mean" Scores
-Q2set %>% 
+Q2set %>% # BMW: You didn't assign this result to an object. Also, these aren't summary statistics. This is the whole dataset. Don't print out a full dataset in your report. 
   rowwise() %>% #By row
   group_by(id2) %>% #By id
   mutate(
@@ -192,8 +201,7 @@ Q3set <- Q2set %>%
                    .names = "{.col}_pomp"
            )  
     ) %>% 
-  rowwise() %>%
-  group_by(id2) %>% 
+  rowwise() %>% # BMW: You can't use rowwise() and group_by() together. rowwise() _is_ group_by(), with the groups being each row. 
   mutate(
     Total_green = mean(c_across(green1_pomp : green5_pomp), 
                       na.rm = TRUE
@@ -236,13 +244,14 @@ Q3set.1
 Q4set <- melt(Q3set.1, 
               value.name = "POMP_scores", 
               variable.name = "POMP_variables"
-              )
+              ) # BMW: Again, use pivot_longer() not melt
 
 summary(Q4set)
 
 #Creates plot based off Q4set
 Q4set.1 = Q4set %>% 
   filter(POMP_scores != 0) #Removes NA or incorrect data (values = 0)
+# BMW: No, this isn't correct. 0 is a valid minimum score. You want na.omit() or drop_na().
 
 Full_hist <- ggplot(Q4set.1) + 
   aes(x = POMP_scores,
@@ -266,7 +275,7 @@ Sep_hist <- ggplot(Q4set.1) +
     facet_grid(~ POMP_variables) + #Split by POMP_variables
   scale_x_continuous("POMP Scores")
 
-grid.arrange(Full_hist,
+grid.arrange(Full_hist, # BMW: You probably don't need both of these plots. The faceted one is clearer.
              Sep_hist)#Merges all the graphs into 1 image
 
 #This graph shows that the green scores are normally distributed while the rest are slightly skewed left.
@@ -338,12 +347,14 @@ grid.arrange(GreenXcomp,
              GreenXintel,
              GreenXopen,
              nrow=1
-             )
-
-#Based on the graphs, there seem to be a potential positive correlation between the green reputation survey and each of the other personality trait surveys. 
-#Additionally the graphs show interactions between the green survey and both intel personality trait survey and open personality trait survey. 
+             ) # BMW: We will look at it this week, but check out the patchwork package for an elegant way to do this.
 
 ```  
+
+<!-- BMW: Put your narrative discussion as regular markdown text, not code comments. -->
+
+Based on the graphs, there seem to be a potential positive correlation between the green reputation survey and each of the other personality trait surveys. 
+Additionally the graphs show interactions between the green survey and both intel personality trait survey and open personality trait survey. 
 
 ### Q6: Compare **green reputation** for students and non-students using a **rainfall plot** (bar + density + data points).
 
@@ -368,11 +379,10 @@ ggplot(Q5set) +
                     alpha = .5,
                     position = position_nudge(y = .2)
                     )
-
-#Overall, the plot does not seem to indicate a notable difference between students and non-students for the green reputation scale. 
-#However, the plot seems to show that students seem to have larger variance and a lower mean.
-
 ```
+
+Overall, the plot does not seem to indicate a notable difference between students and non-students for the green reputation scale. 
+However, the plot seems to show that students seem to have larger variance and a lower mean.
 
 ### Q7: Compute a summary table of means, SDs, medians, minima, and maxima for the four total scores for students and non-students.
 
@@ -403,12 +413,16 @@ Q7set.1 <- as.data.frame(t(as.matrix(Q7set)
                            )
                          )
 Q7set.1
-#Judging only by the summary statistics, there does not seem to be a difference between students and non-students for any of the personality trait scores,
-#(with the possible exception for the mean total score value for comp) or the green reputation scores. 
-#Nearly all the means between the two groups are the same and around 65 for the scores, 
-#with the exception of comp (above 70) and green (below 60)
+
 
 ```  
+
+Judging only by the summary statistics, there does not seem to be a difference between students and non-students for any of the personality trait scores (with the possible exception for the mean total score value for comp) or the green reputation scores. 
+Nearly all the means between the two groups are the same and around 65 for the scores, 
+with the exception of comp (above 70) and green (below 60)
   
+  
+<!-- BMW: You can delete instruction text like this from your final script. -->
+
 In your assignment, prepare an RMarkdown file that includes both the coding and (for 4-7) narrative descriptions of your results.
 
