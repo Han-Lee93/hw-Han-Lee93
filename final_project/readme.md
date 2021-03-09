@@ -59,4 +59,4 @@ Within each trial, participants had to either press the "present" key or "absent
 | Target | Current target for the given **run** | A = Look for letter "A" at a given level |
 | Globality | Current focus level for the given **run** | Global = look for target at only the global level |
 | RunType |  Current run type for the given **run** | Congruent at 6" = Congruent stimulus on the 6th trial |
-| StimuliType | Type of stimulus shown on current trial | Incongruent Stimulus with target = Participants were shown an incongruent stimulus with the target at the focused level) |
+| StimuliType | Type of stimulus shown on current trial | Incongruent Stimulus with target = Participants were shown an incongruent stimulus with the target at the focused level |
