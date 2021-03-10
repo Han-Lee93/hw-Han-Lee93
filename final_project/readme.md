@@ -1,7 +1,7 @@
 # Han Lee's Final Project
 
 
-This repository contains files and folders related to the final project for the [*Data Programming class (Spring 21)*](https://progdata.netlify.app/#about). This includes raw data, experimental code, analyses, and storage for items such as images.
+This repository contains files and folders related to the final project for the [*Data Programming class (Spring 21)*](https://progdata.netlify.app/#about). This includes raw data, experimental code, analyses, and storage for items such as images. _Will be periodically updated with new files throughout the semester._
 
 ## Repository directory:
 
