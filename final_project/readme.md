@@ -19,7 +19,7 @@ This repository contains files and folders related to the final project for the 
 
 ### Objective:
 
-This study tested whether multiple consecutive repetitions of compound stimuli (_see left image_) would reduce the RT advantage and asymmetrical interference effects for the holistic form or global level when searching the lower details, or local level.  
+This study tested whether multiple consecutive presentations of compound stimuli (_see left image_) would reduce the RT advantage and asymmetrical interference effects for the holistic form or global level when searching the lower details, or local level.  
 
 ### Procedure:
 
