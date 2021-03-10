@@ -19,7 +19,6 @@ library(tibble)
 library(ggplot2)
 library(tidyverse)
 library(gridExtra)
-library(reshape2)
 library(kableExtra)
 library(ggdist)
 ```
@@ -47,7 +46,7 @@ dat <- read_csv(here::here("raw_data","RepeatedExposureReverseRdata-3_13_2020.cs
                   ),
                   na = c("","NA")
                 ) %>% 
-    filter(TrialType == "Experiment", ConditionType == "Critical", Error == "0", (RT >= 50 & RT <= 1999)) #Filtering out to relevant data (i.e., cleaning raw data)
+    filter(TrialType == "Experiment", ConditionType == "Critical", Error == "0", (RT >= 50 & RT <= 1999)) #Filtering out irrelevant data (i.e., cleaning raw data).
 
 #Creating clean csv file from filtering
 write_csv(dat,
