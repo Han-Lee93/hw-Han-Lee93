@@ -3,9 +3,10 @@ title: "HW04"
 author: "Han Lee"
 date: "3/5/2021"
 output:
-    html_document: default
-    github_document: default
+  html_document: 
     theme: paper
+  github_document: default
+  
 ---
 
 ```{r setup, include=FALSE}
