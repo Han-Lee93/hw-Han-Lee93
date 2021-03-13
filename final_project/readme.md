@@ -27,8 +27,8 @@ The study was organized into blocks, or **runs**, of seven trials. Before each r
 
 Within each trial, participants had to either press the "present" key or "absent" key to indicate target presence. Participants had 2000 msec. to respond before the study moved participants to the next trial. Response times to press these keys were recorded along with errors or timed out trials. 
 
-<img src="https://github.com/usf-progdata/hw-Han-Lee93/blob/HW4/final_project/Images/Slide16.PNG" width="250" height="250" align="left"> 
-<img src="https://github.com/usf-progdata/hw-Han-Lee93/blob/HW4/final_project/Images/run_breakdown.png" width="500" height="250" align="right">
+<img src="https://github.com/usf-progdata/hw-Han-Lee93/blob/master/final_project/Images/Slide16.PNG" width="250" height="250" align="left"> 
+<img src="https://github.com/usf-progdata/hw-Han-Lee93/blob/master/final_project/Images/run_breakdown.png" width="500" height="250" align="right">
 
 <br clear="right"/>
 
