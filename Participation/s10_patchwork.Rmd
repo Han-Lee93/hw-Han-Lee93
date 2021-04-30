@@ -1,0 +1,103 @@
+---
+title: "Putting Plots Together"
+editor_options: 
+  chunk_output_type: console
+---
+
+## patchwork
+
+```{r}
+library(ggplot2)
+library(patchwork)
+
+p1 <- ggplot(mtcars) + 
+  geom_point(aes(mpg, disp)) + 
+  ggtitle('Plot 1')
+
+p2 <- ggplot(mtcars) + 
+  geom_boxplot(aes(gear, disp, group = gear)) + 
+  ggtitle('Plot 2')
+
+p3 <- ggplot(mtcars) + 
+  geom_point(aes(hp, wt, colour = mpg)) + 
+  ggtitle('Plot 3')
+
+p4 <- ggplot(mtcars) + 
+  geom_bar(aes(gear)) + 
+  facet_wrap(~cyl) + 
+  ggtitle('Plot 4')
+```
+
+patchwork is a very elegant package for composing multiple plots on a page. 
+Let's check it out!
+
+Use the `+` function to add multiple plots together:
+
+```{r}
+p1 + p2
+```
+
+If you save a patchwork as an object, you can create nested patchworks:
+
+```{r}
+patch <- p1 + p2
+p3 + patch
+```
+
+You can control the layout of a patchwork using `()`, `|`, and `/`:
+
+```{r}
+p1 / p2
+
+p1 | p2
+
+p1 / (p2 | p3)
+```
+
+You can also control the grid with `plot_layout()`:
+
+```{r}
+p1 + p2 + p3 + plot_spacer() + p4 + plot_spacer()
+  plot_layout(ncol = 3)
+```
+
+patchwork can collect guides for multiple plots:
+
+```{r}
+p1a <- ggplot(mtcars) + 
+  geom_point(aes(mpg, disp, colour = mpg, size = wt)) + 
+  ggtitle('Plot 1a')
+
+p1a | (p2 / p3)
+
+(p1a | (p2 / p3)) + plot_layout(guides = 'collect')
+```
+
+Finally, patchwork can add annotations and titles to the whole patchworkd:
+
+```{r}
+patchwork <- (p1 + p2) / p3
+patchwork + plot_annotation(
+  title = 'The surprising truth about mtcars',
+  subtitle = 'These 3 plots will reveal yet-untold secrets about our beloved data-set',
+  caption = 'Disclaimer: None of these plots are insightful'
+)
+
+patchwork + plot_annotation(tag_levels = 'A')
+```
+
+You can theme these annotations:
+
+```{r}
+patchwork + 
+  plot_annotation(title = 'The surprising truth about mtcars',
+                  subtitle = 'These 3 plots will reveal yet-untold secrets about our beloved data-set',
+                  caption = 'Disclaimer: None of these plots are insightful',
+                  theme = theme(
+                    text = element_text(family = 'mono'),
+                    plot.title = element_text(size = 18)
+                  )
+  )
+```
+
+patchwork can do a whole lot more too! Check out <https://patchwork.data-imaginist.com/articles/guides/assembly.html> and <https://patchwork.data-imaginist.com/articles/guides/layout.html>.

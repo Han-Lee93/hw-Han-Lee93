@@ -1,0 +1,53 @@
+---
+title: "Table merging: Family communication study"
+output: 
+  html_document:
+    theme: paper
+---
+
+You are working on a study examining the impact of communication skills on parents' and childrens' satisfaction with their relationship. 
+This is a longituduinal study, currently with two waves collected at child ages 12 and 14.
+
+In each wave, participants record a video of themselves expressing a concern they have to the other person and suggesting a solution.
+A researcher views these videos and rates the communication effectiveness of each person.
+Participants also complete a survey of their relationship satisfaction.
+
+The data are kept in separate CSV files for each person.
+The files are named like this:
+
+```
+family-communication_<wave>_<person>.csv
+```
+
+For example, `family-communication_w1_child.csv`.
+You also have a list of email addresses for each family in `family-communication_emails.csv`.
+
+Import the datasets into R, then do the following:
+
+1. Merge the two wave of child data together.
+   Keep only participants with complete data in both waves.
+   Indicate which wave the data came from by setting the `suffix` argument.
+   
+2. For Wave 2, merge the parent and child data together.
+   Keep only participants that have child ratings, whether or not they have parent data.
+   Indicate which person the data came from by setting the `suffix` argument.
+   
+3. Merge the four datasets into one full dataset.
+   Keep all participants.
+   Indicate which wave and person the data came from by setting the `suffix` argument.
+   
+4. There is some missing data in Wave 2. 
+   Which families have parent data but not child data in Wave 2?
+   Which families have child data but not parent data in Wave 2?
+
+5. Which families are missing both parent and child data in Wave 2?
+   (Hint: You might need to look at Wave 1 as well.)
+   
+6. You would like to send an email to the families that have missing data.
+   Merge one or more of the tables from above with the emails dataset to create a mailing list.
+   Create columns to indicate which people in the family are missing data.
+   The ID columns have different names in the two datasets.
+   You can manage that by specifying `by` with something like: `by = c("id.x" = "id.y")`
+   
+7. Create a long-format dataset by row-binding the four datasets.
+   Indicate the wave and person the data come from with columns named `wave` and `person`.

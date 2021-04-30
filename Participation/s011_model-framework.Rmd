@@ -1,0 +1,567 @@
+# The Model-Fitting Paradigm in R
+
+## Today
+
+Up to now, we have been developing skills for data wrangling and _exploratory data analysis_ (e.g., making summary tables, visualizing trends).
+Sometimes though, we would like to actually fit formal statistical models and use these to draw inferences and conclusions. 
+
+Today, we are going to look at the model-fitting paradigm in R. 
+We will see how to fit formal models (e.g., regression models [including things like _t_ tests, ANOVA, correlation analysis, etc.]). 
+We will also see how to work with the results of R model objects.
+
+To that end, today 
+
+1. Introduction and motivation for model-fitting in R.
+1. Distinguish exploratory data analysis from model-fitting.
+1. Practice a full model-fitting analysis workflow.
+
+
+## Resources
+
+- [`broom` vignette](https://cran.r-project.org/web/packages/broom/vignettes/broom.html)
+
+- [*R for Data Science* chapter on modeling](https://r4ds.had.co.nz/model-basics.html)
+
+If you're interested in learning more about the actual statistical/machine 
+learning methods for fitting models, I highly recommend the books 
+[*Learning Statistics with R*](https://learningstatisticswithr.com/) and
+[*An Introduction to Statistical Learning*](https://www-bcf.usc.edu/~gareth/ISL/).
+Both are freely available online and use R. *Learning Statistics with R* is
+particularly well-written and funny.
+
+```{r packages, cache = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(broom)
+library(parameters)
+library(gapminder)
+library(ggdist)
+library(distributional)
+library(modelr)
+set.seed(1234)
+
+theme_set(theme_minimal())
+```
+
+
+## What is Model-Fitting?[^thanks]
+
+We often want to use information on one (or more) variable (the "predictor(s)") 
+to learn or make judgments about another variable (the "criterion" or "response").
+For example, if I know someone's height, what can I say about their weight? In
+general, someone who is 7 feet tall probably weighs more than someone who is 4
+feet tall.
+
+**Example:** Consider the scatterplot below.
+
+1. A car weighs 4000 lbs. What can we say about its mpg?
+2. A car weights less than 3000 lbs. What can we say about its mpg?
+
+```{r, fig.width=5, fig.height=3}
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point() +
+  labs(x = "Weight (1000's of lbs)")
+```
+
+In the `mtcars` data, a car's mpg and its weight are _correlated_ (they are not
+"independent"). So, we could make decent predictions about its miles per gallon
+if all we knew was its weight.
+
+**Example:** What can we say about rear axle ratio if we know something about 
+quarter mile time?
+
+```{r, fig.width=5, fig.height=3}
+ggplot(mtcars, aes(qsec, drat)) + 
+  geom_point() +
+  labs(x = "Quarter mile time",
+       y = "Rear axle ratio")
+```
+
+This approach we use above relies on graphs and visual inspection to make
+inferences. This graphical approach is often called _exploratory data analysis_.
+(They are many methods for exploratory data analysis [EDA], but graphical methods are some of the most common.)
+
+Sometimes, EDA isn't enough. 
+Perhaps we want to make more specific or precise predictions (e.g., what is the specific range of mpg values I can expect for a car that weights 4000 lbs?). 
+Perhaps the relationship between two variables is fairly weak (but not zero!), so it's hard to see a pattern just with your eyes.
+
+In these cases, we can answer questions more precisely by _fitting a model_: 
+a curve that predicts a response variable, $y$, using a predictor variable (or variables), $x$. 
+This is also called a __regression curve__ or a __machine learning model__. 
+
+(There are more comprehensive models too, such as modeling entire distributions, but we will keep things simpler here.)
+
+There are typically two goals of fitting a model:
+
+1. Make predictions.
+   - If I know a patient's diagnostic test score, how likely are they 
+     attempt suicide?
+   - If I know a medical school applicant's MCAT score, what GPA are they 
+     expected to obtain?
+2. Interpret variable relationships ("explanation").
+   - Is age related to personality scores?
+   - Does political orientation influence the effectiveness of different
+     messaging techniques?
+     
+The advantage of formal modeling is that it:
+  
+  1. provides more specific numeric estimates of variable relationships and predicted outcomes
+  2. provides a numeric indication of uncertainty (using uncertainty intervals).
+
+
+## The Linear Model
+
+A linear model is a specific and very useful type of model. 
+A linear model says that if we change the predictor variable $x$ by a certain amount, we expect the response variable $y$ to also change by a specific (constant) amount. 
+Most statistics we use in psychology are linear models (e.g., correlations, t-tests, regression, ANOVA, ANCOVA, …)
+
+(We aren't going to dive into all of the details of linear models [or other types of models] or their assumptions. 
+You can learn more about those in your stats classes or using the books in the **Resources** section. 
+For now, focus on the basic idea of the linear model as quantifying the [linear] relationship between variables and estimating numeric values to accompany your plots.)
+
+Linear models have the generic form
+
+$$y = \beta_0 + \beta_1 \times x$$
+
+where $y$ is the **response** or **outcome of interest**, $x$ is the **explanatory** or **predictor** variable, and $\beta_0$ and $\beta_1$ are **parameters** that reflect the relationship between the two variables 
+(i.e., _"how do I use information on $x$ to predict a value on $y$?").
+$\beta_1$ is the _slope_ (how much does $y$ change for each change of 1 in $x$?). 
+$\beta_0$ is the _intercept_ (what is the expected value of $y$ when $x$ is _0_?). 
+
+We use the observed data for $x$ and $y$ to generate a **fitted model**, where 
+we make our best guess as to the true values for the $\beta_0$ and $\beta_1$ 
+parameters by picking values that best fit the data.
+
+Let's look at some simulated data with predictor $x$ and response $y$. 
+
+```{r sim-plot}
+ggplot(modelr::sim1) + 
+  aes(x = x, y = y) +
+  geom_point()
+```
+
+This looks like a linear relationship. We could randomly draw prediction lines. 
+(That is, we could randomly generate values for $\beta_0$ and $\beta_1$ for the formula $y = \beta_0 + \beta_1 \times x$ to try and explain or predict the relationship between $x$ and $y$.):
+
+```{r sim-random-fit}
+models <- tibble(
+  a1 = runif(250, -20, 40),
+  a2 = runif(250, -5, 5)
+)
+
+ggplot(modelr::sim1) + 
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_abline(
+    data = models, 
+    aes(intercept = a1, slope = a2), 
+    alpha = 1/4
+  )
+```
+
+Obviously some of these lines are better than others (some values of $\beta_0$ and $\beta_1$ better capture the true relationship between $x$ and $y$). 
+
+We need a definition of "better" to separate good sets of parameter values from bad sets of parameter values. 
+One approach that is widely used called **least squares**.
+Least squares means that $\beta_0$ and $\beta_1$ are chosen to _minimize_ the 
+_sum of the squares of the errors_ of the predictions made by the model. 
+That is, which line can we draw that will get as many of the data points as close as possible to that line? 
+The errors in prediction (how far are the points from their predicted values [the line]?) are the _vertical_ difference between the actual values for $y$ and the predicted values for $y$ (the points on the line).
+
+```{r sim-error, echo = FALSE}
+dist1 <- modelr::sim1 %>% 
+  mutate(
+    dodge = rep(c(-1, 0, 1) / 20, 10),
+    x1 = x + dodge,
+    pred = 7 + x1 * 1.5
+  )
+
+ggplot(dist1) +
+  aes(x = x1, y = y) +
+  geom_abline(intercept = 7, slope = 1.5, color = "grey40") +
+  geom_point(color = "grey40") +
+  geom_linerange(aes(ymin = y, ymax = pred), color = "#3366FF")
+```
+
+[R for Data Science](http://r4ds.had.co.nz/model-basics.html) gives a good introduction to performing these calculations manually by writing your own  functions. 
+I encourage you to read through and practice some of this code, especially if you have no experience with linear models.
+
+However for our purposes, let's focus on using existing R tools to fit a linear model. 
+You can use `ggplot2` to draw the best-fit line:
+
+```{r sim-plot-lm}
+ggplot(modelr::sim1) +
+  aes(x = x, y = y) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+The line in blue is the best-fit line. 
+The gray band is the 95% confidence/compatibility intervals for the predicted values. 
+A confidence interval indicates the range of true parameter values that are reasonably compatible with your data (1) assuming your model assumptions are correct (e.g., the relationship between the variables is linear) and (2) with a specified Type 1 error rate (e.g., a 95% confidence interval is expected to miss the true parameter value 5% of the time). 
+(For more discussion on the meaning and interpretation of confidence/compatibility, see [this discussion](https://doi.org/10.1136/bmj.l5381) or take my Regression class in the fall.)
+
+The `method = "lm"` part of `geom_smooth()` specifies what type of model to use to fit the line. 
+`"lm"` stands for "linear model" and uses R's function for fitting linear models, `lm()`, to fit the line. 
+`lm()` is one of many modeling functions in R. 
+
+## Model-Fitting in R
+
+Model fitting methods usually use a common format in R:
+
+```{r, eval=FALSE}
+method(formula, data, options)
+```
+
+They also tend to have a common output object: a special _list_. 
+
+__method__:
+
+The modeling function, such as:
+
+- Linear Regression: `lm()`
+- Generalized Linear Regression: `glm()` (e.g., logistic regression, Poisson regression)
+- Local regression (aka "smoother lines"): `loess()`
+- Quantile regression: `quantreg::rq()`
+- Meta-analysis: `metafor::rma()`
+- Bayesian regression: `brms::brm()`
+- ...
+
+For now, we are only going to use `lm()`.
+
+__formula__:
+
+Formulas are used to describe the structure of the model you want to fit. 
+What is the response variable you are predicting? What are the predictor variables?
+
+In R, formulas take the form `y ~ x1 + x2 + ... + xp`.
+
+The left side of the formula (before `~`) is the response variable. 
+The right side of the formula (after `~`) are the predictors. 
+Separate multiple predictors using `+`. 
+(We will get to some more complex formulas later down the page.)
+
+`y`, `x1`, `x2`, etc. are the column names in your data frame. 
+R will look into your data frame and look for the columns with the names given in your formula (much like `aes()` in ggplot).
+
+__data__: The data frame.
+
+__options__: Additional arguments specific to the method and function.
+
+
+### Example model using `gapminder`:
+
+1. Fit a linear regression model to life expectancy ("Y") from year ("X") by filling in the formula. 
+   
+First, create a subset of the `gapminder` dataset containing only data from Europe
+
+```{r}
+gapminder_europe <- filter(gapminder, continent == "Europe")
+head(gapminder_europe)
+```
+
+Now, use the `lm()` function to fit a linear model:
+
+```{r}
+mod_europe <- lm(lifeExp ~ year, data = gapminder_europe)
+mod_europe
+```
+
+When we print `mod_europe`, it shows us the "coefficients" for the model (the
+estimated values of $\beta_0$ and $\beta_1$). 
+Does that mean that the life expectancy at "year 0" was equal to -397.7646?!
+
+No, that doesn't make much sense. 
+We need to be careful to only interpret the predictions of the model for the general range of the variables we actually have in our data. 
+
+We can modify how we fit the model to make the value of the `(Intercept)` ($\beta_0$) more meaningful. 
+Let's fit it so that it reflects the predicted life expectancy value for the first year in the data, 1952. 
+For example:
+
+```{r}
+mod_europe <- 
+  gapminder_europe %>% 
+  mutate(year_1952 = year - 1952) %>% 
+  lm(lifeExp ~ year_1952, data = .)
+mod_europe
+```
+
+In this model, the `(Intercept)` coefficient ($\beta_0$) is the predicticed life expectancy in 1952, and the `I(year - 1952)` coefficient ($\beta_1$) is the expected increase in life expectancy each year.
+
+What type of R object is the output of `lm()`? Let's see.
+
+```{r}
+class(mod_europe)
+is.list(mod_europe)
+```
+
+`mod_europe` is an object of class `"lm"` (an `lm` model object). 
+This is a special type of `list`. 
+A `list` is a vector than can contain all manner of different types of values, and the values don't have to all be the same or be the same length.
+
+Let's look at the structure of an `"lm"` model object:
+
+```{r}
+str(mod_europe)
+```
+
+An `"lm"` model object contains a lot of important information, some of which 
+you may recognize but most of it probably not. 
+It's a bit of a mess inside (don't tell its mom). 
+It can be easier to see what slots an object like this contains using the `names()` function:
+
+```{r}
+names(mod_europe)
+```
+
+We can view a summary of the model results using the `summary()` function:
+
+```{r}
+summary(mod_europe)
+```
+
+Under the hood, the result of `summary(mod_europe)` is another list that contains even more information:
+
+```{r}
+names(summary(mod_europe))
+```
+
+As you can see, model objects are decidedly _*not*_ tidy. 
+So, we aren't going to pull results directly from them. 
+Instead, we are going to use functions from base R and the `broom` package to tidy up and navigate model results.
+
+### Predicted Values
+
+One basic thing we might want to do is extract the predicted (or "fitted") values for the model. 
+We can do this using the `augment()` function:
+
+```{r}
+head(augment(mod_europe))
+```
+
+The `.fitted` column contains the model-predicted values for each data point.
+
+
+```{r}
+augment(mod_europe) %>% 
+  ggplot() +
+  aes(x = year_1952 + 1952) +
+  geom_point(aes(y = lifeExp)) +
+  geom_line(aes(y = .fitted))
+```
+
+We can get standard errors and confidence intervals for these fitted values by adding `se_fit = TRUE` and `interval = "confidence"`:
+
+```{r}
+head(augment(mod_europe, se_fit = TRUE, interval = "confidence"))
+```
+
+Or we can predict on a new dataset:
+
+```{r}
+new_data_france <- 
+  tibble(year_1952 = c(1955, 1964, 1971, 1998, 2000, 2006) - 1952)
+augment(mod_europe, newdata = new_data_france, se_fit = TRUE, interval = "confidence")
+```
+
+(If you want a _prediction interval_ [what is the whole predicted _range_ of values, not just the predicted mean value, we can expect in new data],  specify `interval = "prediction"` instead.)
+
+### Residuals
+
+We might also want to extract the model *residuals*; the differences between
+the model predicted values and the actual data for each case. 
+Residuals are useful for evaluating model fit and other diagnostics.
+
+In the `augment()` output, the residuals are labelled `.resid`.
+
+```{r}
+head(augment(mod_europe))
+```
+
+## Working with model output
+
+We can use model output from `augment()` to visualize model results.
+
+A linear model assumes that the residuals are normally distributed, so looking at a plot of the residuals is useful to determine if our model is poorly fit:
+
+```{r}
+augment(mod_europe) %>% 
+  ggplot() +
+  aes(x = .resid) +
+  geom_histogram() +
+  theme_minimal() +
+  xlab("Model residuals") +
+  ylab("Count")
+```
+
+A plot of the residuals against the observed or fitted values can also help to show if a specific range of values is more poorly predicted than others:
+
+```{r}
+augment(mod_europe) %>% 
+  ggplot() +
+  aes(x = year_1952, y = .resid) +
+  geom_point(alpha = .5) +
+  theme_minimal() +
+  xlab("Year") +
+  ylab("Model residuals")
+```
+
+Let's fit a new model and plot its predicted values:
+
+```{r}
+gapminder_europe <- mutate(gapminder_europe, year_1952 = year - 1952)
+mod_country <- lm(lifeExp ~ year_1952 + country, data = gapminder_europe)
+
+mod_country_aug <- augment(
+  mod_country, 
+  se_fit = TRUE, 
+  interval = "confidence"
+) %>% 
+  mutate(
+    country = factor(
+      recode(country, 
+             France = "France", 
+             Germany = "Germany", 
+             Turkey = "Turkey", 
+             .default = "Other"),
+      levels = c("France", "Germany", "Turkey", "Other")
+    )
+  )
+```
+
+
+```{r}
+mod_country_aug  %>% 
+  ggplot() +
+  aes(x = year_1952 + 1952, 
+      color = country, 
+      fill = after_scale(alpha(color, .25))) +
+  geom_point(
+    aes(y = lifeExp),
+    alpha = .5
+  ) +
+  geom_ribbon(
+    data = filter(mod_country_aug, country != "Other"),
+    aes(ymin = .lower, ymax = .upper),
+    size = 0,
+    alpha = .5
+  ) + 
+  geom_line(
+    data = filter(mod_country_aug, country != "Other"),
+    aes(y = .fitted)
+  ) +
+  theme_minimal() +
+  scale_color_manual(values = c(palette.colors(3, "Set 1"), "gray30")) +
+  labs(title = "Life expectancy by year for European countries",
+       x = NULL, y = NULL) +
+  theme(legend.position = "bottom")
+```
+
+```{r}
+mod_country_aug  %>% 
+  ggplot() +
+  aes(x = year_1952 + 1952,
+      color = country, 
+      fill = after_scale(alpha(color, .25))) +
+  geom_point(
+    aes(y = lifeExp),
+    alpha = .5
+  ) +
+  stat_dist_lineribbon(
+    data = filter(mod_country_aug, country != "Other"),
+    aes(dist = dist_student_t(
+      df = df.residual(mod_country), 
+      mu = .fitted, 
+      sigma = .se.fit)
+    )
+  ) +
+  theme_minimal() +
+  scale_color_manual(values = c(palette.colors(3, "Set 1"), "gray30")) +
+  labs(title = "Life expectancy by year for European countries",
+       x = NULL, y = NULL) +
+  theme(legend.position = "bottom")
+```
+
+### Model coefficients
+
+If we are interested in using our model to understand relationships between the variables, we will also want to examine and interpret the model coefficients $\beta_0$ and $\beta_1$ themselves. 
+
+We can view the model coefficients using the `coef()` function:
+
+```{r}
+coef(mod_europe)
+```
+
+We can get more information about the coefficients, such standard errors and
+hypothesis tests using `summary()`:
+
+```{r}
+summary(mod_europe)
+```
+
+We can get confidence intervals for the coefficients using the `confint()` function:
+
+```{r}
+confint(mod_europe)
+```
+
+Rather than using all of these indivdual functions, the `parameters::parameters()` function puts them all together and conveniently returns the results as a data frame (great for tabling or plotting):
+
+```{r}
+parameters(mod_europe)
+
+mod_europe_param <- parameters(mod_europe) %>% as.data.frame()
+```
+
+Looking at these results, we can see that the predicted average life expectancy for European countries in 1952 is `r  mod_europe_param[1, "Coefficient"]` years [with a 95% confidence interval of `r  c(mod_europe_param[1, "CI_low"], mod_europe_param[1, "CI_high"])`, indicating a range of true values that are reasonably compatible with our data]. 
+Each year, the predicted life expectancy increases by `r  mod_europe_param[2, "Coefficient"]` years [95% CI `r  c(mod_europe_param[2, "CI_low"], mod_europe_param[2, "CI_high"])`].
+
+We can plot these using a **coefficient plot**. 
+
+```{r}
+parameters(mod_europe) %>% 
+  as.data.frame() %>% 
+  filter(Parameter != "(Intercept)") %>% 
+  ggplot() +
+  aes(y = Parameter) +
+  stat_dist_slabinterval(
+    aes(
+      dist = dist_student_t(
+        df = df_error,
+        mu = Coefficient,
+        sigma = SE
+      )
+    )
+  ) +
+  theme_minimal()
+```
+
+
+## Activity
+
+Use the green behavior dataset from homework 3. 
+In homework 3, you computed mean scores for each of the Big Five scales for each person.
+Then, you graphically explored those relationships. 
+
+Now, let's supplement those exploratory analyses with some formal linear models. 
+
+
+1. How do students and non-students differ on green reputation?
+
+Answer this question by fitting a model using student as a predictor, then
+(a) plotting the raw data with confidence distributions for each group mean, and
+(b) presenting a table of group means and confidence intervals.
+
+
+2. Which trait shows the strongest relationship with green reputation?
+
+Answer this question by fitting separate models for each trait, then
+(a) presenting a table of model coefficients, and
+(b) presenting a coefficient plot with confidence distributions, and 
+(c) plotting the raw data with fitted regression lines and confidence intervals.
+
+
+For (a) and (b), use `bind_rows()` after filtering the coefficent tables.
+
+
+[^thanks]: Some parts of this tutorial are adapted from a
+[tutorial](https://cfss.uchicago.edu/notes/linear-models/) by Dr. Benjamin Soltoff.

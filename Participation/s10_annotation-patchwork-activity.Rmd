@@ -1,0 +1,49 @@
+---
+title: "Gapminder annotation activity"
+editor_options: 
+  chunk_output_type: console
+---
+
+In this activity, imagine that you are a data analyst working for the prime minister of New Zealand.
+The PM wants to know how trends in life expectancy in Zealand and its nearest neighbor, Australia, compare to other countries.
+
+To answer this question, use the `gapminder` dataset.
+
+1. Prepare your dataset. Load the `gapminder` package and make a new factor variable indicating whether a country is New Zealand/Australia (the `continent == "Oceania"` countries).
+
+```{r}
+
+```
+
+2. Make a plot showing trendlines for life expectancy each country over time.
+   Assign this plot to an object, then show it. (We will be adding more stuff to it later.)
+
+```{r}
+
+```
+
+3. Now, update your plot above to emphasize the Oceania countries compared to the rest (e.g., use color, size [line width], and alpha).
+
+```{r}
+
+```
+
+4. Label Australia and New Zealand on the plot.
+   (Hint: You might need to update the data for this layer to filter out other countries and extra years.)
+   
+```{r}
+
+```
+
+5. Finish up your plot. Clean up the titles, axes, legend (do you need a legend?), theme, etc. Add any additional annotations you think would be helful to readers.
+
+```{r}
+
+```
+
+6. As a supplement to the above plot, make a new **set** of plots comparing the Oceania countries to each of the other continents individually. Arrange these plots in a grid using `patchwork`.
+
+```{r}
+
+```
+
