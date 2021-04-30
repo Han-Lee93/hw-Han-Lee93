@@ -1,0 +1,317 @@
+---
+title: "Final Project"
+author: "Han"
+date: "4/13/2021"
+output:
+  html_document:
+    code_folding: hide
+    highlight: breezedark
+    theme: cerulean
+  github_document: default
+---
+
+```{r setup, include=FALSE, message=FALSE, echo=FALSE, results='hide'}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(here)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(ggplot2)
+library(tidyverse)
+library(e1071)
+library(gridExtra)
+library(kableExtra)
+library(patchwork)
+library(ggdist)
+library(ggrepel)
+library(ggtext) 
+require(svMisc)
+library(knitr)
+library(progress)
+library(Rmisc)
+library(gghighlight)
+library(ez)
+library(rmcorr)
+library(lsr)
+library(nlme)
+library(gamlss.dist)
+library(plyr)
+library(plotly)
+library(retimes)
+library(car)
+library(psych)
+library(viridis)
+library(forcats)
+library(devtools)
+library(psycho)
+library(tidyverse)
+library(lmerTest)
+library(ggpubr)
+library(rstatix)
+library(DescTools)
+library(gplots)
+library(mvoutlier)
+library(xlsx)
+library(reshape2)
+
+#Theme used for all the graphs
+theme_x = function(){
+  theme_minimal() %+replace%
+    theme(plot.background = element_rect(fill = "gray60"), 
+          plot.title = element_markdown(face = "bold", size = 15),
+          axis.text.x = element_text(size = 9),
+          plot.margin = unit(c(.2, .2, .2, .2), "cm"),
+          panel.background = element_rect(fill = "gray60",
+                                          colour = "gray60",
+                                          size = 0.5, 
+                                          linetype = "solid"),
+          panel.grid.major = element_line(size = 0.5, 
+                                          linetype = 'solid',
+                                          colour = "gray50"), 
+          panel.grid.minor = element_line(size = 0.25, 
+                                          linetype = 'solid',
+                                          colour = "gray50"))}
+```
+
+# Repeated exposure effects on Global Precedence {.tabset}
+
+## Introduction and Overall Study Description and Report
+
+This study aimed to test the endurance of global level influence on local level processing. Research has shown that the global level, or the large form, of an object can influence how the local level, or detailed components, of the object is visually processed. When the two levels are congruent ( consistent information between the two levels), global information can facilitate local information processing; however, when incongruent (inconsistent information between the two levels), global information can impede local information processing, leading to slower response times. The current literature presents inconsistent findings on whether attention can reduce global level influence. Repeated presentation to a 
+
+## Summary Tables/Datasets
+
+Importing "cleaned" datasets  created from "Import_data_RE.rmd"
+```{r importing dataset RE, warning = FALSE, message=FALSE, results='hide'}
+
+#Importing cleaned dataset for LME modeling/analysis
+REdat.full <-read_csv(here::here("Analyses", "LME", "Data", "RE_Cleaned_data.csv"),
+                    col_types = cols(
+                      ID = col_factor(),
+                      Condition = col_character(),
+                      RunPosition = col_factor(),
+                      RT = col_double(),
+                      Globality = col_character(),
+                      RunType = col_character(),
+                      StimuliType = col_character()
+                      ),
+                    na = c("","NA")
+                    ) 
+
+#Importing summarized means (by ID) dataset                    
+REdat.means <- read_csv(here::here("Analyses", "LME", "Output", "Summary", "Mean_by_condition-id-conditiontype.csv")
+                )
+```
+
+Summary table that consolidates previous summarized means (by ID) into a dataset with total summarized means; used for by condition comparisons. **Used for run graph**
+
+```{r summarytable, message=FALSE, warning = FALSE}
+
+#Summary table that consolidates previous summarized means (by ID) into a dataset with total summarized means; used for by condition comparisons.
+REdat.totalmeans <- summarySEwithin(
+  REdat.means,
+  measurevar = "RT_Mu",
+  withinvars = c("Globality", "RunType", 
+                 "RunPosition","Condition", "StimuliType", "Critdatpoint"),
+  idvar = "ID")
+
+REdat.totalmeans %>% 
+  select(Condition, RunPosition, RT_Mu, sd, se, N)
+```
+
+Full dataset with only comparison data (Incongruent stimulus at Position 2 and 6, and the congruent stimulus at the same positions from the all congruent runs) **Used for LME analyses**
+```{r full dataset for analysis, message = FALSE, warning = FALSE}
+
+#Filter to look at critical data points
+REdat.analysis <- REdat.full %>% 
+  filter(((Condition == "Global Congruent"| Condition == "Local Congruent") &
+                              (RunPosition == "6" | RunPosition== "2")) | 
+                              (StimuliType == "Incongruent Stimuli with Target"))
+
+REdat.analysis %>% 
+  select(ID, Condition, RunPosition, RT)
+```
+
+Mean data (by ID) with only comparison data (Incongruent stimulus at Position 2 and 6, and the congruent stimulus at the same positions from the all congruent runs) **Used for ANOVA and pairwise comparison analyses**
+```{r mean (by ID) dataset for analysis, message = FALSE, warning = FALSE}
+#Data by full aggregated means
+REdat.IDanalysismeans <- REdat.means %>% 
+  filter(((Condition == "Global Congruent"| Condition == "Local Congruent") &
+                              (RunPosition == "6" | RunPosition== "2")) | 
+                              (StimuliType == "Incongruent Stimuli with Target"))
+
+REdat.IDanalysismeans %>% 
+  select(ID, Condition, RunPosition, RT_Mu, RT_Sigma, RT_n)
+```
+
+## Analyses
+
+ANOVA results
+```{r ANOVA, message = FALSE, warning = FALSE}
+
+#ANOVA
+aov.ww <- aov(RT_Mu ~ Globality*RunPosition*StimuliType + 
+                Error(ID/(Globality*RunPosition*StimuliType)),
+              data = REdat.IDanalysismeans)
+summary(aov.ww)
+```
+
+Linear mixed effects model results
+```{r LME, message = FALSE, warning = FALSE}
+#Linear mixed effects model
+x =lmer(RT ~ Globality + RunPosition + StimuliType + Globality * RunPosition * StimuliType + # Fixed effects
+       (1 | ID), # Random effects, nested within subject
+     data = REdat.analysis, 
+     REML=TRUE) 
+summary(x)
+```
+
+Pairwise comparison (Planned contrast: Local Incongruent at P2(and 6) vs. Local congruent at P2(and 6))
+```{R Pairwise, message = FALSE, warning = FALSE}
+#Pairwise comparison for Local level
+pwc <- REdat.IDanalysismeans %>%
+  filter(Globality == "Local") %>% 
+  group_by(RunPosition) %>% 
+  pairwise_t_test(
+    RT_Mu ~ StimuliType, paired = TRUE,
+    p.adjust.method = "bonferroni"
+  )
+pwc
+```
+## Graphs
+
+Graph depicting total means throughout a run for all conditions
+```{r graphs, message=FALSE, warning = FALSE}
+runplot <- ggplot(data = REdat.totalmeans) +
+  aes(x = RunPosition, 
+      y = RT_Mu, 
+      shape = StimuliType,
+      group = interaction(Globality,RunType)) +
+  geom_errorbar(aes(ymax = RT_Mu + se, 
+                    ymin = RT_Mu - se,
+                    color = Condition), 
+                width=.3) +
+  geom_line(aes(size = Condition,  
+                color = Condition)) +
+  geom_line(data = subset(REdat.totalmeans,
+                        RunType == "Congruent"),
+            aes(color = "black",
+                size = Condition))+
+  geom_point(aes(color = Condition,
+                 alpha = Critdatpoint,
+                 size = Globality,
+                 fill = Globality)) +
+  geom_point(data = subset(REdat.totalmeans,
+                           RunType == "Congruent"),
+                           aes(color = Condition,
+                               alpha = Critdatpoint,
+                               size = Globality,
+                               fill = Globality)) +
+  geom_errorbar(data=subset(REdat.totalmeans, 
+                            Critdatpoint =="Critical"),
+                aes(ymax = RT_Mu + se, 
+                    ymin = RT_Mu - se, 
+                    color = "gold"), 
+                width=.3) +
+  geom_point(data = subset(REdat.totalmeans, 
+                           Critdatpoint == "Critical"),
+             aes(color ="gold", 
+                 size = RunType,
+                 fill = Globality)) +
+  scale_alpha_manual(values=c(1,.4)) +
+  scale_color_manual(values = c("black", "black", "cyan3", "cyan3","gold","black","red3","red3")) +
+  scale_fill_manual(values = c("cyan3", "red3")) +
+  scale_size_manual(values = c(3.5,2.5,2,1,1,3.5,3.5,2.5,2,1,1)) +
+  scale_shape_manual(name = "Stimulus", 
+                     values = c(21,24), 
+                     labels=c("Incongruent Stimulus",
+                              "Congruent Stimulus")) +
+  scale_x_discrete("Run Position", 
+                   1:7,  
+                   waiver(),
+                   limits = c("1","2","3","4","5","6","7"),
+                   expand = c(.05,0)) + 
+  ylim(265,460) +
+  labs(title = "Mean <span style='color: cyan3'>**Global**</span> and <span style='color: red3'>**Local**</span> Response Times throughout a Run", 
+       color ="Critical Position", 
+       x ="Run Position", 
+       y ="Response Time (msec)") +
+  guides(color = FALSE, size = FALSE, alpha = FALSE, shape = FALSE, fill = FALSE) +
+  theme_x()
+
+runplot
+```
+
+Assumption graphs (for analyses)
+```{r assumption graphs, message=FALSE, warning = FALSE, fig.width = 12}
+
+#Scatterplot + trendlines
+scatter = ggplot(REdat.analysis) +
+  aes(x = RunPosition, y = RT, color = StimuliType) +
+  geom_point() +
+    geom_smooth(aes(color=StimuliType, group = StimuliType), 
+              method="lm") +
+  facet_grid(.~Globality) +
+  scale_size_manual(values = c(.5,1,1,1)) +
+  scale_x_discrete(expand = c(.05,0)) +
+  scale_color_manual(values = c("red","blue")) +
+  guides(color = FALSE) +
+  theme_x()
+
+#Density plot
+dens = ggplot(REdat.analysis) +
+  aes(x = RT) +
+  facet_grid(.~Globality) +
+geom_density(aes(y = (after_stat(count)), 
+                 fill = interaction(StimuliType, RunPosition), 
+                 alpha  = interaction(StimuliType, RunPosition))) +
+    scale_alpha_manual(values = c(.1,.7,.5,.1)) +
+    scale_fill_manual(values = c("red","red3","blue","cyan")) + 
+  theme_x()
+
+#boxplot
+boxplot = REdat.analysis %>% 
+  ggplot(mapping = aes(x = RunPosition, y = RT)) +
+  geom_boxplot(aes(color = StimuliType)) +
+  facet_grid(.~Globality) +
+  scale_x_discrete(expand = c(.05,0)) +
+  scale_color_manual(values = c("red", "blue")) +
+  guides(color = FALSE) +
+  theme_x()
+
+
+scatter  + boxplot + dens +
+  plot_layout(ncol = 1, guides = 'collect') +
+  plot_annotation(title = "<span style='color: red'>**Congruent**</span> vs. <span style='color: blue'>**Incongruent**</span> RT performance",
+                  theme = theme(plot.title = element_markdown(face = "bold"),
+                                plot.background = element_rect(fill = "gray")
+                                )
+                 )
+
+
+```
+
+```{R pasting dataset/graphs into folders, include=FALSE, message=FALSE, echo=FALSE, results='hide'}
+
+#Copying totalmeans dataset into "summary" folder
+write_csv(REdat.totalmeans,
+          here::here("Analyses", "LME", "Output", "Summary", "Total_Mean.csv")
+          )
+#Copying filtered dataset(for analysis) into "summary" folder
+write_csv(REdat.analysis,
+          here::here("Analyses", "LME", "Output", "Summary", "Fulldata_analysis.csv")
+          )
+#Copying means (by ID) dataset (for analysis) into "summary" folder
+write_csv(REdat.IDanalysismeans,
+          here::here("Analyses", "LME", "Output", "Summary", "IDdata_Mean.csv")
+          )
+
+#Saving/outputing plots
+ggsave(here::here("Analyses", "LME", "Output", "Plots", "RunPlot.pdf"), runplot)
+
+ggsave(here::here("Analyses", "LME", "Output", "Plots","RunPlot.svg"), runplot)
+
+ggsave(here::here("Analyses", "LME", "Output", "Plots","RunPlot.eps"), runplot)
+
+```

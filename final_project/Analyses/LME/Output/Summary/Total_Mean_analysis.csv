@@ -1,0 +1,9 @@
+Globality,RunType,RunPosition,Condition,StimuliType,Critdatpoint,N,RT_Mu,sd,se,ci
+Global,Congruent,2,Global Congruent,Congruent Stimuli with Target,Critical,30,292.66666666666663,33.6762993632738,6.148422938187307,12.574936845549331
+Global,Congruent,6,Global Congruent,Congruent Stimuli with Target,Critical,30,275.7710526315789,32.92568730623139,6.0113805529948134,12.294653697125074
+Global,Incongruent at 2,2,Global Incongruent at 2,Incongruent Stimuli with Target,Critical,30,320.7452826510721,32.41325455256613,5.917823560199163,12.103308162230615
+Global,Incongruent at 6,6,Global Incongruent at 6,Incongruent Stimuli with Target,Critical,30,271.72974658869396,31.779296255998258,5.802079140349905,11.86658424384346
+Local,Congruent,2,Local Congruent,Congruent Stimuli with Target,Critical,30,338.9235087719298,36.188626299301475,6.607108983084039,13.51305514100474
+Local,Congruent,6,Local Congruent,Congruent Stimuli with Target,Critical,30,295.38108187134503,26.746303423823917,4.883184571702006,9.987233834050032
+Local,Incongruent at 2,2,Local Incongruent at 2,Incongruent Stimuli with Target,Critical,30,372.8393372319688,49.789240666604655,9.090230078050974,18.59160800943613
+Local,Incongruent at 6,6,Local Incongruent at 6,Incongruent Stimuli with Target,Critical,30,319.872134502924,41.37615726901897,7.5542182263743465,15.45011103971995

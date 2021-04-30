@@ -1,0 +1,241 @@
+ID,Condition,RunPosition,Globality,StimuliType,RunType,Critdatpoint,RT_Mu,RT_Sigma,RT_n,RT_SE
+1,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,394.6,126.31472806571603,20,28.244831851434153
+1,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,335.8,99.43133044309631,20,22.233521396400764
+1,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,475.55,274.50366213643815,20,61.38088486097108
+1,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,309.85,137.94288482442366,20,30.84496674798354
+1,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,436.10526315789474,116.76752532600935,19,26.78830751491584
+1,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,407.8888888888889,114.04534128705585,18,26.880744728937113
+1,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,523.35,220.2568536480701,20,49.250929726730725
+1,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,454.4,143.32091337458857,20,32.04753049029388
+2,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,209.15,103.17245399406711,20,23.070062053620372
+2,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,224.5,75.34447208444831,20,16.84753613096617
+2,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,219.21052631578948,94.6223951335978,19,21.70786622016461
+2,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,254.4,89.34580955036742,20,19.978330365937147
+2,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,230.5,61.212743771211564,20,13.687585616170589
+2,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,232.35,78.41071019755024,20,17.53316781657583
+2,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,205.73684210526315,65.02464669925222,19,14.917677042182948
+2,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,228.95,80.50921817112818,20,18.00240846460039
+3,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,252.2,160.58826069698932,20,35.90862673069259
+3,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,243.05,157.2495418786733,20,35.16206650714135
+3,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,320.7,396.6886754914462,20,88.70228443032285
+3,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,236.15,220.51191040753093,20,49.30796215195825
+3,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,330.1578947368421,193.96885865688589,19,44.499508056804736
+3,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,216.35,182.2647799219586,20,40.75564378095382
+3,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,364.05,218.58359234422255,20,48.87677712477842
+3,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,269.35,192.97457563654666,20,43.150426905249304
+4,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,188.35,124.94305018476892,20,27.938115352931096
+4,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,213.5,126.71746442173503,20,28.33488643834106
+4,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,224.1578947368421,151.32645474745237,19,34.71666966991714
+4,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,165.5,99.07493177016656,20,22.153828230424597
+4,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,228.05263157894737,129.19256672984562,19,29.638807506949053
+4,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,215.15,123.26705070485659,20,27.563350476197268
+4,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,180.52631578947367,143.31448264454124,19,32.87859721017731
+4,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,240.65,231.23837666379097,20,51.70647292269376
+5,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,279.89473684210526,91.98181869674156,19,21.10207643906192
+5,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,271.1,94.37266553404116,20,21.10236953519675
+5,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,351.85,131.2331292415384,20,29.344619788409524
+5,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,305.8421052631579,93.79188732856893,19,21.517334662588684
+5,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,321.9,76.49692116267438,20,17.105231578918215
+5,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,354.1,71.23415798026882,20,15.92844195638402
+5,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,346.05,131.02409380680615,20,29.297878044232775
+5,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,327,124.72833637444558,20,27.890103885371996
+6,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,288.45,98.46157412385487,20,22.016677291257377
+6,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,266.85,55.35081894511351,20,12.3768193771557
+6,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,319.7,128.31339102287598,20,28.691746475066193
+6,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,232.4,85.043270719892,20,19.0162534358596
+6,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,276.4,87.4139576955534,20,19.546355158954828
+6,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,242.65,79.47477256138711,20,17.771099394359666
+6,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,337.4736842105263,131.52370653276526,19,30.17360765559074
+6,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,241.8,94.2798745058674,20,21.081620830526887
+7,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,392.9,132.7022389054771,20,29.673122695906404
+7,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,356.95,108.73118712049262,20,24.31303256756711
+7,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,405.6,133.40930291873636,20,29.83122701571556
+7,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,390.05,169.17990268848192,20,37.8297762838245
+7,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,440.85,94.32266848151447,20,21.09118985438432
+7,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,422.25,139.04178660047717,20,31.09068865516863
+7,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,441.1578947368421,96.26829589912579,19,22.08546175216633
+7,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,451.5,122.2471611983388,20,27.33529624958602
+8,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,392.8,92.63601664011341,20,20.714043037209525
+8,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,363.25,94.6516466339932,20,21.164751605589792
+8,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,402.57894736842104,95.78234341433456,19,21.97397660624173
+8,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,431.57894736842104,219.05461414133276,19,50.25457506096659
+8,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,417.65,99.3861554480142,20,22.22341996041208
+8,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,389.1,46.43376720493509,20,10.382905992163526
+8,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,467.45,136.21363831554422,20,30.45829547361268
+8,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,456.35,115.71256357207308,20,25.87411579979213
+9,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,167.1,109.15749124424234,20,24.408357067546394
+9,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,152.35,108.15839992198576,20,24.18495345631681
+9,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,227.7,145.61416212211748,20,32.56031649917297
+9,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,187,84.83668521279421,20,18.970059512155906
+9,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,240.7,103.2779081691214,20,23.09364232401363
+9,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,159.3,88.7812806253305,20,19.852097860772403
+9,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,278.5,192.5153445695611,20,43.047739716933364
+9,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,159.21052631578948,161.77267278752217,19,37.113196447751655
+10,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,307.5,93.55240580326594,20,20.918953883474845
+10,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,233.15,97.5798053956485,20,21.81950780958708
+10,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,312.8,149.89701728011028,20,33.51799202627872
+10,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,316.25,163.4206309851328,20,36.541963980866534
+10,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,333.6,148.52835986507938,20,33.2119509244869
+10,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,280.45,131.95712022830512,20,29.50650909456028
+10,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,400.3,121.94265261308608,20,27.267206059950283
+10,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,372.7894736842105,168.82422777267763,19,38.73093410959971
+11,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,390.25,115.13601795953753,20,25.745196281616252
+11,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,369.1,67.8728687753028,20,15.176834840949997
+11,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,385.7,77.45497843399433,20,17.319459697419152
+11,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,389.5,148.09189892197273,20,33.11435529065588
+11,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,372.7,5.974507246803309,20,1.3359404335917313
+11,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,341.05,43.807563634365096,20,9.79566902150881
+11,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,511.95,168.0953598407761,20,37.587265130626356
+11,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,445.55,137.65038665898626,20,30.779562169862345
+12,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,323.6,76.41947946764138,20,17.087915089479555
+12,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,349.1,52.33887555858305,20,11.703328361489397
+12,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,341.7368421052632,112.8479026070357,19,25.889084392346774
+12,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,302.2,164.18301726395072,20,36.712438735321534
+12,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,360.15,60.10015763181009,20,13.438803792318014
+12,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,351.4,79.27128636590467,20,17.72559849780151
+12,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,385.4,164.16275620954892,20,36.70790822582771
+12,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,408.75,192.2736194511408,20,42.99368833726766
+13,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,351.7,84.52287139865567,20,18.89988861008668
+13,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,286.3,112.33788319173546,20,25.11951432651515
+13,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,310.5263157894737,93.11066797756351,19,21.361052225250944
+13,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,334.6,179.55658835323374,20,40.15007373657777
+13,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,376.1,96.8699073364294,20,21.660769777836173
+13,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,277.65,102.18521625486062,20,22.84930898413848
+13,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,379.6842105263158,123.27208056958078,19,28.28055482962139
+13,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,342.6,137.26210041568766,20,30.692738726387972
+15,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,259.1,55.49765286644302,20,12.409652440105264
+15,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,252.2,126.9303994943271,20,28.382500168052033
+15,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,294.44444444444446,85.54339952687396,18,20.162772630400895
+15,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,272.1,102.4365785819643,20,22.90551530917712
+15,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,392.2,263.63703118212794,20,58.95103231094698
+15,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,280.7,77.78519680572431,20,17.393298770079905
+15,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,393.8333333333333,208.3981624622613,18,49.119917954626935
+15,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,236.4,119.1524454770354,20,26.64329677719885
+17,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,287.6,66.36850870230866,20,14.84044970236485
+17,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,286.05,85.70848695923937,20,19.165000308951345
+17,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,316.4,81.57940916677443,20,18.241710446117708
+17,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,240.05,96.1060132846727,20,21.4899578751026
+17,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,342,80.50171622884491,20,18.000730979309523
+17,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,288.45,81.34234024042752,20,18.18870022265125
+17,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,389.5,135.2562869440631,20,30.24422519911424
+17,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,324,128.13931563156686,20,28.652822034248487
+18,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,345.3,88.62285555270599,20,19.816672937599527
+18,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,321.5,91.06995575987321,20,20.3638611786975
+18,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,401.45,91.74878458968386,20,20.515651919551825
+18,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,354.7,137.54888126350613,20,30.756864873424686
+18,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,424.8,178.93003631234427,20,40.00997244109076
+18,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,357.95,162.02484377403363,20,36.22985647225227
+18,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,541.35,237.9905515594662,20,53.2163051289635
+18,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,350.3,202.18154947316143,20,45.209168841822574
+19,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,273.1,140.73263190962686,20,31.468773160238168
+19,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,210.65,129.43898176360938,20,28.94343621617862
+19,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,276.9,137.8053165271859,20,30.81420554156629
+19,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,181.73684210526315,144.40715668063268,19,33.12927382604854
+19,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,281.95,108.04749199456593,20,24.160153689821374
+19,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,190.95,120.0712398186133,20,26.848745437709884
+19,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,317.57894736842104,182.89867133636642,19,41.95983290858318
+19,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,195.7,179.6192171174753,20,40.16407795399686
+20,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,357.95,104.88865023141646,20,23.453815198564623
+20,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,305.85,162.22864793410045,20,36.27542846785294
+20,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,417.2,191.0857068658487,20,42.72806300806359
+20,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,287.2,128.1251854940891,20,28.64966243945532
+20,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,375.75,82.87522326714388,20,18.531463287580593
+20,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,332.85,116.80180018439694,20,26.117676510665902
+20,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,445.8421052631579,191.2259463909106,19,43.87024082636345
+20,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,406.1,195.1940734648198,20,43.6467217072425
+21,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,247.1,147.77468624475858,20,33.04342437969833
+21,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,208.6315789473684,151.1523185128593,19,34.67672007786451
+21,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,315,114.6729904416995,20,25.64166018108237
+21,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,221.05,150.40663304242236,20,33.631945574972235
+21,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,287.3,165.0397400309201,20,36.90400776980305
+21,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,306.75,185.22585786291458,20,41.41776093721909
+21,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,250.68421052631578,213.35964749991163,19,48.94806010955659
+21,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,241.42105263157896,179.17629921066685,19,41.10586217562649
+22,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,334.57894736842104,384.8145752306447,19,88.28251818062685
+22,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,219.85,105.31120548165804,20,23.548301424943585
+22,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,254.3684210526316,119.11395595363281,19,27.32661561932844
+22,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,170.73684210526315,103.64031932348378,19,23.776719916176393
+22,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,296.4,87.49039044976672,20,19.563446042367676
+22,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,272.85,258.12793135840303,20,57.71916014087888
+22,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,251.8,107.42027643547415,20,24.0199040271539
+22,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,233.78947368421052,152.08059959090713,19,34.88968236262301
+23,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,225.2,152.07636585818184,20,34.005309183002275
+23,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,239.3,171.1475509919038,20,38.26975582005085
+23,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,240.7,139.89774461144262,20,31.28208668500906
+23,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,242.21052631578948,209.15081718101266,19,47.98248821320971
+23,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,365.8,321.5152611586186,20,71.8929979754269
+23,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,285.15,182.0110682001741,20,40.69891211529396
+23,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,334.5,145.42225269520264,20,32.51740424676251
+23,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,273.25,148.7264797857923,20,33.256251885527995
+24,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,391.6,393.9021251662985,20,88.07919283534741
+24,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,276,120.29085122688628,19,27.596613912130678
+24,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,381.05,218.49761530675076,20,48.85755207474932
+24,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,280.55555555555554,174.85127200069618,18,41.212840043595264
+24,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,455.7894736842105,273.1868670479703,19,62.67336558760968
+24,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,354.25,242.78989725795083,20,54.28947145189678
+24,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,483.5263157894737,338.83105728388733,19,77.73317566492136
+24,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,290.55,237.85432848478365,20,53.185844723454075
+27,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,312.25,116.04303874901443,20,25.948012295843842
+27,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,328.85,62.0570832294539,20,13.876385658642109
+27,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,315.95,140.2143002692664,20,31.352870681964674
+27,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,297.05,57.679217273322614,20,12.897465071212942
+27,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,402.35,98.85623532766101,20,22.10492621923662
+27,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,332.25,67.30752284536214,20,15.050419647934982
+27,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,394,124.36110409017087,20,27.80798825025492
+27,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,389.94736842105266,137.2226389178511,19,31.481032410993915
+28,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,156.05,124.50511509255564,20,27.840190089338943
+28,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,298.9,401.27951932733737,20,89.7288283194367
+28,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,296,175.04189974593703,19,40.15736588831144
+28,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,175.95,133.41327756853494,20,29.832115774429198
+28,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,236.8,134.8931741084501,20,30.1630307007209
+28,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,209.31578947368422,127.52518384468176,19,29.25628363870597
+28,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,229.94736842105263,111.55988610219403,19,25.593593140651127
+28,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,282.4736842105263,106.8328748929595,19,24.509142395070214
+29,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,326.75,62.12794523358525,20,13.892230884468066
+29,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,274.25,54.452176023408015,20,12.17587671111245
+29,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,392.5263157894737,168.23342527606385,19,38.5953947212665
+29,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,314.2105263157895,99.61457889026777,19,22.853151720317747
+29,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,396.35,89.73779054908573,20,20.065979981839387
+29,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,364.75,93.5627428098667,20,20.921265308419162
+29,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,391.5,92.43916918709297,20,20.670026608594384
+29,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,367.55,155.65869377380892,20,34.806342056706
+30,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,415.4,146.12157879476146,20,32.67377831646784
+30,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,346.35,138.15905212547793,20,30.893303225950543
+30,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,480.15,249.00523668135344,20,55.67926359729304
+30,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,333.35,151.16260850662215,20,33.80098682769951
+30,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,401.25,139.54243836648104,20,31.20263779335263
+30,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,406.7,131.09502379250668,20,29.31373847119972
+30,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,538.7,198.38137115428108,20,44.35942313705884
+30,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,507.4,216.87454535065342,20,48.4946225993422
+32,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,158.3,86.66153156176955,20,19.37810756063602
+32,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,168.75,140.0533263101106,20,31.31687581043671
+32,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,118.9,108.79188243711259,20,24.326604452954925
+32,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,161.2,112.6090582502136,20,25.18015091297111
+32,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,209.7,121.61851486469787,20,27.194726656003308
+32,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,188.95,92.06718084895228,20,20.586847487502407
+32,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,274.55,201.26350232573478,20,45.003887259002994
+32,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,192.5,192.64106246428466,20,43.07585109279236
+34,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,243.65,118.63623081992235,20,26.527867670770195
+34,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,322.25,102.26224029168188,20,22.866532082361857
+34,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,288.1666666666667,99.56921919832808,18,23.468690030862522
+34,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,279.7894736842105,137.21174996145695,19,31.478534313071666
+34,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,273.75,114.18584804929567,20,25.532731830668688
+34,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,296.27777777777777,73.62688571882961,18,17.354023389810465
+34,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,367.72222222222223,135.878321672935,18,32.02682755705979
+34,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,340.6666666666667,161.904111054879,18,38.161164942961605
+35,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,290.05,96.34230365568497,20,21.542794008303808
+35,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,287.95,81.90718431313131,20,18.3150031969766
+35,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,305.5,134.830758113026,16,33.7076895282565
+35,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,283.63157894736844,137.76800569004715,19,31.606148129265893
+35,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,300.05,104.78472920079629,20,23.43057774968877
+35,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,282.65,130.46083300120546,20,29.17192909919433
+35,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,384.6666666666667,123.38366752437175,18,29.081809331383223
+35,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,285.3157894736842,104.65395497733309,19,24.009263883581596
+37,Global Congruent,2,Global,Congruent Stimuli with Target,Congruent,Critical,217.52631578947367,151.60415137274538,19,34.78037764500211
+37,Global Congruent,6,Global,Congruent Stimuli with Target,Congruent,Critical,260.8,153.73511053278077,20,34.376215767974166
+37,Global Incongruent at 2,2,Global,Incongruent Stimuli with Target,Incongruent at 2,Critical,229.8421052631579,163.58187320044382,19,37.528255488201
+37,Global Incongruent at 6,6,Global,Incongruent Stimuli with Target,Incongruent at 6,Critical,201.05,145.1777404280335,20,32.46272964169023
+37,Local Congruent,2,Local,Congruent Stimuli with Target,Congruent,Critical,360.6,208.7121916596355,20,46.66946482839096
+37,Local Congruent,6,Local,Congruent Stimuli with Target,Congruent,Critical,220.95,140.05994017600202,20,31.318354715809434
+37,Local Incongruent at 2,2,Local,Incongruent Stimuli with Target,Incongruent at 2,Critical,373.85,259.72176914617893,20,58.07555310473636
+37,Local Incongruent at 6,6,Local,Incongruent Stimuli with Target,Incongruent at 6,Critical,279.9,238.18588495012395,20,53.25998300294212

@@ -1,0 +1,122 @@
+---
+title: "Import_dataset"
+author: "Han Lee"
+date: "4/13/2021"
+output: 
+  html_document:
+    code_folding: hide
+    highlight: breezedark
+    theme: cerulean
+  github_document: default
+---
+
+```{r setup, include=FALSE, message=FALSE, echo=FALSE, results='hide'}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(here)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(ggplot2)
+library(tidyverse)
+library(gridExtra)
+library(kableExtra)
+library(ggdist)
+```
+
+```{r}
+
+#Reading in data file and making sure all columns are correct and controlled for.
+dat <- read_csv(here::here("raw_data","RepeatedExposureRdata.csv"),
+                col_types = cols(
+                  `F/L/Sex` = col_character(),
+                  ID = col_double(),
+                  TrialType = col_character(),
+                  `Trial#` = col_double(),
+                  `RunPosition#` = col_double(),
+                  `Run#` = col_double(),
+                  ConditionType = col_character(),
+                  Condition = col_character(),
+                  RT = col_double(),
+                  Error = col_double(),
+                  TotalError = col_double(),
+                  Target = col_character(),
+                  Globality = col_character(),
+                  RunType = col_character(),
+                  StimuliType = col_character()
+                  ),
+                  na = c("","NA")
+                ) %>% 
+    filter(TrialType == "Experiment", Error == "0", RT <= 1999) #Filtering out irrelevant data (i.e., cleaning raw data).
+dat$RunPosition = dat$`T2#`
+#Check accuracy per participant (cutoff = 90% of 1260 (1134))
+Total_number_of_trials_by_ID <- dat %>%
+  group_by (ID) %>% 
+  summarise(across(c(RT),
+                     list(Mu = ~ mean(.x,
+                                      na.rm = TRUE
+                                     ),
+                         Sigma = ~ sd(.x,
+                                      na.rm = TRUE
+                                     ),
+                         n = ~ n()
+                         )
+                  )
+            )
+
+dat = dat %>% 
+  filter(ID != 14, ID !=  16, ID != 25, ID != 26, ID != 31, ID != 33, ID != 36, ConditionType == "Critical", (RunType =="Congruent"| RunType == "Incongruent at 2"| RunType == "Incongruent at 6")) %>% #Removed participants 14,16,25,26,31,33,36 for high error rates.
+  select(ID, Condition, RunPosition, RT, Globality, RunType, StimuliType)
+
+#Creating clean csv file from filtering
+write_csv(dat,
+          here::here("Analyses", "LME", "Data", "RE_Cleaned_data.csv")
+          )
+
+```
+
+```{r}
+
+#Histogram of RT distribution
+graph <- ggplot(dat) +
+  aes(RT) +
+  geom_histogram(binwidth = 50) #Bins are 50 msecs apart.
+
+
+#Saving/outputing plots
+ggsave(here::here("Analyses", "LME", "Output", "Plots", "Overall_RT_dististribution.pdf"), graph)
+
+ggsave(here::here("Analyses", "LME", "Output", "Plots","Overall_RT_dististribution.svg"), graph)
+
+ggsave(here::here("Analyses", "LME", "Output", "Plots","Overall_RT_dististribution.eps"), graph)
+```
+
+```{r}
+
+#Creating summary table (mean and SD) by ID (within subject design), condition, and run position
+summarytable <- dat %>%
+  mutate(Critdatpoint = ifelse (((Condition == "Global Congruent"| Condition == "Local Congruent") &
+                              (RunPosition == "6" | RunPosition== "2") | 
+                              (StimuliType == "Incongruent Stimuli with Target")),
+                           "Critical", "Non-critical")) %>%
+  group_by (ID, Condition, RunPosition,Globality, StimuliType, RunType, Critdatpoint) %>% 
+  summarise(across(c(RT),
+                     list(Mu = ~ mean(.x,
+                                      na.rm = TRUE
+                                     ),
+                         Sigma = ~ sd(.x,
+                                      na.rm = TRUE
+                                     ),
+                         n = ~ n()
+                         )
+                  )
+            ) %>% 
+  mutate(RT_SE = RT_Sigma/sqrt(RT_n))
+summarytable
+
+#Saving/output summary table as a csv
+write_csv(summarytable,
+          here::here("Analyses", "LME", "Output", "Summary", "Mean_by_condition-id-conditiontype.csv")
+          )
+
+```
