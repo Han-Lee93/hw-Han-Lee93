@@ -1,0 +1,481 @@
+---
+title: "Final Project"
+author: "Han"
+date: "4/13/2021"
+output:
+  pdf_document: default
+  html_document:
+    code_folding: hide
+    highlight: breezedark
+    theme: cerulean
+  github_document: default
+---
+
+```{r setup, include=FALSE, message=FALSE, echo=FALSE, results='hide'}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(here)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(ggplot2)
+library(tidyverse)
+library(e1071)
+library(gridExtra)
+library(kableExtra)
+library(patchwork)
+library(ggdist)
+library(ggrepel)
+library(ggtext) 
+require(svMisc)
+library(knitr)
+library(progress)
+library(Rmisc)
+library(gghighlight)
+library(ez)
+library(rmcorr)
+library(lsr)
+library(nlme)
+library(gamlss.dist)
+library(plyr)
+library(plotly)
+library(retimes)
+library(car)
+library(psych)
+library(viridis)
+library(forcats)
+library(devtools)
+library(psycho)
+library(tidyverse)
+library(lmerTest)
+library(ggpubr)
+library(rstatix)
+library(DescTools)
+library(gplots)
+library(mvoutlier)
+library(xlsx)
+library(reshape2)
+
+#Theme used for all the graphs
+theme_x = function(){
+  theme_minimal() %+replace%
+    theme(plot.background = element_rect(fill = "gray60"), 
+          plot.title = element_markdown(face = "bold", size = 13),
+          axis.text.x = element_text(size = 9),
+          plot.margin = unit(c(.2, .2, .2, .2), "cm"),
+          panel.background = element_rect(fill = "gray60",
+                                          colour = "gray60",
+                                          size = 0.5, 
+                                          linetype = "solid"),
+          panel.grid.major = element_line(size = 0.5, 
+                                          linetype = 'solid',
+                                          colour = "gray50"), 
+          panel.grid.minor = element_line(size = 0.25, 
+                                          linetype = 'solid',
+                                          colour = "gray50"))}
+```
+
+# Repeated exposure effects on Global Precedence {.tabset}
+
+## Introduction
+
+This study aimed to test the endurance of global level influence on local level processing. Research has shown that an object can have at least two levels of information; the global level, or the large form, of an object can influence how the local level, or detailed components, of the object is visually processed. When the two levels are congruent (consistent information between the two levels), global information can facilitate local information processing; however, when incongruent (inconsistent information between the two levels), global information can impede local information processing, leading to slower response times. This is called 'global interference' and is derived from the 'congruency' effect that is calculated from comparisons between performance with congruent stimuli vs. performance with incongruent stimuli.
+  
+The current literature presents inconsistent findings on whether attention can reduce global level influence during local level processing. To examine this, studies have utilized repeated presentation paradigms that involve multiple presentations of a compound stimulus (objects with a global and local level of perception) and manipulate the level that participants must attend to for future presentations. For example, participants may be directed to look for a target (letter "A") within a given compound stimulus. The level that contains the letter "A" will be the last level that participants attend to for the current stimulus and the first level that participants attend to for the following stimulus. This is an important facet of repeated presentation paradigms such that it enables control over the order of level information processing over a series of compound stimulus. Furthermore, attentional control is seen to increase with more repetitions. In other words, attention becomes better at suppressing irrelevant information and facilitating relevant information processing with multiple repetitions. However, this effect has yet to be tested with compound stimuli. As such, it is unclear whether multiple repetitions enables better attentional control or focus on a particular level.
+  
+## Study Description
+This study aims to investigate whether multiple repetitions can reduce congruency effects. The study utilizes the repeated presentation paradigm with three additional details. Firsly, the study involves multiple repeated presentations through a series of 7 compound stimulus presentations, known as a run. Run position reference a stimulus presentation by its sequential order within the run. Secondly, participants are directed to a specific level (global or local) before the series of compound stimulus presentation. This enables a more voluntary, goal-oriented attentional deployment to the given task, and stronger establishment of level relevancy in terms of information processing (i.e., directed level contains relevant information while other level contains irrelevant inforamtion). Lastly, the critical data runs in this study contained only congruent stimuli (both irrelevant and relevant levels contained target information) and manipulated whether and when a single incongruent stimulus (irrelvant level contained non-target while relevant level contained target) was presented in the run. 
+  
+Critical data runs only had at most 1 incongruent stimulus within a given run. The incongruent stimulus was presented either early in the run (run position 2), late in the run (run position 6), or not at all to determine whether multiple repeated presentations strengthened attentional control. Therefore, there were three types of runs; all congruent stimuli, incongruent at 2, and incongruent at 6. The study looked at whether there was a change in the amount of global level interference during local information processing between the two run positions (2 and 6). The congruence effect (e.g., global level interference) was calculated from reponse time (RT) comparisons between the incongruent stimulus and congruent stimulus (only in the all congruent runs). Notably, the target letter was always present at the relevant level in the critical runs.
+
+Throughout the study, the stimulus was presented for 150 msec and was immediately followed by a blank screen. Participants were tasked to determine target letter presence (via keyboard button press) and had a total of 2000 msec to respond as soon as the stimulus was shown.
+
+Planned comparisons were made to look at whether the congruence effect was lower at position 6 than position 2. Two important planned comparisons were the RT differences for task completion between the congruent and incongruent stimulus at position 2 and at position 6 for local information processing. At position 2, an incongruent stimulus should produce much slower RTs relative to a congruent stimulus. At position 6, an incongruent stimulus should produce similar RTs to a congruent stimulus if multiple exposures enable better attentional control. The last planned comparison is the RT difference in the amount of influence an incongruent stimulus has on task performance (i.e., congruence effect, or the RT difference between an incongruent stimulus and congruent stimulus at the same position) between positions 2 and 6. If multiple repeated exposure and better attentional control enables stronger focus on relevant information, then there should be a large reduction in the amount of incongruent stimulus influence.
+
+## Results
+
+Planned comparison results show that there was a congruency effect at both positions 2 (Mean difference = 33.92 msec, SE = 7.22, t(29) = 3.62, _p_ < .01, cohen's _d_ = .75) and 6 (Mean difference = 24.49 msec, SE = 7.39, t(29) = 2.86, _p_ < .01, cohen's _d_ = .61). There was not a reliable difference in congruence effect between these two positions (Mean difference = 9.42 msec, SE = 11.62, t(29) = 1.01, _p_ = .32, cohen's _d_ = .81).
+
+These results show that six repeated exposures do not prevent incongruent global information from affecting local information processing.
+  
+## Summary Tables/Datasets
+
+A total of 6 datasets were created: 
+
+REdat.totalmeans - Dataset with  means across ID from _REdat.means_ (summarized means by ID).  **Used for run graph**
+
+REdat.IDanalysismeans - Dataset with means (by ID) without non-critical data points **Used for Planned pairwise comparison analyses**
+
+REdat.fullanalysismeans - Dataset with means aggreated from _REdat.IDanalysismeans_. **Used for  critical position graph**
+
+REdat.IDanalysismeans.congruency - Dataset with means (by ID) for differences in RT between congruent and incongruent stimuli (i.e., congruency effect). **Used for third planned comparison**
+
+REdat.IDanalysismeans.congruency.means - Dataset with  means across ID from _REdat.IDanalysismeans.congruency_. Exhibits total amount of congruency effect. **Used for cohen's d calculation and congruency effect graph**
+
+REdat.IDanalysismeans.CE_difference.means - Dataset with differences in congruency effects between positions 2 and 6 **Used for third comparison's cohen's d calculation**
+
+
+
+Importing "cleaned" datasets  created from "Import_data_RE.rmd"
+```{r importing dataset RE, warning = FALSE, message=FALSE, results='hide', fig.width = 12}
+
+#Importing cleaned dataset for LME modeling/analysis
+REdat.full <-read_csv(here::here("Analyses", "Planned_Comparisons", "Data", "RE_Cleaned_data.csv"),
+                    col_types = cols(
+                      ID = col_factor(),
+                      Condition = col_character(),
+                      RunPosition = col_factor(),
+                      RT = col_double(),
+                      Globality = col_character(),
+                      RunType = col_character(),
+                      StimuliType = col_character()
+                      ),
+                    na = c("","NA")
+                    ) 
+
+#Importing summarized means (by ID) dataset                    
+REdat.means <- read_csv(here::here("Analyses", "Planned_Comparisons", "Output", "Summary", "Mean_by_condition-id-conditiontype.csv")
+                )
+```
+
+Summary table that aggregates means from _RTdat.means_ into a dataset with total summarized means; used for by condition comparisons. **Used for run graph**
+
+```{r summarytable, message=FALSE, warning = FALSE, fig.width = 12}
+#Summary table that consolidates previous summarized means (by ID) into a dataset with total summarized means; used for by condition comparisons.
+REdat.totalmeans <- summarySEwithin(
+  REdat.means,
+  measurevar = "RT_Mu",
+  withinvars = c("Globality", "RunType", 
+                 "RunPosition","Condition", "StimuliType", "Critdatpoint"),
+  idvar = "ID")
+
+#Substitute  dataframe for table
+REdat.totalmeans %>% 
+  select(Condition, RunPosition, RT_Mu, sd, se, N)
+
+```
+
+Mean data (by ID) with only comparison data (Incongruent stimulus at Position 2 and 6, and the congruent stimulus at the same positions from the all congruent runs) **Used for Planned pairwise comparison analyses**
+
+```{r mean (by ID) dataset for analysis, message = FALSE, warning = FALSE, fig.width = 12}
+#Data by full aggregated means
+REdat.IDanalysismeans <- REdat.means %>% 
+  filter(((Condition == "Global Congruent"| Condition == "Local Congruent") &
+                              (RunPosition == "6" | RunPosition== "2")) | 
+                              (StimuliType == "Incongruent Stimuli with Target"))
+
+REdat.IDanalysismeans %>% 
+  select(ID, Condition, RunPosition, RT_Mu, RT_Sigma, RT_n)
+```
+
+Collapsed Mean data (by ID) and included only critical position data for simplified visual appearance (Incongruent stimulus at Position 2 and 6, and the congruent stimulus at the same positions from the all congruent runs) **Used for critical position graph**
+
+```{r total mean dataset for graph, message = FALSE, warning = FALSE, fig.width = 12}
+#Data by full aggregated means
+REdat.fullanalysismeans <- REdat.totalmeans %>% 
+  filter(((Condition == "Global Congruent"| Condition == "Local Congruent") &
+                              (RunPosition == "6" | RunPosition== "2")) | 
+                              (StimuliType == "Incongruent Stimuli with Target"))
+
+REdat.fullanalysismeans %>% 
+  select(Condition, RunPosition, RT_Mu, sd, N)
+```
+
+Dataset for third planned comparison. Pivoted dataset for analysis (by ID) and subtracted congruent stimulus RT from incongruent stimulus RT. **Used for third planned comparison**
+```{r third planned comparison dataset, message = FALSE, warning = FALSE, fig.width = 12}
+#Data by full aggregated means
+REdat.IDanalysismeans.congruency <- REdat.IDanalysismeans %>%
+   select(ID, Globality, StimuliType,RunPosition, RT_Mu) %>% 
+   pivot_wider(id_cols = c(-StimuliType, -RT_Mu), 
+              names_from = StimuliType,
+              values_from = RT_Mu) %>% 
+  mutate(Congruence_Effect = `Incongruent Stimuli with Target` - `Congruent Stimuli with Target`)
+
+REdat.IDanalysismeans.congruency
+```
+
+Dataset with means aggregated from _REdat.IDanalysismeans.congruency_ for differences between P2 and P6 **Used for cohen's d calculation and third planned comparison graph**
+```{r differences mean dataset, message=FALSE, warning = FALSE, fig.width = 12}
+REdat.IDanalysismeans.congruency.means <- summarySEwithin(
+  REdat.IDanalysismeans.congruency,
+  measurevar = "Congruence_Effect",
+  withinvars = c("Globality", "RunPosition"),
+  idvar = "ID")
+
+REdat.IDanalysismeans.congruency.means
+```
+
+Dataset used for calculating difference in congruence effect between positions 2 and 6. **Used for cohen's d calculation for third comparison**
+```{r cohens d calculation for third comparison, message=FALSE, warning = FALSE, fig.width = 12}
+#Steps to calculate cohen's d for change in congruence effect (i.e., comparison of congruence effect) at position 2 vs. 6
+
+#Pivot data to subtract RT at position 6 from RT at position 2.
+REdat.IDanalysismeans.CE_difference <- REdat.IDanalysismeans.congruency %>%
+   select(ID, Globality,RunPosition, Congruence_Effect) %>% 
+   pivot_wider(id_cols = c(-RunPosition, -Congruence_Effect), 
+              names_from = RunPosition,
+              values_from = Congruence_Effect) %>% 
+  mutate(Congruence_Effect_difference = `2` - `6`)
+#Get means from the previous subtractions to get 'change in congruence effect'.
+REdat.IDanalysismeans.CE_difference.means <- summarySEwithin(
+  REdat.IDanalysismeans.CE_difference,
+  measurevar = "Congruence_Effect_difference",
+  withinvars = c("Globality"),
+  idvar = "ID")
+
+REdat.IDanalysismeans.CE_difference.means
+```
+
+## Planned Comparisons
+
+Pairwise comparison (Planned comparisons: Local Incongruent at P2(and 6) vs. Local congruent at P2(and 6)) 
+```{R first and second comparison, message = FALSE, warning = FALSE}
+#Pairwise comparison for Local level
+pwc.1_and_2 <- REdat.IDanalysismeans %>%
+  filter(Globality == "Local") %>% 
+  group_by(RunPosition) %>% 
+  pairwise_t_test(
+    RT_Mu ~ StimuliType, paired = TRUE,
+    p.adjust.method = "bonferroni"
+  )
+pwc.1_and_2
+```      
+
+Pairwise comparison (Planned comparison: Difference at P2 vs. difference at P6)
+```{R Third comparison, message = FALSE, warning = FALSE}
+#Pairwise comparison of congruency effect between position 2 and 6 for local level
+pwc.3 <- REdat.IDanalysismeans.congruency %>%
+  filter(Globality == "Local") %>% 
+  pairwise_t_test(
+    Congruence_Effect ~ RunPosition, paired = TRUE,
+    p.adjust.method = "bonferroni")
+pwc.3
+```
+
+First comparison cohen's _d_: Incongruent vs. congruent stimuli (i.e., congruency effect) comparison at position 2 
+```{R Congruency effect at position 2 cohens d, message = FALSE, warning = FALSE}
+#data fromREdat.IDanalysismeans.congruency.means
+pwc1_cohens_d = 33.915828/45.2227
+pwc1_cohens_d
+```
+
+Second comparison cohen's _d_: Incongruent vs. congruent stimuli (i.e., congruency effect) comparison at position 6
+```{R Congruency effect at postion 6 cohens d, message = FALSE, warning = FALSE}
+pwc2_cohens_d = 24.491053/40.45816
+pwc2_cohens_d
+```
+Third comparison cohen's _d_: Difference in congruency effect between position 2 and 6
+```{R Difference in Congruency effect cohens d, message = FALSE, warning = FALSE}
+
+#data REdat.IDanalysismeans.CE_difference.means
+pwc3_cohens_d = 9.424776/11.62251
+pwc3_cohens_d
+```
+
+## Graphs
+
+Graph depicting total means throughout a run for all conditions
+```{r graphs, message=FALSE, warning = FALSE}
+runplot <- ggplot(data = REdat.totalmeans) +
+  aes(x = RunPosition, 
+      y = RT_Mu, 
+      shape = StimuliType,
+      group = interaction(Globality,RunType)) +
+  geom_errorbar(aes(ymax = RT_Mu + se, 
+                    ymin = RT_Mu - se,
+                    color = Condition), 
+                width=.3) +
+  geom_line(aes(size = Condition,  
+                color = Condition)) +
+  geom_line(data = subset(REdat.totalmeans,
+                        RunType == "Congruent"),
+            aes(color = "black",
+                size = Condition))+
+  geom_point(aes(color = Condition,
+                 alpha = Critdatpoint,
+                 size = Globality,
+                 fill = Globality)) +
+  geom_point(data = subset(REdat.totalmeans,
+                           RunType == "Congruent"),
+                           aes(color = Condition,
+                               alpha = Critdatpoint,
+                               size = Globality,
+                               fill = Globality)) +
+  geom_errorbar(data=subset(REdat.totalmeans, 
+                            Critdatpoint =="Critical"),
+                aes(ymax = RT_Mu + se, 
+                    ymin = RT_Mu - se, 
+                    color = "gold"), 
+                width=.3) +
+  geom_point(data = subset(REdat.totalmeans, 
+                           Critdatpoint == "Critical"),
+             aes(color ="gold", 
+                 size = RunType,
+                 fill = Globality)) +
+   annotate(geom = "rect", 
+           xmin = 5.75, 
+           xmax = 6.25, 
+           ymin = 285, 
+           ymax = 332, 
+           color = "gold",
+           size = 1.5,
+           fill = NA) +
+  annotate(geom = "rect", 
+           xmin = 1.75, 
+           xmax = 2.25, 
+           ymin = 327, 
+           ymax = 387, 
+           color = "gold",
+           size = 1.5,
+           fill = NA) +
+  annotate(geom = "segment", 
+           x = 2, 
+           xend = 2, 
+           y = 387, 
+           yend = 400, 
+           color = "gold",
+           size = 1.5) +
+  annotate(geom = "segment", 
+           x = 2, 
+           xend = 3, 
+           y = 400, 
+           yend = 400, 
+           color = "gold",
+           size = 1.5) +
+  annotate(geom = "segment", 
+           x = 6, 
+           xend = 6, 
+           y = 332, 
+           yend = 370, 
+           color = "gold",
+           size = 1.5) +
+  annotate(geom = "rect", 
+           xmin = 2.64, 
+           xmax = 6.87, 
+           ymin = 361.5, 
+           ymax = 460, 
+           color = "gold",
+           size = 1.5,
+           fill = NA) +
+  scale_alpha_manual(values=c(1,.4)) +
+  scale_color_manual(values = c("black", "black", "cyan2", "cyan2","gold","black","red3","red3")) +
+  scale_fill_manual(values = c("cyan2", "red3")) +
+  scale_size_manual(values = c(3.5,2.5,2,1,1,3.5,3.5,2.5,2,1,1)) +
+  scale_shape_manual(name = "Stimulus", 
+                     values = c(21,24), 
+                     labels=c("Incongruent Stimulus",
+                              "Congruent Stimulus")) +
+  scale_x_discrete("Run Position", 
+                   1:7,  
+                   waiver(),
+                   limits = c("1","2","3","4","5","6","7"),
+                   expand = c(.05,0)) + 
+  ylim(265,460) +
+  labs(title = "<span style='color: cyan2'>**Global**</span> and <span style='color: red3'>**Local**</span> RTs throughout a Run", 
+       color ="Critical Position", 
+       x ="Run Position", 
+       y ="Response Time (msec)") +
+  guides(color = FALSE, size = FALSE, alpha = FALSE, fill = FALSE) +
+  theme_x() +
+  theme(legend.position="bottom", legend.box = "horizontal")
+```
+
+Graph for only comparison data
+```{r graphs2, message=FALSE, warning = FALSE}
+critdatplot <- ggplot(data = REdat.fullanalysismeans) +
+  aes(x = RunPosition, 
+      y = RT_Mu,
+      color = Globality,
+      group = interaction(Globality,StimuliType)) +
+  geom_errorbar(aes(ymax = RT_Mu + se, 
+                    ymin = RT_Mu - se, 
+                width=.2), size = 1) +
+  geom_line(size = 1.2) +
+  geom_point(aes(shape = StimuliType), size = 3.5) +
+  ylim(265,390) +
+  scale_color_manual(values = c("cyan2", "red3")) +
+  labs(title = "RTs at critical positions",
+       x ="Run Position", 
+       y ="Response Time (msec)") +
+   guides(color = FALSE, shape = FALSE) +
+
+  theme_x()
+
+```
+
+Graph of differences between P2 and P6
+```{r differences graph, message=FALSE, warning = FALSE}
+differencesgraph = ggplot(REdat.IDanalysismeans.congruency.means) +
+  aes(x = RunPosition, y = Congruence_Effect, fill = Globality) +
+  geom_bar(stat = "identity", position = position_dodge(width =)) +
+  geom_errorbar(aes(ymax = Congruence_Effect + se, 
+                    ymin = Congruence_Effect - se,
+                    color = Globality), 
+                width=.3,
+                position = position_dodge(width = .9),
+                size = 2,
+                color = "gold") +
+  scale_fill_manual(values = c("cyan2","red3"))+
+  labs(title = "<span style='color: cyan2'>**Global**</span> and <span style='color: red3'>**Local**</span> congruence effects at critical positions",
+       x ="Run Position", 
+       y ="Congruence Effect (RT msec)") +
+   guides(fill = FALSE) +
+  theme_x()
+
+```
+
+```{r all graphs, message=FALSE, warning = FALSE, fig.width = 12, fig.height = 10}
+allgraphs = (runplot + 
+               inset_element(
+                 critdatplot,
+                 left = 0.3, 
+                 bottom = 0.5, 
+                 right = unit(1, 'npc') - unit(1, 'cm'), 
+                 top = unit(1, 'npc') - unit(1, 'cm'))
+             )| differencesgraph +
+  plot_layout(ncol = 1, guides = 'collect') +
+  plot_annotation(theme = theme(plot.title = element_markdown(face = "bold"),
+                                plot.background = element_rect(fill = "gray")))
+allgraphs
+
+```
+
+```{R pasting dataset/graphs into folders, include=FALSE, message=FALSE, echo=FALSE, results='hide'}
+
+#Copying totalmeans dataset into "summary" folder
+write_csv(REdat.totalmeans,
+          here::here("Analyses", "Planned_Comparisons", "Output", "Summary", "Total_Mean.csv")
+          )
+#Copying means (by ID) dataset (for analysis) into "summary" folder
+write_csv(REdat.IDanalysismeans,
+          here::here("Analyses", "Planned_Comparisons", "Output", "Summary", "IDdata_Mean.csv")
+          )
+#Copying total analysis means dataset into "summary" folder
+write_csv(REdat.fullanalysismeans,
+          here::here("Analyses", "Planned_Comparisons", "Output", "Summary", "Total_Analysis_Mean.csv")
+          )
+
+#Copying congruency effect means (by ID) dataset into "summary" folder
+write_csv(REdat.IDanalysismeans.congruency,
+          here::here("Analyses", "Planned_Comparisons", "Output", "Summary", "Congruency_Effect(byID)_Mean.csv")
+          )
+
+#Copying Total congruency effect means dataset into "summary" folder
+write_csv(REdat.IDanalysismeans.congruency.means,
+          here::here("Analyses", "Planned_Comparisons", "Output", "Summary", "Total_Congruency_Effect_Mean.csv")
+          )
+
+#Copying Difference in congruency effect means dataset into "summary" folder
+write_csv(REdat.IDanalysismeans.CE_difference.means,
+          here::here("Analyses", "Planned_Comparisons", "Output", "Summary", "Difference_in_Congruency_Effect_Mean.csv")
+          )
+
+
+#Saving/outputing plots
+ggsave(here::here("Analyses", "Planned_Comparisons", "Output", "Plots", "allgraphs.pdf"), runplot)
+
+ggsave(here::here("Analyses", "Planned_Comparisons", "Output", "Plots","allgraphs.svg"), runplot)
+
+ggsave(here::here("Analyses", "Planned_Comparisons", "Output", "Plots","allgraphs.eps"), runplot)
+
+```

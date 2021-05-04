@@ -70,7 +70,7 @@ dat = dat %>%
 
 #Creating clean csv file from filtering
 write_csv(dat,
-          here::here("Analyses", "LME", "Data", "RE_Cleaned_data.csv")
+          here::here("Analyses", "Planned_Comparisons", "Data", "RE_Cleaned_data.csv")
           )
 
 ```
@@ -84,11 +84,11 @@ graph <- ggplot(dat) +
 
 
 #Saving/outputing plots
-ggsave(here::here("Analyses", "LME", "Output", "Plots", "Overall_RT_dististribution.pdf"), graph)
+ggsave(here::here("Analyses", "Planned_Comparisons", "Output", "Plots", "Overall_RT_dististribution.pdf"), graph)
 
-ggsave(here::here("Analyses", "LME", "Output", "Plots","Overall_RT_dististribution.svg"), graph)
+ggsave(here::here("Analyses", "Planned_Comparisons", "Output", "Plots","Overall_RT_dististribution.svg"), graph)
 
-ggsave(here::here("Analyses", "LME", "Output", "Plots","Overall_RT_dististribution.eps"), graph)
+ggsave(here::here("Analyses", "Planned_Comparisons", "Output", "Plots","Overall_RT_dististribution.eps"), graph)
 ```
 
 ```{r}
@@ -116,7 +116,7 @@ summarytable
 
 #Saving/output summary table as a csv
 write_csv(summarytable,
-          here::here("Analyses", "LME", "Output", "Summary", "Mean_by_condition-id-conditiontype.csv")
+          here::here("Analyses", "Planned_Comparisons", "Output", "Summary", "Mean_by_condition-id-conditiontype.csv")
           )
 
 ```

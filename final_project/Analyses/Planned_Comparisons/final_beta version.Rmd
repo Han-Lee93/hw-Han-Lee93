@@ -3,11 +3,11 @@ title: "Final Project"
 author: "Han"
 date: "4/13/2021"
 output:
-  github_document: default
   html_document:
     code_folding: hide
     highlight: breezedark
     theme: cerulean
+  github_document: default
 ---
 
 ```{r setup, include=FALSE, message=FALSE, echo=FALSE, results='hide'}
@@ -59,7 +59,7 @@ library(reshape2)
 theme_x = function(){
   theme_minimal() %+replace%
     theme(plot.background = element_rect(fill = "gray60"), 
-          plot.title = element_markdown(face = "bold", size = 15),
+          plot.title = element_markdown(face = "bold", size = 13),
           axis.text.x = element_text(size = 9),
           plot.margin = unit(c(.2, .2, .2, .2), "cm"),
           panel.background = element_rect(fill = "gray60",
@@ -78,8 +78,20 @@ theme_x = function(){
 
 ## Introduction and Overall Study Description and Report
 
-This study aimed to test the endurance of global level influence on local level processing. Research has shown that the global level, or the large form, of an object can influence how the local level, or detailed components, of the object is visually processed. When the two levels are congruent ( consistent information between the two levels), global information can facilitate local information processing; however, when incongruent (inconsistent information between the two levels), global information can impede local information processing, leading to slower response times. The current literature presents inconsistent findings on whether attention can reduce global level influence. Repeated presentation to a 
+  This study aimed to test the endurance of global level influence on local level processing. Research has shown that an object can have at least two levels of information; the global level, or the large form, of an object can influence how the local level, or detailed components, of the object is visually processed. When the two levels are congruent (consistent information between the two levels), global information can facilitate local information processing; however, when incongruent (inconsistent information between the two levels), global information can impede local information processing, leading to slower response times. 
+  
+  The current literature presents inconsistent findings on whether attention can reduce global level influence during local level processing. To determine this, studies have utilized repeated presentation paradigms that involve multiple presentations of a compound stimulus and manipulate the level that participants must attend to for future presentations. For example, participants may be directed to look for a target (letter "A") within a given compound stimulus. The level that contains the letter "A" will be the last level that participants attend to for the current stimulus and the first level that participants attend to for the following stimulus. This is an important facet of repeated presentation paradigms such that it enables control over the order of level information processing over a series of compound stimulus. Furthermore, attentional control is seen to increase with more repetitions. In other words, attention becomes better at suppressing irrelevant inforamtion and facilitating relevant information processing with multiple repetitions. However, this effect has yet to be tested with compound stimuli. As such, it is unclear whether multiple repetitions enables better attentional control or focus on a particular level.
+  
+  This study aims to investigate this issue. The study utilizes the repeated presentation paradigm with three additional details. Firsly, the study involves multiple repeated presentations through a series of 7 compound stimulus presentations, known as a run. Run position is utilized to reference each stimulus presentation by their sequential order within the run. Secondly, participants are directed to a specific level (global or local) before the series of compound stimulus presentation. This enables a more voluntary, goal-oriented attentional deployment to the given task, and stronger establishment of level relevancy in terms of information processing (i.e., directed level contains relevant information while other level contains irrelevant inforamtion). Lastly, the critical data runs in this study contained only congruent stimuli (both irrelevant and relevant levels contained target information) and manipulated whether and when a single incongruent stimulus (irrelvant level contained non-target while relevant level contained target) was presented in the run. 
+  
+Critical data runs only had at most 1 incongruent stimulus within a given run. The incongruent stimulus was presented either early in the run (run position 2), late in the run (run position 6), or not at all to determine whether multiple repeated presentations strengthened attentional control. Therefore, there were three types of runs; all congruent stimuli, incongruent at 2, and incongruent at 6. The study looked at whether there was a change in the amount of global level interference during local information processing between the two run positions (2 and 6). Global level interference was calculated from Reponse time (RT) comparisons between the incongruent stimulus and congruent stimulus (only in the all congruent runs). Notably, the target letter was always present at the relevant level in the critical runs.
 
+Throughout the study, the stimulus was presented for 150 msec and was immediately followed by a blank screen. The task was that participants had a total of 2000 msec to determine target letter presence (via keyboard button press) as soon as the stimulus was shown.
+
+Planned comparisons were made to look at whether the amount of global level interference was lower at position 6 than position 2. Two important planned comparisons were the RT differences for task completion between the congruent and incongruent stimulus at position 2 and at position 6 for local information processing. At position 2, an incongruent stimulus should produce much slower RTs relative to a congruent stimulus. At position 6, an incongruent stimulus should produce similar RTs to a congruent stimulus if multiple exposures enable better attentional control. The last planned comparison is the RT difference in the amount of influence an incongruent stimulus has on task performance (i.e., the RT difference between an incongruent stimulus and congruent stimulus at the same position) between positions 2 and 6. If multiple repeated exposure and better attentional control enables better focus on relevant information, then there should be a large reduction in the amount of incongruent stimulus influence.
+
+Planned comparison results show that
+  
 ## Summary Tables/Datasets
 
 Importing "cleaned" datasets  created from "Import_data_RE.rmd"
@@ -134,6 +146,7 @@ REdat.analysis %>%
 ```
 
 Mean data (by ID) with only comparison data (Incongruent stimulus at Position 2 and 6, and the congruent stimulus at the same positions from the all congruent runs) **Used for ANOVA and pairwise comparison analyses**
+
 ```{r mean (by ID) dataset for analysis, message = FALSE, warning = FALSE}
 #Data by full aggregated means
 REdat.IDanalysismeans <- REdat.means %>% 
@@ -143,6 +156,32 @@ REdat.IDanalysismeans <- REdat.means %>%
 
 REdat.IDanalysismeans %>% 
   select(ID, Condition, RunPosition, RT_Mu, RT_Sigma, RT_n)
+```
+
+Collapsed Mean data (by ID) and included only critical position data for simplified visual appearance (Incongruent stimulus at Position 2 and 6, and the congruent stimulus at the same positions from the all congruent runs) **Used for critical position graph**
+
+```{r total mean dataset for graph, message = FALSE, warning = FALSE}
+#Data by full aggregated means
+REdat.fullanalysismeans <- REdat.totalmeans %>% 
+  filter(((Condition == "Global Congruent"| Condition == "Local Congruent") &
+                              (RunPosition == "6" | RunPosition== "2")) | 
+                              (StimuliType == "Incongruent Stimuli with Target"))
+
+REdat.fullanalysismeans %>% 
+  select(Condition, RunPosition, StimuliType, RT_Mu, sd, N)
+```
+
+Dataset for third planned comparison. Pivoted dataset for analysis (by ID) and subtracted congruent stimulus RT from incongruent stimulus RT.
+```{r total mean dataset for graph, message = FALSE, warning = FALSE}
+#Data by full aggregated means
+(REdat.IDanalysismeans.congruency <- REdat.IDanalysismeans %>%
+   select(ID, Globality, StimuliType,RunPosition, RT_Mu) %>% 
+   pivot_wider(id_cols = c(-StimuliType, -RT_Mu), 
+              names_from = StimuliType,
+              values_from = RT_Mu))
+
+REdat.IDanalysismeans.congruency <- REdat.IDanalysismeans.congruency %>% 
+  mutate(Congruence_Effect = `Incongruent Stimuli with Target` - `Congruent Stimuli with Target`)
 ```
 
 ## Analyses
@@ -168,7 +207,7 @@ summary(x)
 ```
 
 Pairwise comparison (Planned contrast: Local Incongruent at P2(and 6) vs. Local congruent at P2(and 6))
-```{R Pairwise, message = FALSE, warning = FALSE}
+```{R Pairwise #1 and 2, message = FALSE, warning = FALSE}
 #Pairwise comparison for Local level
 pwc <- REdat.IDanalysismeans %>%
   filter(Globality == "Local") %>% 
@@ -179,6 +218,16 @@ pwc <- REdat.IDanalysismeans %>%
   )
 pwc
 ```
+
+```{R Pairwise #3, message = FALSE, warning = FALSE}
+pwc <- pwc <- REdat.IDanalysismeans.congruency %>%
+  filter(Globality == "Local") %>% 
+  pairwise_t_test(
+    Congruence_Effect ~ RunPosition, paired = TRUE,
+    p.adjust.method = "bonferroni")
+pwc 
+```
+
 ## Graphs
 
 Graph depicting total means throughout a run for all conditions
@@ -241,6 +290,30 @@ runplot <- ggplot(data = REdat.totalmeans) +
   theme_x()
 
 runplot
+```
+
+Graph for only comparison data
+```{r graphs2, message=FALSE, warning = FALSE}
+critdatplot <- ggplot(data = REdat.fullanalysismeans) +
+  aes(x = RunPosition, 
+      y = RT_Mu,
+      color = Globality,
+      group = interaction(Globality,StimuliType)) +
+  geom_errorbar(aes(ymax = RT_Mu + se, 
+                    ymin = RT_Mu - se, 
+                width=.1)) +
+  geom_line(aes(size = 1)) +
+  geom_point(aes(shape = StimuliType, size = 2)) +
+  ylim(265,390) +
+  labs(title = " Mean Global and local performance at critical positions",
+       color ="Critical Position", 
+       x ="Run Position", 
+       y ="Response Time (msec)") +
+   guides(color = FALSE, size = FALSE) +
+
+  theme_x() +
+  theme(legend.position="bottom", legend.box = "horizontal")
+critdatplot
 ```
 
 Assumption graphs (for analyses)
