@@ -3,12 +3,11 @@ title: "Final Project"
 author: "Han"
 date: "4/13/2021"
 output:
-  pdf_document: default
+  github_document: default
   html_document:
     code_folding: hide
     highlight: breezedark
     theme: cerulean
-  github_document: default
 ---
 
 ```{r setup, include=FALSE, message=FALSE, echo=FALSE, results='hide'}
